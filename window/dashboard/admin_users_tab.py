@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QWidget,
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
-
+from window.helpers.enhanced_controls import LineEdit
 
 class AdminUsersTab(QWidget):
 
@@ -29,13 +29,29 @@ class AdminUsersTab(QWidget):
 
         self.users_table = QTableWidget()
         
-        #self.users_table.horizontalHeader().setStretchLastSection(True)
+        self.search_bar = LineEdit('Search for user')
+        self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
+
 
         layout.addLayout(button_bar)
+        layout.addLayout(self.search_bar)
         layout.addWidget(self.users_table)
 
         self.setLayout(layout)
         self.configure_users_table()
+    
+    def search_bar_value_changed(self):
+        search = self.search_bar.line_edit.text().lower()
+
+        for i in range(self.users_table.rowCount()):
+            name = self.users_table.cellWidget(i, 0).text().lower()
+
+            if not search in name:
+                self.users_table.hideRow(i)
+            else:
+                self.users_table.showRow(i)
+
+
 
     def add_new_user(self, user_privilege):
         new_user_window = AdminAddUser(user_privilege, self.configure_users_table)
@@ -46,6 +62,7 @@ class AdminUsersTab(QWidget):
         l_users = Database.get_all_users()
 
         self.users_table.clear()
+        self.users_table.setSortingEnabled(True)
         self.users_table.setRowCount(len(l_users))
         self.users_table.setColumnCount(4) 
         self.users_table.setHorizontalHeaderLabels(["Name", " Username ", " Privilege ", "Actions"])
@@ -63,7 +80,6 @@ class AdminUsersTab(QWidget):
             name_item = QLabel(i.name)
             username_item = QLabel(i.username)
 
-            print('asdaskdjankdjas', i.privilege)
             if i.privilege == UserPrivilege.NORMAL:
                 p_text = 'Normal'
             elif i.privilege == UserPrivilege.ADMIN:
