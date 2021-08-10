@@ -78,8 +78,6 @@ class NewUserLayout(QVBoxLayout):
 
         self.set_disable(True)
 
-        # Create new Admin user
-
         new_new_user_user = User(proposed_new_user_username, proposed_new_user_password,
                                  proposed_new_user_password_hint, proposed_new_user_name,
                                  privilege=self.user_privilege)

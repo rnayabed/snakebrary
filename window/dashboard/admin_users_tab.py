@@ -1,7 +1,7 @@
 from window.dashboard.admin_add_user import AdminAddUser
 from window.helpers.helpers import center_screen
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
+from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QMessageBox, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
@@ -129,6 +129,12 @@ class AdminUsersTab(QWidget):
         return final_widget
     
     def delete_user(self, username):
-        Database.delete_user(username)
-        self.configure_users_table()
+        user_req = Database.get_users_by_username(username)[0]
+        warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following user
+        Name: {user_req.name}
+        Username: {user_req.username}''', QMessageBox.Yes, QMessageBox.No).exec()
+
+        if warning_box == QMessageBox.Yes:
+            Database.delete_user(username)
+            self.configure_books_table()
     

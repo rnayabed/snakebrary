@@ -10,8 +10,8 @@ from logic.user import UserPrivilege
 
 class AdminAddUser(QWidget):
 
-    def __init__(self, new_user_privilege:UserPrivilege, on_success):
-        super(AdminAddUser, self).__init__(None)
+    def __init__(self, new_user_privilege:UserPrivilege, on_success, parent=None):
+        super(AdminAddUser, self).__init__(parent)
 
         self.setWindowTitle('Add new User')
         self.setFixedSize(500, 500)
