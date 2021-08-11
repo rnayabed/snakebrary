@@ -16,21 +16,7 @@ class AdminAddUser(QWidget):
         self.setWindowTitle('Add new User')
         self.setFixedSize(500, 500)
 
-        sub_heading = QLabel('Fill the form below to add new user!')
-        sub_heading.setAlignment(Qt.AlignCenter)
-        sub_heading.setFont(get_font_size(15))
-
-        # Create layout and add widgets
-        layout = QVBoxLayout()
-        layout.addWidget(sub_heading)
-
-        new_user_layout = NewUserLayout(on_success=self.on_success, user_privilege=new_user_privilege)
-
-        layout.addLayout(new_user_layout)
-
-        layout.setSpacing(10)
-
-        self.setLayout(layout)
+        self.setLayout(NewUserLayout(on_success=self.on_success, user_privilege=new_user_privilege))
         self.on_success = on_success
 
     def on_success(self):

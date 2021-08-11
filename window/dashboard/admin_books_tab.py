@@ -56,7 +56,7 @@ class AdminBooksTab(QWidget):
         self.books_table.clear()
         self.books_table.setSortingEnabled(True)
         self.books_table.setRowCount(len(l_books))
-        self.books_table.setColumnCount(4) 
+        self.books_table.setColumnCount(5) 
         self.books_table.setHorizontalHeaderLabels(["Name", " Author ", " Current Holder ", "ISBN", "Actions"])
 
         self.books_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
@@ -72,7 +72,13 @@ class AdminBooksTab(QWidget):
         for i in l_books:
             name_item = QLabel(i.name)
             author_item = QLabel(i.author)
-            current_holder_item = QLabel(i.current_holder)
+
+            c_holder = i.current_holder
+            if c_holder == '':
+                c_holder = 'No-one'
+
+
+            current_holder_item = QLabel(c_holder)
             isbn_item = QLabel(i.ISBN)
 
 
@@ -113,9 +119,9 @@ class AdminBooksTab(QWidget):
     def delete_book(self, ISBN):
         book_req = Database.get_books_by_ISBN(ISBN)[0]
         warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following book
-        Name: {book_req.name}
-        Author: {book_req.author}
-        ISBN: {book_req.ISBN}''', QMessageBox.Yes, QMessageBox.No).exec()
+Name: {book_req.name}
+Author: {book_req.author}
+ISBN: {book_req.ISBN}''', QMessageBox.Yes, QMessageBox.No)
 
         if warning_box == QMessageBox.Yes:
             Database.delete_book(ISBN)

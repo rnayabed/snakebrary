@@ -102,7 +102,7 @@ class Database:
 
     @staticmethod
     def get_books_by_ISBN(ISBN):
-        return Database.__filter_users(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
+        return Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
 
     @staticmethod
     def get_all_users():

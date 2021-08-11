@@ -131,8 +131,8 @@ class AdminUsersTab(QWidget):
     def delete_user(self, username):
         user_req = Database.get_users_by_username(username)[0]
         warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following user
-        Name: {user_req.name}
-        Username: {user_req.username}''', QMessageBox.Yes, QMessageBox.No).exec()
+Name: {user_req.name}
+Username: {user_req.username}''', QMessageBox.Yes, QMessageBox.No)
 
         if warning_box == QMessageBox.Yes:
             Database.delete_user(username)
