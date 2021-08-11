@@ -18,8 +18,6 @@ if __name__ == '__main__':
     Database.create_connection()
 
     if Database.is_new_setup():
-        Database.create_new_tables()
-
         welcome = Welcome(app)
         welcome.show()
         center_screen(welcome)

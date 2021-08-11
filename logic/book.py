@@ -10,7 +10,7 @@ class BookReviews:
 
 class Book:
     def __init__(self, ISBN, name, author, current_holder,
-                 previous_holders, genre, price, date_time_added=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
+                 previous_holders, genre, price, photo=None, date_time_added=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
         self.ISBN = ISBN
         self.name = name
         self.author = author
@@ -18,6 +18,7 @@ class Book:
         self.previous_holders = previous_holders
         self.genre = genre
         self.price = price
+        self.photo = photo
         self.date_time_added = date_time_added
 
 

@@ -32,8 +32,6 @@ class AdminBooksTab(QWidget):
 
         self.setLayout(layout)
         self.configure_books_table()
-
-        self.new_book_window = AdminAddBook(self.configure_books_table)
     
     def search_bar_value_changed(self):
         search = self.search_bar.line_edit.text().lower()
@@ -47,6 +45,7 @@ class AdminBooksTab(QWidget):
                 self.books_table.showRow(i)
 
     def add_new_book(self):
+        self.new_book_window = AdminAddBook(self.configure_books_table)
         self.new_book_window.show()
         center_screen(self.new_book_window)
 
@@ -57,7 +56,7 @@ class AdminBooksTab(QWidget):
         self.books_table.setSortingEnabled(True)
         self.books_table.setRowCount(len(l_books))
         self.books_table.setColumnCount(5) 
-        self.books_table.setHorizontalHeaderLabels(["Name", " Author ", " Current Holder ", "ISBN", "Actions"])
+        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "Current Holder", "Price (₹)", "Actions"])
 
         self.books_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.books_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -79,13 +78,13 @@ class AdminBooksTab(QWidget):
 
 
             current_holder_item = QLabel(c_holder)
-            isbn_item = QLabel(i.ISBN)
+            price_item = QLabel(str(i.price))
 
 
             self.books_table.setCellWidget(j, 0, name_item)
             self.books_table.setCellWidget(j, 1, author_item)
             self.books_table.setCellWidget(j, 2, current_holder_item)
-            self.books_table.setCellWidget(j, 3, isbn_item)
+            self.books_table.setCellWidget(j, 3, price_item)
             self.books_table.setCellWidget(j, 4, self.get_actions_bar_each_row(i))
             j += 1
 
@@ -99,18 +98,13 @@ class AdminBooksTab(QWidget):
         delete_user_button.setProperty('class', 'danger')
         delete_user_button.setProperty('flat', 'true')
 
-        edit_user_button = QPushButton(' Edit ')
-        edit_user_button.setProperty('flat', 'true')
-
         view_info_button = QPushButton(' More Info  ')
         view_info_button.setProperty('flat', 'true')
 
         l.addWidget(view_info_button)
-        l.addWidget(edit_user_button)
         l.addWidget(delete_user_button)
 
         if(self.current_user.privilege == UserPrivilege.NORMAL):
-            edit_user_button.setEnabled(False)
             delete_user_button.setEnabled(False)
 
         final_widget.setLayout(l)

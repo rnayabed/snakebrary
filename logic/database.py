@@ -38,7 +38,8 @@ class Database:
         password_hint   TEXT    NOT NULL,
         name    TEXT    NOT NULL,
         privilege   INT NOT NULL,
-        date_time_created    TEXT    NOT_NULL);''')
+        photo   BLOB,
+        date_time_created    TEXT    NOT NULL);''')
 
     @staticmethod
     def create_new_account_settings_table():
@@ -57,9 +58,10 @@ class Database:
         author   TEXT    NOT NULL,
         current_holder    TEXT    NOT NULL,
         previous_holders   TEXT NOT NULL,
-        genre    TEXT    NOT_NULL,
-        price   INT NOT_NULL,
-        date_time_added    TEXT    NOT_NULL);''')
+        genre    TEXT    NOT NULL,
+        price   FLOAT NOT NULL,
+        photo   BLOB,
+        date_time_added    TEXT    NOT NULL);''')
 
     @staticmethod
     def create_new_books_reviews_table():
@@ -73,10 +75,19 @@ class Database:
     @staticmethod
     def create_new_user(new_user: User):
         global __db_con
-        __db_con.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, date_time_created)
-        VALUES ("{new_user.username}", "{new_user.password}", 
-        "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}",
-        "{new_user.date_time_created}");''')
+
+        if new_user.photo == None:
+            __db_con.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
+            VALUES ("{new_user.username}", "{new_user.password}", 
+            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", NULL
+            "{new_user.date_time_created}");''')
+        else:
+            __db_con.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
+            VALUES ("{new_user.username}", "{new_user.password}", 
+            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", ?,
+            "{new_user.date_time_created}");''', [sqlite3.Binary(new_user.photo)])
+        
+        
 
         __db_con.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
         VALUES ("{new_user.username}", "light", "purple")''')
@@ -86,10 +97,17 @@ class Database:
     @staticmethod
     def create_new_book(new_book: Book):
         global __db_con
-        __db_con.execute(f'''INSERT INTO books(ISBN, name, author, current_holder, previous_holders, genre, price, date_time_added)
-        VALUES ("{new_book.ISBN}", "{new_book.name}", 
-        "{new_book.author}", "{new_book.current_holder}", "{new_book.previous_holders}",
-        "{new_book.genre}", "{new_book.price}", "{new_book.date_time_added}");''')
+        
+        if new_book.photo == None:
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, current_holder, previous_holders, genre, price, photo, date_time_added)
+            VALUES ("{new_book.ISBN}", "{new_book.name}", 
+            "{new_book.author}", "{new_book.current_holder}", "{new_book.previous_holders}",
+            "{new_book.genre}", "{new_book.price}", NULL, "{new_book.date_time_added}");''')
+        else:
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, current_holder, previous_holders, genre, price, photo, date_time_added)
+            VALUES ("{new_book.ISBN}", "{new_book.name}", 
+            "{new_book.author}", "{new_book.current_holder}", "{new_book.previous_holders}",
+            "{new_book.genre}", "{new_book.price}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
 
         __db_con.execute(f'''INSERT INTO books_reviews(ISBN, ratings, reviews)
         VALUES ("{new_book.ISBN}", "0.0", "{{}}")''')
@@ -136,7 +154,7 @@ class Database:
         tbr = []
 
         for i in books:
-            tba = Book(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7])
+            tba = Book(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8])
             tba.print_details()
             tbr.append(tba)
 

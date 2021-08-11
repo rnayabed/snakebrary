@@ -21,6 +21,5 @@ class AdminAddUser(QWidget):
 
     def on_success(self):
         self.on_success()
-        QMessageBox.information(self, 'Congratulations', 'Account was successfully added!',
-                                QMessageBox.Ok)
+        QMessageBox.information(self, 'Congratulations', 'Account was successfully added!', QMessageBox.Ok)
         self.close()

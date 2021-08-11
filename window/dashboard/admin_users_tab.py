@@ -108,21 +108,16 @@ class AdminUsersTab(QWidget):
         delete_user_button.setProperty('class', 'danger')
         delete_user_button.setProperty('flat', 'true')
 
-        edit_user_button = QPushButton(' Edit ')
-        edit_user_button.setProperty('flat', 'true')
-
         view_info_button = QPushButton(' More Info  ')
         view_info_button.setProperty('flat', 'true')
 
         l.addWidget(view_info_button)
-        l.addWidget(edit_user_button)
         l.addWidget(delete_user_button)
 
         if(user.username == self.current_user.username):
             delete_user_button.setEnabled(False)
 
         if(user.privilege == UserPrivilege.MASTER and self.current_user.privilege == UserPrivilege.ADMIN):
-            edit_user_button.setEnabled(False)
             delete_user_button.setEnabled(False)
 
         final_widget.setLayout(l)

@@ -17,7 +17,7 @@ class Welcome(QWidget):
         self.app = app
 
         self.setWindowTitle('Welcome')
-        self.setFixedSize(500, 500)
+        self.setFixedSize(500, 650)
 
         heading = QLabel('Welcome to snakebrary!')
         heading.setAlignment(Qt.AlignCenter)
