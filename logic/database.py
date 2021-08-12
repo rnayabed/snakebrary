@@ -57,7 +57,7 @@ class Database:
         name    TEXT    NOT NULL,
         author   TEXT    NOT NULL,
         holders    TEXT    NOT NULL,
-        genre    TEXT    NOT NULL,
+        genres    TEXT    NOT NULL,
         price   FLOAT NOT NULL,
         about   TEXT,
         photo   BLOB,
@@ -99,13 +99,13 @@ class Database:
         global __db_con
 
         if new_book.photo == None:
-            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genre, price, about, photo, date_time_added)
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genre}", "{new_book.price}", "{new_book.about}", NULL, "{new_book.date_time_added}");''')
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", NULL, "{new_book.date_time_added}");''')
         else:
-            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genre, price, about, photo, date_time_added)
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genre}", "{new_book.price}", "{new_book.about}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
 
         __db_con.execute(f'''INSERT INTO books_reviews(ISBN, ratings, reviews)
         VALUES ("{new_book.ISBN}", "0.0", "{{}}")''')
@@ -118,12 +118,12 @@ class Database:
 
         if book.photo == None:
             __db_con.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genre="{book.genre}", 
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=NULL
             WHERE ISBN={book.ISBN}''')
         else:
             __db_con.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genre="{book.genre}", 
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=?
             WHERE ISBN={book.ISBN}''', [sqlite3.Binary(book.photo)])
         

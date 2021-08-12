@@ -27,7 +27,7 @@ class AdminAddBook(QWidget):
         self.new_book_name_field = LineEdit('Name')
         self.new_book_author_field = LineEdit('Author')
         self.new_book_isbn_field = LineEdit('ISBN')
-        self.new_book_genre_field = LineEdit('Genre (Seperate with comma)')
+        self.new_book_genres_field = LineEdit('Genres (Seperate with comma)')
         self.new_book_price_field = LineEdit('Price (₹)')
         self.new_book_about_field = PlainTextEdit('About (Optional)')
 
@@ -42,7 +42,7 @@ class AdminAddBook(QWidget):
         vbox.addLayout(self.new_book_name_field)
         vbox.addLayout(self.new_book_author_field)
         vbox.addLayout(self.new_book_isbn_field)
-        vbox.addLayout(self.new_book_genre_field)
+        vbox.addLayout(self.new_book_genres_field)
         vbox.addLayout(self.new_book_price_field)
         vbox.addLayout(self.new_book_about_field)
         vbox.addWidget(self.proceed_button)
@@ -61,7 +61,7 @@ class AdminAddBook(QWidget):
         proposed_new_book_name = self.new_book_name_field.line_edit.text()
         proposed_new_book_author = self.new_book_author_field.line_edit.text()
         proposed_new_book_isbn = self.new_book_isbn_field.line_edit.text()
-        proposed_new_book_genre = self.new_book_genre_field.line_edit.text()
+        proposed_new_book_genres = self.new_book_genres_field.line_edit.text()
         proposed_new_book_price = self.new_book_price_field.line_edit.text()
         proposed_new_book_about = self.new_book_about_field.plain_text_edit.toPlainText()
 
@@ -85,11 +85,11 @@ class AdminAddBook(QWidget):
         else:
             self.new_book_isbn_field.on_success()
         
-        if len(proposed_new_book_genre) < 1:
-            self.new_book_genre_field.on_error('Too short!')
+        if len(proposed_new_book_genres) < 1:
+            self.new_book_genres_field.on_error('Too short!')
             error = True
         else:
-            self.new_book_genre_field.on_success()
+            self.new_book_genres_field.on_success()
         
         try:
             float(proposed_new_book_price)
@@ -103,7 +103,7 @@ class AdminAddBook(QWidget):
 
         self.set_disable(True)
 
-        genres = proposed_new_book_genre.split(',')
+        genres = proposed_new_book_genres.split(',')
         for i in range(len(genres)):
             genres[i] = genres[i].strip().lower()
 
@@ -138,5 +138,5 @@ Price: {old_books[0].price}''', QMessageBox.Ok)
         self.new_book_isbn_field.line_edit.setReadOnly(disable)
         self.new_book_name_field.line_edit.setReadOnly(disable)
         self.new_book_author_field.line_edit.setReadOnly(disable)
-        self.new_book_genre_field.line_edit.setReadOnly(disable)
+        self.new_book_genres_field.line_edit.setReadOnly(disable)
         self.new_book_price_field.line_edit.setReadOnly(disable)

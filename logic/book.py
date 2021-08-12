@@ -25,17 +25,26 @@ class BookHolder:
     
 
 class Book:
-    def __init__(self, ISBN, name, author, holders, genre, price, about, photo=None,
+    def __init__(self, ISBN, name, author, holders, genres, price, about, photo=None,
                     date_time_added=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
         self.ISBN = ISBN
         self.name = name
         self.author = author
         self.holders = holders
-        self.genre = genre
+        self.genres = genres
         self.price = price
         self.about = about
         self.photo = photo
         self.date_time_added = date_time_added
+
+    def get_stylish_genres(self):
+        l = len(self.genres)
+        g = ''
+        for i in range(l):
+            g += self.genres[i].capitalize()
+            if i < (l-1):
+                g+= ', '
+        return g
 
     def return_now(self):
         self.holders[-1][2] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -54,7 +63,7 @@ class Book:
         print(self.ISBN)
         print(self.name)
         print(self.author)
-        print(self.genre)
+        print(self.genres)
         print(self.price)
         print(self.about)
         print(self.date_time_added)

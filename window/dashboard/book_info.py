@@ -38,6 +38,9 @@ class BookInfo(QWidget):
         self.author_label = QLabel()
         self.author_label.setFont(get_font_size(20))
 
+        self.genres_label = QLabel()
+        self.genres_label.setFont(get_font_size(15))
+
         self.rating_label = QLabel()
         self.rating_label.setFont(get_font_size(15))
 
@@ -51,6 +54,7 @@ class BookInfo(QWidget):
         vbox_labels_1.setAlignment(QtCore.Qt.AlignTop)
         vbox_labels_1.addWidget(self.name_label)
         vbox_labels_1.addWidget(self.author_label)
+        vbox_labels_1.addWidget(self.genres_label)
         vbox_labels_1.addWidget(self.rating_label)
         vbox_labels_1.addWidget(self.reviews_button)
         vbox_labels_1.addWidget(self.get_return_button)
@@ -83,6 +87,11 @@ class BookInfo(QWidget):
         
         self.name_label.setText(self.book.name)
         self.author_label.setText(f'by {self.book.author}')
+        
+        if len(self.book.genres) == 1:
+            self.genres_label.setText('Genre: '+self.book.get_stylish_genres())
+        else:
+            self.genres_label.setText('Genres: '+self.book.get_stylish_genres())
 
         if self.book.about != '':
             self.about_label.setText(self.book.about)
