@@ -2,12 +2,42 @@ from datetime import datetime
 
 
 
-class BookReviews:
-    def __init__(self, ISBN, ratings, reviews):
+class BookRatings:
+    def __init__(self, ISBN, ratings):
         self.ISBN = ISBN
         self.ratings = ratings
-        self.reviews = reviews
     
+    def get_average_rating(self):
+        if len(self.ratings) == 0:
+            return 0.0
+
+        s = 0.0
+        for each_rating in self.ratings.values():
+            s+=each_rating
+        
+        return round(s/len(self.ratings), 1)
+    
+    def get_rating_by_username(self, username):
+        if username in self.ratings:
+            return self.ratings[username]
+        return None
+    
+    def set_rating_by_username(self, username, rating):
+        self.ratings[username] =  rating
+    
+    def delete_rating_by_username(self, username):
+        del self.ratings[username]
+    
+    def get_ratings_by_proportion(self, rating):
+        return (self.get_total_ratings_for_particular_rating(rating) / len(self.ratings)) * 100
+
+    def get_total_ratings_for_particular_rating(self, rating):
+        c = 0
+        for each_rating in self.ratings.values():
+            if each_rating == rating:
+                c+=1 
+        
+        return c
 
 class BookHolder:
     def __init__(self, username, issued_on=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), returned_on=None):
@@ -36,6 +66,13 @@ class Book:
         self.about = about
         self.photo = photo
         self.date_time_added = date_time_added
+    
+    def is_eligible_to_rate(self, username):
+        for each_holder in self.holders:
+            if each_holder[0] == username and each_holder[2] != None:
+                return True
+        
+        return False
 
     def get_stylish_genres(self):
         l = len(self.genres)

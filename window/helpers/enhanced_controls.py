@@ -168,5 +168,4 @@ class ImageView(QLabel):
     def clear_image(self):
         self.clear()
         self.setText(self.info)
- 
 

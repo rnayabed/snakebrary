@@ -72,7 +72,7 @@ class AdminBooksTab(QWidget):
             name_item = QLabel(i.name)
             author_item = QLabel(i.author)
 
-            rating_item = QLabel(Database.get_book_reviews(i.ISBN).ratings)
+            rating_item = QLabel(str(Database.get_book_ratings(i.ISBN).get_average_rating()))
 
             self.books_table.setCellWidget(j, 0, name_item)
             self.books_table.setCellWidget(j, 1, author_item)

@@ -1,4 +1,4 @@
-from logic.book import Book, BookReviews
+from logic.book import Book, BookRatings
 import sqlite3
 
 from pathlib import Path
@@ -27,7 +27,7 @@ class Database:
         Database.create_new_users_table()
         Database.create_new_account_settings_table()
         Database.create_new_books_table()
-        Database.create_new_books_reviews_table()
+        Database.create_new_books_ratings_table()
 
     @staticmethod
     def create_new_users_table():
@@ -64,12 +64,11 @@ class Database:
         date_time_added    TEXT    NOT NULL);''')
 
     @staticmethod
-    def create_new_books_reviews_table():
+    def create_new_books_ratings_table():
         global __db_con
-        __db_con.execute('''CREATE TABLE books_reviews
+        __db_con.execute('''CREATE TABLE books_ratings
         (ISBN   TEXT  PRIMARY KEY  NOT NULL,
-        ratings    TEXT    NOT NULL,
-        reviews   TEXT    NOT NULL);''')
+        ratings   TEXT    NOT NULL);''')
 
 
     @staticmethod
@@ -86,8 +85,6 @@ class Database:
             VALUES ("{new_user.username}", "{new_user.password}", 
             "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", ?,
             "{new_user.date_time_created}");''', [sqlite3.Binary(new_user.photo)])
-        
-        
 
         __db_con.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
         VALUES ("{new_user.username}", "light", "purple")''')
@@ -107,8 +104,8 @@ class Database:
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
             "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
 
-        __db_con.execute(f'''INSERT INTO books_reviews(ISBN, ratings, reviews)
-        VALUES ("{new_book.ISBN}", "0.0", "{{}}")''')
+        __db_con.execute(f'''INSERT INTO books_ratings(ISBN, ratings)
+        VALUES ("{new_book.ISBN}", "{{}}")''')
 
         Database.save_database()
     
@@ -120,13 +117,23 @@ class Database:
             __db_con.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=NULL
-            WHERE ISBN={book.ISBN}''')
+            WHERE ISBN="{book.ISBN}"''')
         else:
             __db_con.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=?
-            WHERE ISBN={book.ISBN}''', [sqlite3.Binary(book.photo)])
+            WHERE ISBN="{book.ISBN}"''', [sqlite3.Binary(book.photo)])
         
+        Database.save_database()
+
+    @staticmethod
+    def update_book_ratings(book_ratings: BookRatings):
+        global __db_con
+
+        __db_con.execute(f'''UPDATE books_ratings
+        SET ratings="{book_ratings.ratings}" 
+        WHERE ISBN="{book_ratings.ISBN}"''')
+
         Database.save_database()
 
     @staticmethod
@@ -192,17 +199,17 @@ class Database:
         Database.save_database()
     
     @staticmethod
-    def get_book_reviews(ISBN):
+    def get_book_ratings(ISBN):
         global __db_con
-        s = list(__db_con.execute(f'SELECT * FROM books_reviews WHERE ISBN="{ISBN}"'))[0]
-        return BookReviews(s[0], s[1], literal_eval(s[2]))
+        s = list(__db_con.execute(f'SELECT * FROM books_ratings WHERE ISBN="{ISBN}"'))[0]
+        return BookRatings(s[0], literal_eval(s[1]))
 
     @staticmethod
-    def set_book_reviews(book_reviews: BookReviews):
+    def set_book_ratings(book_ratings: BookRatings):
         global __db_con
-        __db_con.execute(f'''UPDATE book_reviews 
-                             SET ratings="{book_reviews.ratings}", reviews="{book_reviews.reviews}" 
-                             WHERE ISBN="{book_reviews.ISBN}" ''')
+        __db_con.execute(f'''UPDATE books_ratings 
+                             SET ratings="{book_ratings.ratings}"
+                             WHERE ISBN="{book_ratings.ISBN}" ''')
 
         Database.save_database()
 
@@ -238,6 +245,6 @@ class Database:
     def delete_book(ISBN):
         global __db_con
         __db_con.execute(f'DELETE FROM books WHERE ISBN="{ISBN}"')
-        __db_con.execute(f'DELETE FROM books_reviews WHERE ISBN="{ISBN}"')  
+        __db_con.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')  
 
         Database.save_database()

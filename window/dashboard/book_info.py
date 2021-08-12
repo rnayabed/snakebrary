@@ -1,3 +1,4 @@
+from window.dashboard.book_ratings_layout import BookRatingsLayout
 from logic.user import User
 from logic.database import Database
 from os import name
@@ -5,12 +6,12 @@ from window.helpers.helpers import get_font_size
 from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder, BookReviews
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget, QTabWidget)
+from logic.book import Book, BookHolder
+from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 
-class BookInfo(QWidget):
+class BookInfo(QScrollArea):
 
     def __init__(self, book: Book, current_user: User, parent=None):
         super(BookInfo, self).__init__(parent)
@@ -39,13 +40,9 @@ class BookInfo(QWidget):
         self.author_label.setFont(get_font_size(20))
 
         self.genres_label = QLabel()
-        self.genres_label.setFont(get_font_size(15))
 
-        self.rating_label = QLabel()
-        self.rating_label.setFont(get_font_size(15))
-
-        self.reviews_button = QPushButton()
-        self.reviews_button.setProperty('flat', 'true')
+        self.isbn_label = QLabel()
+        self.price_label = QLabel()
 
         self.get_return_button = QPushButton()
 
@@ -55,8 +52,8 @@ class BookInfo(QWidget):
         vbox_labels_1.addWidget(self.name_label)
         vbox_labels_1.addWidget(self.author_label)
         vbox_labels_1.addWidget(self.genres_label)
-        vbox_labels_1.addWidget(self.rating_label)
-        vbox_labels_1.addWidget(self.reviews_button)
+        vbox_labels_1.addWidget(self.isbn_label)
+        vbox_labels_1.addWidget(self.price_label)
         vbox_labels_1.addWidget(self.get_return_button)
 
         hbox_1.addLayout(vbox_labels_1)
@@ -76,7 +73,15 @@ class BookInfo(QWidget):
 
         main_vbox.addLayout(about_layout)
 
-        self.setLayout(main_vbox)
+        self.ratings_layout = BookRatingsLayout(self.book, self.current_user)
+
+        main_vbox.addLayout(self.ratings_layout)
+
+        widget = QWidget()
+        widget.setLayout(main_vbox)
+    
+        self.setWidget(widget)
+        self.setWidgetResizable(True)
 
         self.configure_ui()
     
@@ -93,6 +98,9 @@ class BookInfo(QWidget):
         else:
             self.genres_label.setText('Genres: '+self.book.get_stylish_genres())
 
+        self.isbn_label.setText(f'ISBN: {self.book.ISBN}')
+        self.price_label.setText(f'Price: ₹ {self.book.price}')
+
         if self.book.about != '':
             self.about_label.setText(self.book.about)
         else:
@@ -101,16 +109,6 @@ class BookInfo(QWidget):
 
 
         self.configure_get_return_button()
-
-        
-        book_reviews = Database.get_book_reviews(self.book.ISBN)
-
-        self.rating_label.setText(f'<i>{book_reviews.ratings} / 10</i>')
-
-        if(len(book_reviews.reviews) > 0):
-            self.reviews_button.setText(f'Check Reviews ({len(book_reviews.reviews)})')
-        else:
-            self.reviews_button.hide()
 
     def get_button(self):
         new_holder = BookHolder(self.current_user.username)
@@ -130,6 +128,8 @@ class BookInfo(QWidget):
         Database.update_book(self.book)
 
         self.configure_get_return_button()
+        self.ratings_layout.book = self.book
+        self.ratings_layout.configure_ui()
     
     def configure_get_return_button(self):
         if self.book.get_current_holder() == None:
