@@ -6,6 +6,15 @@ class UserPrivilege:
     ADMIN = 1
     NORMAL = 2
 
+    @staticmethod
+    def get_ui_name(user_privilege):
+        if user_privilege == UserPrivilege.MASTER:
+            return 'Master'
+        elif user_privilege == UserPrivilege.ADMIN:
+            return 'Administrator'
+        elif user_privilege == UserPrivilege.NORMAL:
+            return 'Normal'
+
 
 class UserSettings:
     def __init__(self, username, theme, accent_colour):

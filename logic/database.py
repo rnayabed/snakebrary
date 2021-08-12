@@ -3,7 +3,7 @@ import sqlite3
 
 from pathlib import Path
 from logic.user import User, UserSettings
-
+from ast import literal_eval
 
 class Database:
     __db_con: sqlite3.dbapi2
@@ -56,10 +56,10 @@ class Database:
         (ISBN   TEXT  PRIMARY KEY  NOT NULL,
         name    TEXT    NOT NULL,
         author   TEXT    NOT NULL,
-        current_holder    TEXT    NOT NULL,
-        previous_holders   TEXT NOT NULL,
+        holders    TEXT    NOT NULL,
         genre    TEXT    NOT NULL,
         price   FLOAT NOT NULL,
+        about   TEXT,
         photo   BLOB,
         date_time_added    TEXT    NOT NULL);''')
 
@@ -79,7 +79,7 @@ class Database:
         if new_user.photo == None:
             __db_con.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
             VALUES ("{new_user.username}", "{new_user.password}", 
-            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", NULL
+            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", NULL,
             "{new_user.date_time_created}");''')
         else:
             __db_con.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
@@ -92,27 +92,42 @@ class Database:
         __db_con.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
         VALUES ("{new_user.username}", "light", "purple")''')
 
-        __db_con.commit()
+        Database.save_database()
 
     @staticmethod
     def create_new_book(new_book: Book):
         global __db_con
-        
+
         if new_book.photo == None:
-            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, current_holder, previous_holders, genre, price, photo, date_time_added)
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genre, price, about, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.current_holder}", "{new_book.previous_holders}",
-            "{new_book.genre}", "{new_book.price}", NULL, "{new_book.date_time_added}");''')
+            "{new_book.author}", "{new_book.holders}", "{new_book.genre}", "{new_book.price}", "{new_book.about}", NULL, "{new_book.date_time_added}");''')
         else:
-            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, current_holder, previous_holders, genre, price, photo, date_time_added)
+            __db_con.execute(f'''INSERT INTO books(ISBN, name, author, holders, genre, price, about, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.current_holder}", "{new_book.previous_holders}",
-            "{new_book.genre}", "{new_book.price}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
+            "{new_book.author}", "{new_book.holders}", "{new_book.genre}", "{new_book.price}", "{new_book.about}", ?, "{new_book.date_time_added}");''', [sqlite3.Binary(new_book.photo)])
 
         __db_con.execute(f'''INSERT INTO books_reviews(ISBN, ratings, reviews)
         VALUES ("{new_book.ISBN}", "0.0", "{{}}")''')
 
-        __db_con.commit()
+        Database.save_database()
+    
+    @staticmethod
+    def update_book(book: Book):
+        global __db_con
+
+        if book.photo == None:
+            __db_con.execute(f'''UPDATE books
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genre="{book.genre}", 
+            price="{book.price}", about="{book.about}", photo=NULL
+            WHERE ISBN={book.ISBN}''')
+        else:
+            __db_con.execute(f'''UPDATE books
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genre="{book.genre}", 
+            price="{book.price}", about="{book.about}", photo=?
+            WHERE ISBN={book.ISBN}''', [sqlite3.Binary(book.photo)])
+        
+        Database.save_database()
 
     @staticmethod
     def get_users_by_username(username):
@@ -154,7 +169,7 @@ class Database:
         tbr = []
 
         for i in books:
-            tba = Book(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8])
+            tba = Book(i[0], i[1], i[2], literal_eval(i[3]), literal_eval(i[4]), i[5], i[6], i[7], i[8])
             tba.print_details()
             tbr.append(tba)
 
@@ -180,7 +195,7 @@ class Database:
     def get_book_reviews(ISBN):
         global __db_con
         s = list(__db_con.execute(f'SELECT * FROM books_reviews WHERE ISBN="{ISBN}"'))[0]
-        return BookReviews(s[0], s[1], s[2])
+        return BookReviews(s[0], s[1], literal_eval(s[2]))
 
     @staticmethod
     def set_book_reviews(book_reviews: BookReviews):

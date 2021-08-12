@@ -1,9 +1,9 @@
 from PySide6 import QtCore
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.database import Database
-from window.helpers.enhanced_controls import FilePicker, LineEdit
+from window.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
 from logic.user import UserPrivilege, User
 
 
@@ -25,11 +25,7 @@ class NewUserLayout(QVBoxLayout):
 
         self.new_user_photo_path_field = FilePicker('Profile picture (Optional)', on_select=self.on_user_photo_selected, on_clear=self.on_user_photo_cleared)
 
-        self.preview_will_appear_here_text = 'Preview'
-        self.new_user_photo_preview = QLabel(self.preview_will_appear_here_text)
-        self.new_user_photo_preview.setStyleSheet('border: 2px solid black;')
-        self.new_user_photo_preview.setAlignment(QtCore.Qt.AlignCenter)
-        self.new_user_photo_preview.setFixedSize(100,100)
+        self.new_user_photo_preview = ImageView('Preview', 100, 100)
 
         self.photo_hbox = QHBoxLayout()
         self.photo_hbox.addLayout(self.new_user_photo_path_field)
@@ -55,13 +51,11 @@ class NewUserLayout(QVBoxLayout):
         self.addWidget(self.proceed_button)
     
     def on_user_photo_selected(self, img_path):
-        pixmap = QPixmap(img_path).scaled(200,200, QtCore.Qt.KeepAspectRatio)
-        self.new_user_photo_preview.setPixmap(pixmap)
+        self.new_user_photo_preview.set_image_from_path(img_path)
             
     def on_user_photo_cleared(self):
         self.new_user_photo_path_field.line_edit.clear()
-        self.new_user_photo_preview.clear()
-        self.new_user_photo_preview.setText(self.preview_will_appear_here_text)
+        self.new_user_photo_preview.clear_image()
 
     def on_proceed_button_clicked(self):
         proposed_new_user_photo_path = self.new_user_photo_path_field.line_edit.text()
@@ -107,6 +101,14 @@ class NewUserLayout(QVBoxLayout):
         if Database.is_new_setup():
             Database.create_new_tables()
 
+        old_users = Database.get_users_by_username(proposed_new_user_username)
+        if len(old_users) > 0:
+            QMessageBox.critical(None, 'Error', f'''User with same username already exists.
+Name: {old_users[0].name}
+Privilege: {UserPrivilege.get_ui_name(old_users[0].privilege)}
+Date Time Created: {old_users[0].date_time_created}''', QMessageBox.Ok)
+            return
+        
         new_user = User(proposed_new_user_username, proposed_new_user_password,
                                  proposed_new_user_password_hint, proposed_new_user_name,
                                  privilege=self.user_privilege)

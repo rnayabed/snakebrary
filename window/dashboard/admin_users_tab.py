@@ -80,14 +80,7 @@ class AdminUsersTab(QWidget):
             name_item = QLabel(i.name)
             username_item = QLabel(i.username)
 
-            if i.privilege == UserPrivilege.NORMAL:
-                p_text = 'Normal'
-            elif i.privilege == UserPrivilege.ADMIN:
-                p_text = 'Administrator'
-            else:
-                p_text = 'Master'
-
-            privilege_item = QLabel(p_text)
+            privilege_item = QLabel(UserPrivilege.get_ui_name(i.privilege))
 
 
             self.users_table.setCellWidget(j, 0, name_item)

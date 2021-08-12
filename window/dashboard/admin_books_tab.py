@@ -1,5 +1,6 @@
+from window.dashboard.book_info import BookInfo
 from window.dashboard.admin_add_book import AdminAddBook
-from logic.book import Book
+from logic.book import Book, BookHolder
 from window.dashboard.admin_add_user import AdminAddUser
 from window.helpers.helpers import center_screen
 from PySide6 import QtWidgets
@@ -55,14 +56,13 @@ class AdminBooksTab(QWidget):
         self.books_table.clear()
         self.books_table.setSortingEnabled(True)
         self.books_table.setRowCount(len(l_books))
-        self.books_table.setColumnCount(5) 
-        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "Current Holder", "Price (₹)", "Actions"])
+        self.books_table.setColumnCount(4) 
+        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "Rating", "Actions"])
 
         self.books_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.books_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.books_table.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         self.books_table.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
-        self.books_table.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.ResizeToContents)
         
         self.books_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.books_table.verticalHeader().setDefaultSectionSize(70)
@@ -72,20 +72,12 @@ class AdminBooksTab(QWidget):
             name_item = QLabel(i.name)
             author_item = QLabel(i.author)
 
-            c_holder = i.current_holder
-            if c_holder == '':
-                c_holder = 'No-one'
-
-
-            current_holder_item = QLabel(c_holder)
-            price_item = QLabel(str(i.price))
-
+            rating_item = QLabel(Database.get_book_reviews(i.ISBN).ratings)
 
             self.books_table.setCellWidget(j, 0, name_item)
             self.books_table.setCellWidget(j, 1, author_item)
-            self.books_table.setCellWidget(j, 2, current_holder_item)
-            self.books_table.setCellWidget(j, 3, price_item)
-            self.books_table.setCellWidget(j, 4, self.get_actions_bar_each_row(i))
+            self.books_table.setCellWidget(j, 2, rating_item)
+            self.books_table.setCellWidget(j, 3, self.get_actions_bar_each_row(i))
             j += 1
 
 
@@ -99,6 +91,7 @@ class AdminBooksTab(QWidget):
         delete_user_button.setProperty('flat', 'true')
 
         view_info_button = QPushButton(' More Info  ')
+        view_info_button.clicked.connect(lambda: self.show_book_info(book.ISBN))
         view_info_button.setProperty('flat', 'true')
 
         l.addWidget(view_info_button)
@@ -115,10 +108,16 @@ class AdminBooksTab(QWidget):
         warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following book
 Name: {book_req.name}
 Author: {book_req.author}
-ISBN: {book_req.ISBN}''', QMessageBox.Yes, QMessageBox.No)
+ISBN: {book_req.ISBN}
+Date Time Added: {book_req.date_time_added}''', QMessageBox.Yes, QMessageBox.No)
 
         if warning_box == QMessageBox.Yes:
             Database.delete_book(ISBN)
             self.configure_books_table()
+    
+    def show_book_info(self, ISBN):
+        self.book_info_window = BookInfo(Database.get_books_by_ISBN(ISBN)[0], self.current_user)
+        self.book_info_window.show()
+        center_screen(self.book_info_window)
 
     

@@ -4,7 +4,7 @@ from logic.book import Book
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton, QWidget
 
 from logic.database import Database
-from window.helpers.enhanced_controls import FilePicker, LineEdit
+from window.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
 
 class AdminAddBook(QWidget):
 
@@ -18,11 +18,7 @@ class AdminAddBook(QWidget):
 
         self.new_book_cover_photo_path_field = FilePicker('Cover Picture (Optional)', on_select=self.on_cover_photo_selected, on_clear=self.on_cover_photo_cleared)
 
-        self.preview_will_appear_here_text = 'Preview will appear here'
-        self.new_book_cover_photo_preview = QLabel(self.preview_will_appear_here_text)
-        self.new_book_cover_photo_preview.setStyleSheet('border: 2px solid black;')
-        self.new_book_cover_photo_preview.setAlignment(QtCore.Qt.AlignCenter)
-        self.new_book_cover_photo_preview.setFixedSize(200,200)
+        self.new_book_cover_photo_preview = ImageView('Preview will appear here', 200, 200)
 
         self.photo_hbox = QHBoxLayout()
         self.photo_hbox.addLayout(self.new_book_cover_photo_path_field)
@@ -33,6 +29,7 @@ class AdminAddBook(QWidget):
         self.new_book_isbn_field = LineEdit('ISBN')
         self.new_book_genre_field = LineEdit('Genre (Seperate with comma)')
         self.new_book_price_field = LineEdit('Price (₹)')
+        self.new_book_about_field = PlainTextEdit('About (Optional)')
 
         self.proceed_button = QPushButton('Proceed')
         self.proceed_button.clicked.connect(self.on_proceed_button_clicked)
@@ -47,18 +44,17 @@ class AdminAddBook(QWidget):
         vbox.addLayout(self.new_book_isbn_field)
         vbox.addLayout(self.new_book_genre_field)
         vbox.addLayout(self.new_book_price_field)
+        vbox.addLayout(self.new_book_about_field)
         vbox.addWidget(self.proceed_button)
 
         self.setLayout(vbox)
 
     def on_cover_photo_selected(self, img_path):
-        pixmap = QPixmap(img_path).scaled(200,200, QtCore.Qt.KeepAspectRatio)
-        self.new_book_cover_photo_preview.setPixmap(pixmap)
+        self.new_book_cover_photo_preview.set_image_from_path(img_path)
             
     def on_cover_photo_cleared(self):
         self.new_book_cover_photo_path_field.line_edit.clear()
-        self.new_book_cover_photo_preview.clear()
-        self.new_book_cover_photo_preview.setText(self.preview_will_appear_here_text)
+        self.new_book_cover_photo_preview.clear_image()
 
     def on_proceed_button_clicked(self):
         proposed_new_book_cover_photo_path = self.new_book_cover_photo_path_field.line_edit.text()
@@ -67,6 +63,7 @@ class AdminAddBook(QWidget):
         proposed_new_book_isbn = self.new_book_isbn_field.line_edit.text()
         proposed_new_book_genre = self.new_book_genre_field.line_edit.text()
         proposed_new_book_price = self.new_book_price_field.line_edit.text()
+        proposed_new_book_about = self.new_book_about_field.plain_text_edit.toPlainText()
 
         error = False
 
@@ -110,8 +107,17 @@ class AdminAddBook(QWidget):
         for i in range(len(genres)):
             genres[i] = genres[i].strip().lower()
 
+        old_books = Database.get_books_by_ISBN(proposed_new_book_isbn)
+        if len(old_books) > 0:
+            QMessageBox.critical(None, 'Error', f'''Book with same ISBN already exists.
+Name: {old_books[0].name}
+Author: {old_books[0].author}
+Price: {old_books[0].price}''', QMessageBox.Ok)
+            return
+
         new_book = Book(proposed_new_book_isbn, proposed_new_book_name,
-                                 proposed_new_book_author, '', [], genres, proposed_new_book_price)
+                                 proposed_new_book_author, [], genres, proposed_new_book_price, 
+                                 proposed_new_book_about)
 
         if proposed_new_book_cover_photo_path != '':
             file = open(proposed_new_book_cover_photo_path, 'rb')
