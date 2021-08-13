@@ -40,10 +40,15 @@ class BookRatings:
         return c
 
 class BookHolder:
-    def __init__(self, username, issued_on=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), returned_on=None):
+    def __init__(self, username, issued_on=None, returned_on=None):
         self.username = username
-        self.issued_on = issued_on
         self.returned_on = returned_on
+
+        if issued_on == None:
+            issued_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
+
+        self.issued_on = issued_on
     
     def get_raw_list(self):
         return [self.username, self.issued_on, self.returned_on]
@@ -56,7 +61,7 @@ class BookHolder:
 
 class Book:
     def __init__(self, ISBN, name, author, holders, genres, price, about, photo=None,
-                    date_time_added=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
+                    date_time_added=None):
         self.ISBN = ISBN
         self.name = name
         self.author = author
@@ -65,6 +70,11 @@ class Book:
         self.price = price
         self.about = about
         self.photo = photo
+
+        if date_time_added == None:
+            date_time_added = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
+
         self.date_time_added = date_time_added
     
     def is_eligible_to_rate(self, username):

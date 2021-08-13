@@ -1,3 +1,4 @@
+from PySide6.QtCore import QCoreApplication
 from window.dashboard.admin_add_book import AdminAddBook
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase, QScreen
@@ -10,8 +11,14 @@ from window.login_prompt import LoginPrompt
 
 from window.welcome import Welcome
 
-if __name__ == '__main__':
-    app = QApplication()
+
+
+def start():
+    try:
+        app = QApplication()
+    except RuntimeError:
+        app = QCoreApplication.instance() 
+        
     QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
     apply_stylesheet(app, theme='light_purple.xml')
 
@@ -26,5 +33,12 @@ if __name__ == '__main__':
         login_prompt.show()
         center_screen(login_prompt)
 
-    app.exec()
+    exit_code = app.exec()
     Database.close_connection()
+
+    if exit_code == 6504:
+        start()
+    
+
+if __name__ == '__main__':
+    start()

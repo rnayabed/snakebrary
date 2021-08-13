@@ -24,14 +24,21 @@ class UserSettings:
 
 class User:
     def __init__(self, username, password, password_hint, name,
-                 privilege=UserPrivilege.NORMAL, photo=None, date_time_created=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
+                 privilege=UserPrivilege.NORMAL, photo=None, date_time_created=None):
         self.username = username
         self.password = password
         self.password_hint = password_hint
         self.name = name
         self.privilege = privilege
         self.photo = photo
+
+
+        if date_time_created == None:
+            date_time_created = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+            
         self.date_time_created = date_time_created
+
 
     def print_details(self):
         print(self.username)

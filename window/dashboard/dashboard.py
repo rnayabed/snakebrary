@@ -1,3 +1,4 @@
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import (QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
@@ -14,13 +15,12 @@ class Dashboard(QWidget, QtStyleTools):
         super(Dashboard, self).__init__(parent)
 
         self.app = app
-
-        self.setWindowTitle("Snakebrary - Dashboard")
-
-        self.resize(800, 600)
-
         self.current_user = current_user
         self.current_user_settings = Database.get_user_settings(self.current_user.username)
+
+        self.setWindowTitle(f'Snakebrary - Logged in as {self.current_user.username} ({self.current_user.name})')
+
+        self.resize(1024, 768)
 
         layout = QVBoxLayout()
 
@@ -37,10 +37,14 @@ class Dashboard(QWidget, QtStyleTools):
             self.tabs.addTab(AdminUsersTab(self.current_user), 'Users')
             self.tabs.addTab(AdminBooksTab(self.current_user), 'Books')
 
-        self.tabs.addTab(SettingsTab(self.app, self.current_user_settings), "Settings")
+        self.tabs.addTab(SettingsTab(self.app, self.logout, self.current_user_settings), "Settings")
 
     def configure_theme_and_accent_colour(self):
         stylesheet_name = f'{self.current_user_settings.theme.lower()}_{self.current_user_settings.accent_colour.lower().replace(" ", "")}.xml'
 
         print(stylesheet_name)
         apply_stylesheet(self.app, stylesheet_name)
+    
+    def logout(self):
+        self.close()
+        return QCoreApplication.exit(6504)

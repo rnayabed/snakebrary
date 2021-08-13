@@ -1,6 +1,6 @@
 from window.dashboard.book_info import BookInfo
 from window.dashboard.admin_add_book import AdminAddBook
-from logic.book import Book, BookHolder
+from logic.book import Book
 from window.dashboard.admin_add_user import AdminAddUser
 from window.helpers.helpers import center_screen
 from PySide6 import QtWidgets
@@ -26,6 +26,7 @@ class AdminBooksTab(QWidget):
         
         self.search_bar = LineEdit('Search for book')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
+        self.search_bar.line_edit.setPlaceholderText('Search by Name, Author, ISBN ...')
 
         layout.addWidget(self.add_book_button)
         layout.addLayout(self.search_bar)
@@ -39,8 +40,10 @@ class AdminBooksTab(QWidget):
 
         for i in range(self.books_table.rowCount()):
             name = self.books_table.cellWidget(i, 0).text().lower()
+            author = self.books_table.cellWidget(i, 1).text().lower()
+            isbn = self.books_table.cellWidget(i, 2).text().lower()
 
-            if not search in name:
+            if not search in (name+author+isbn):
                 self.books_table.hideRow(i)
             else:
                 self.books_table.showRow(i)
@@ -57,7 +60,7 @@ class AdminBooksTab(QWidget):
         self.books_table.setSortingEnabled(True)
         self.books_table.setRowCount(len(l_books))
         self.books_table.setColumnCount(4) 
-        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "Rating", "Actions"])
+        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "ISBN", "Actions"])
 
         self.books_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.books_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -67,18 +70,16 @@ class AdminBooksTab(QWidget):
         self.books_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.books_table.verticalHeader().setDefaultSectionSize(70)
 
-        j = 0
-        for i in l_books:
-            name_item = QLabel(i.name)
-            author_item = QLabel(i.author)
+        for i in range(len(l_books)):
+            each_book = l_books[i]
+            name_widget = QLabel(each_book.name)
+            author_widget = QLabel(each_book.author)
+            isbn_widget = QLabel(each_book.ISBN)
 
-            rating_item = QLabel(str(Database.get_book_ratings(i.ISBN).get_average_rating()))
-
-            self.books_table.setCellWidget(j, 0, name_item)
-            self.books_table.setCellWidget(j, 1, author_item)
-            self.books_table.setCellWidget(j, 2, rating_item)
-            self.books_table.setCellWidget(j, 3, self.get_actions_bar_each_row(i))
-            j += 1
+            self.books_table.setCellWidget(i, 0, name_widget)
+            self.books_table.setCellWidget(i, 1, author_widget)
+            self.books_table.setCellWidget(i, 2, isbn_widget)
+            self.books_table.setCellWidget(i, 3, self.get_actions_bar_each_row(each_book))
 
 
     def get_actions_bar_each_row(self, book: Book):

@@ -75,22 +75,18 @@ class AdminUsersTab(QWidget):
         self.users_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.users_table.verticalHeader().setDefaultSectionSize(70)
 
-        j = 0
-        for i in l_users:
-            name_item = QLabel(i.name)
-            username_item = QLabel(i.username)
+        for i in range(len(l_users)):
+            each_user = l_users[i]
+            name_item = QLabel(each_user.name)
+            username_item = QLabel(each_user.username)
+            privilege_item = QLabel(UserPrivilege.get_ui_name(each_user.privilege))
 
-            privilege_item = QLabel(UserPrivilege.get_ui_name(i.privilege))
+            self.users_table.setCellWidget(i, 0, name_item)
+            self.users_table.setCellWidget(i, 1, username_item)
+            self.users_table.setCellWidget(i, 2, privilege_item)
+            self.users_table.setCellWidget(i, 3, self.get_actions_bar_each_row(each_user))
 
 
-            self.users_table.setCellWidget(j, 0, name_item)
-            self.users_table.setCellWidget(j, 1, username_item)
-            self.users_table.setCellWidget(j, 2, privilege_item)
-            self.users_table.setCellWidget(j, 3, self.get_actions_bar_each_row(i))
-            #self.users_table.resizeColumnsToContents()
-            j += 1
-
-        #self.users_table.resizeColumnsToContents
 
     def get_actions_bar_each_row(self, user:User):
         final_widget = QWidget()

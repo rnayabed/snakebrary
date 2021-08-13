@@ -1,8 +1,9 @@
+from window.dashboard.book_holders_window import BookHoldersWindow
 from window.dashboard.book_ratings_layout import BookRatingsLayout
-from logic.user import User
+from logic.user import User, UserPrivilege
 from logic.database import Database
 from os import name
-from window.helpers.helpers import get_font_size
+from window.helpers.helpers import center_screen, get_font_size
 from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
@@ -44,7 +45,14 @@ class BookInfo(QScrollArea):
         self.isbn_label = QLabel()
         self.price_label = QLabel()
 
+
+        self.current_holder_label = QLabel()
+
         self.get_return_button = QPushButton()
+        
+        self.get_book_holders_details = QPushButton('Show book holders list')
+        self.get_book_holders_details.clicked.connect(self.show_book_holders_list_window)
+
 
 
         vbox_labels_1 = QVBoxLayout()
@@ -54,7 +62,9 @@ class BookInfo(QScrollArea):
         vbox_labels_1.addWidget(self.genres_label)
         vbox_labels_1.addWidget(self.isbn_label)
         vbox_labels_1.addWidget(self.price_label)
+        vbox_labels_1.addWidget(self.current_holder_label)
         vbox_labels_1.addWidget(self.get_return_button)
+        vbox_labels_1.addWidget(self.get_book_holders_details)
 
         hbox_1.addLayout(vbox_labels_1)
 
@@ -107,31 +117,48 @@ class BookInfo(QScrollArea):
             self.about_label_header.hide()
             self.about_label.hide()
 
-
         self.configure_get_return_button()
 
+        if self.current_user.privilege == UserPrivilege.NORMAL:
+            self.current_holder_label.hide()
+            self.get_book_holders_details.hide()
+        else:
+            current_holder = self.book.get_current_holder()
+
+            if current_holder == None:
+                self.current_holder_label.hide()
+            else:
+                current_holder_user = Database.get_users_by_username(current_holder)[0]
+
+                
+                self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
+
+
     def get_button(self):
+        self.get_return_button.setDisabled(True)
+
         new_holder = BookHolder(self.current_user.username)
-
-        print('book holders before \n\n',self.book.holders)
-
         self.book.holders.append(new_holder.get_raw_list())
-
-        print('book holders after \n\n',self.book.holders)
-
         Database.update_book(self.book)
         
         self.configure_get_return_button()
+
+        self.get_return_button.setDisabled(False)
     
     def return_button(self):
+        self.get_return_button.setDisabled(True)
         self.book.return_now()
         Database.update_book(self.book)
 
         self.configure_get_return_button()
         self.ratings_layout.book = self.book
         self.ratings_layout.configure_ui()
+
+        self.get_return_button.setDisabled(False)
     
     def configure_get_return_button(self):
+        self.disconnect_slots_get_return_button()
+
         if self.book.get_current_holder() == None:
             self.get_return_button.setText('Get it')
             self.get_return_button.clicked.connect(self.get_button)
@@ -142,4 +169,14 @@ class BookInfo(QScrollArea):
             else:
                 self.get_return_button.setDisabled(True)
                 self.get_return_button.setText('Unavailable')
-        
+    
+    def disconnect_slots_get_return_button(self):
+        try:
+            self.get_return_button.clicked.disconnect()
+        except:
+            pass
+    
+    def show_book_holders_list_window(self):
+        self.book_holders_list_window = BookHoldersWindow(self.book.holders)
+        self.book_holders_list_window.show()
+        center_screen(self.book_holders_list_window)

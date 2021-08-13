@@ -1,5 +1,7 @@
+from PySide6 import QtCore
+from window.helpers.helpers import center_screen
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout
+from PySide6.QtWidgets import QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database
@@ -8,10 +10,11 @@ from window.helpers.enhanced_controls import ComboBox
 
 class GeneralTab(QWidget, QtStyleTools):
 
-    def __init__(self, app, current_user_settings):
+    def __init__(self, app, logout, current_user_settings):
         super(GeneralTab, self).__init__()
 
         self.app = app
+        self.logout = logout
 
         self.current_user_settings = current_user_settings
 
@@ -45,6 +48,12 @@ class GeneralTab(QWidget, QtStyleTools):
         layout.addLayout(self.theme_combo_box)
         layout.addLayout(self.accent_colour_combo_box)
 
+        self.logout_button = QPushButton('Logout')
+        self.logout_button.setProperty('class', 'danger')
+        self.logout_button.clicked.connect(self.logout)
+
+        layout.addWidget(self.logout_button)
+
         self.setLayout(layout)
 
     def change_theme(self):
@@ -59,3 +68,4 @@ class GeneralTab(QWidget, QtStyleTools):
         self.current_user_settings.theme = chosen_theme
         self.current_user_settings.accent_colour = chosen_accent_colour
         Database.set_user_settings(self.current_user_settings)
+    
