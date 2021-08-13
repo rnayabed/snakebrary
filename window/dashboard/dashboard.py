@@ -1,10 +1,10 @@
+from window.dashboard.books_tab_widget import BooksTabWidget
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import (QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database
 from logic.user import User, UserPrivilege
-from window.dashboard.admin_books_tab import AdminBooksTab
 from window.dashboard.admin_users_tab import AdminUsersTab
 from window.dashboard.settings_tab.settings_tab import SettingsTab
 
@@ -35,7 +35,9 @@ class Dashboard(QWidget, QtStyleTools):
     def configure_tabs(self):
         if self.current_user.privilege != UserPrivilege.NORMAL:
             self.tabs.addTab(AdminUsersTab(self.current_user), 'Users')
-            self.tabs.addTab(AdminBooksTab(self.current_user), 'Books')
+        
+
+        self.tabs.addTab(BooksTabWidget(self.current_user), 'Books')
 
         self.tabs.addTab(SettingsTab(self.app, self.logout, self.current_user_settings), "Settings")
 

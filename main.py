@@ -1,5 +1,4 @@
 from PySide6.QtCore import QCoreApplication
-from window.dashboard.admin_add_book import AdminAddBook
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase, QScreen
 

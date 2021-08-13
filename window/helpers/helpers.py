@@ -15,4 +15,4 @@ def get_font_size(size):
 
 def delete_layouts_in_layout(layout):
     for i in range(layout.count()): 
-        layout.itemAt(i).layout().deleteLater()
+        layout.itemAt(i).layout().close()

@@ -1,23 +1,25 @@
+from window.dashboard.book_wizard_window import BookWizardWindow
 from window.dashboard.book_holders_window import BookHoldersWindow
 from window.dashboard.book_ratings_layout import BookRatingsLayout
 from logic.user import User, UserPrivilege
 from logic.database import Database
 from os import name
-from window.helpers.helpers import center_screen, get_font_size
+from window.helpers.helpers import center_screen, delete_layouts_in_layout, get_font_size
 from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
 from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 
 class BookInfo(QScrollArea):
 
-    def __init__(self, book: Book, current_user: User, parent=None):
+    def __init__(self, ISBN, dashboard_on_books_edited, current_user: User, parent=None):
         super(BookInfo, self).__init__(parent)
 
-        self.book = book
+        self.ISBN = ISBN
+        self.dashboard_on_books_edited = dashboard_on_books_edited
         self.current_user = current_user
 
         self.setWindowTitle("Book Information")
@@ -54,6 +56,20 @@ class BookInfo(QScrollArea):
         self.get_book_holders_details.clicked.connect(self.show_book_holders_list_window)
 
 
+        self.edit_book_button = QPushButton('Edit')
+        self.edit_book_button.clicked.connect(self.on_edit_button_clicked)
+
+        self.delete_book_button = QPushButton('Delete')
+        self.delete_book_button.setProperty('class', 'danger')
+        self.delete_book_button.clicked.connect(self.on_delete_button_clicked)
+
+        self.edit_delete_button_hbox = QHBoxLayout()
+        self.edit_delete_button_hbox.addWidget(self.edit_book_button)
+        self.edit_delete_button_hbox.addWidget(self.delete_book_button)
+
+        self.edit_delete_button_widget = QWidget()
+        self.edit_delete_button_widget.setLayout(self.edit_delete_button_hbox)
+
 
         vbox_labels_1 = QVBoxLayout()
         vbox_labels_1.setAlignment(QtCore.Qt.AlignTop)
@@ -65,6 +81,7 @@ class BookInfo(QScrollArea):
         vbox_labels_1.addWidget(self.current_holder_label)
         vbox_labels_1.addWidget(self.get_return_button)
         vbox_labels_1.addWidget(self.get_book_holders_details)
+        vbox_labels_1.addWidget(self.edit_delete_button_widget)
 
         hbox_1.addLayout(vbox_labels_1)
 
@@ -83,9 +100,9 @@ class BookInfo(QScrollArea):
 
         main_vbox.addLayout(about_layout)
 
-        self.ratings_layout = BookRatingsLayout(self.book, self.current_user)
+        self.ratings_layout_parent = QVBoxLayout()
 
-        main_vbox.addLayout(self.ratings_layout)
+        main_vbox.addLayout(self.ratings_layout_parent)
 
         widget = QWidget()
         widget.setLayout(main_vbox)
@@ -96,9 +113,14 @@ class BookInfo(QScrollArea):
         self.configure_ui()
     
     def configure_ui(self):
+        self.book = Database.get_books_by_ISBN(self.ISBN)[0]
 
-        if self.book.photo != None:
+        if self.book.photo == None:
+            self.cover_photo.clear_image()
+            self.cover_photo.hide()
+        else:
             self.cover_photo.set_image_from_blob(self.book.photo)
+            self.cover_photo.show()
         
         self.name_label.setText(self.book.name)
         self.author_label.setText(f'by {self.book.author}')
@@ -113,6 +135,7 @@ class BookInfo(QScrollArea):
 
         if self.book.about != '':
             self.about_label.setText(self.book.about)
+            self.about_label.show()
         else:
             self.about_label_header.hide()
             self.about_label.hide()
@@ -122,6 +145,7 @@ class BookInfo(QScrollArea):
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.current_holder_label.hide()
             self.get_book_holders_details.hide()
+            self.edit_delete_button_widget.hide()
         else:
             current_holder = self.book.get_current_holder()
 
@@ -132,7 +156,22 @@ class BookInfo(QScrollArea):
 
                 
                 self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
+            
+        delete_layouts_in_layout(self.ratings_layout_parent)
+        self.ratings_layout = BookRatingsLayout(self.book, self.current_user)
+        self.ratings_layout_parent.addLayout(self.ratings_layout)
+    
+    def on_delete_button_clicked(self):
+        warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following book
+Name: {self.book.name}
+Author: {self.book.author}
+ISBN: {self.book.ISBN}
+Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No)
 
+        if warning_box == QMessageBox.Yes:
+            Database.delete_book(self.book.ISBN)
+            self.dashboard_on_books_edited()
+            self.close()
 
     def get_button(self):
         self.get_return_button.setDisabled(True)
@@ -180,3 +219,12 @@ class BookInfo(QScrollArea):
         self.book_holders_list_window = BookHoldersWindow(self.book.holders)
         self.book_holders_list_window.show()
         center_screen(self.book_holders_list_window)
+
+    def on_edit_button_clicked(self):
+        self.book_wizard_window = BookWizardWindow(self.on_book_edited, self.book)
+        self.book_wizard_window.show()
+        center_screen(self.book_wizard_window)
+    
+    def on_book_edited(self):
+        self.dashboard_on_books_edited()
+        self.configure_ui()

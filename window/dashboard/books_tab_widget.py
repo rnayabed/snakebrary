@@ -1,5 +1,5 @@
+from window.dashboard.book_wizard_window import BookWizardWindow
 from window.dashboard.book_info import BookInfo
-from window.dashboard.admin_add_book import AdminAddBook
 from logic.book import Book
 from window.dashboard.admin_add_user import AdminAddUser
 from window.helpers.helpers import center_screen
@@ -10,10 +10,10 @@ from logic.database import Database
 from logic.user import UserPrivilege, User
 from window.helpers.enhanced_controls import LineEdit
 
-class AdminBooksTab(QWidget):
+class BooksTabWidget(QWidget):
 
     def __init__(self, current_user:User, parent=None):
-        super(AdminBooksTab, self).__init__(parent)
+        super(BooksTabWidget, self).__init__(parent)
 
         self.current_user = current_user
 
@@ -23,6 +23,7 @@ class AdminBooksTab(QWidget):
         self.add_book_button.clicked.connect(self.add_new_book)
 
         self.books_table = QTableWidget()
+        self.books_table.clicked.connect(self.books_table_clicked)
         
         self.search_bar = LineEdit('Search for book')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
@@ -34,6 +35,9 @@ class AdminBooksTab(QWidget):
 
         self.setLayout(layout)
         self.configure_books_table()
+
+        if self.current_user.privilege == UserPrivilege.NORMAL:
+            self.add_book_button.hide()
     
     def search_bar_value_changed(self):
         search = self.search_bar.line_edit.text().lower()
@@ -49,7 +53,7 @@ class AdminBooksTab(QWidget):
                 self.books_table.showRow(i)
 
     def add_new_book(self):
-        self.new_book_window = AdminAddBook(self.configure_books_table)
+        self.new_book_window = BookWizardWindow(self.configure_books_table)
         self.new_book_window.show()
         center_screen(self.new_book_window)
 
@@ -59,13 +63,12 @@ class AdminBooksTab(QWidget):
         self.books_table.clear()
         self.books_table.setSortingEnabled(True)
         self.books_table.setRowCount(len(l_books))
-        self.books_table.setColumnCount(4) 
-        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "ISBN", "Actions"])
+        self.books_table.setColumnCount(3) 
+        self.books_table.setHorizontalHeaderLabels(["Name", "Author", "Genre"])
 
         self.books_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.books_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        self.books_table.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-        self.books_table.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
+        self.books_table.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         
         self.books_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.books_table.verticalHeader().setDefaultSectionSize(70)
@@ -74,51 +77,23 @@ class AdminBooksTab(QWidget):
             each_book = l_books[i]
             name_widget = QLabel(each_book.name)
             author_widget = QLabel(each_book.author)
-            isbn_widget = QLabel(each_book.ISBN)
+            genre_widget = QLabel(each_book.get_stylish_genres())
+
+            name_widget.setProperty('ISBN', each_book.ISBN)
+            author_widget.setProperty('ISBN', each_book.ISBN)
+            genre_widget.setProperty('ISBN', each_book.ISBN)
+
 
             self.books_table.setCellWidget(i, 0, name_widget)
             self.books_table.setCellWidget(i, 1, author_widget)
-            self.books_table.setCellWidget(i, 2, isbn_widget)
-            self.books_table.setCellWidget(i, 3, self.get_actions_bar_each_row(each_book))
+            self.books_table.setCellWidget(i, 2, genre_widget)
 
-
-    def get_actions_bar_each_row(self, book: Book):
-        final_widget = QWidget()
-        l = QHBoxLayout()
-
-        delete_user_button = QPushButton('Delete')
-        delete_user_button.clicked.connect(lambda: self.delete_book(book.ISBN))
-        delete_user_button.setProperty('class', 'danger')
-        delete_user_button.setProperty('flat', 'true')
-
-        view_info_button = QPushButton(' More Info  ')
-        view_info_button.clicked.connect(lambda: self.show_book_info(book.ISBN))
-        view_info_button.setProperty('flat', 'true')
-
-        l.addWidget(view_info_button)
-        l.addWidget(delete_user_button)
-
-        if(self.current_user.privilege == UserPrivilege.NORMAL):
-            delete_user_button.setEnabled(False)
-
-        final_widget.setLayout(l)
-        return final_widget
-    
-    def delete_book(self, ISBN):
-        book_req = Database.get_books_by_ISBN(ISBN)[0]
-        warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following book
-Name: {book_req.name}
-Author: {book_req.author}
-ISBN: {book_req.ISBN}
-Date Time Added: {book_req.date_time_added}''', QMessageBox.Yes, QMessageBox.No)
-
-        if warning_box == QMessageBox.Yes:
-            Database.delete_book(ISBN)
-            self.configure_books_table()
-    
-    def show_book_info(self, ISBN):
-        self.book_info_window = BookInfo(Database.get_books_by_ISBN(ISBN)[0], self.current_user)
+    def books_table_clicked(self, index):
+        isbn = self.books_table.cellWidget(index.row(), index.column()).property('ISBN')
+        self.book_info_window = BookInfo(isbn, self.configure_books_table, self.current_user)
         self.book_info_window.show()
         center_screen(self.book_info_window)
+    
+
 
     

@@ -156,16 +156,21 @@ class ImageView(QLabel):
         self.setStyleSheet(self.style)
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.setFixedSize(width,height)
+        self.is_clear = True
     
     def set_image_from_blob(self, blob):
         self.setPixmap(QPixmap.fromImage(QImage.fromData(blob))
                         .scaled(self.width(),self.height(),
                             QtCore.Qt.KeepAspectRatio))   
+        self.is_clear = False
 
     def set_image_from_path(self, path):
         self.setPixmap(QPixmap(path).scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio))
+        self.is_clear = False
 
     def clear_image(self):
         self.clear()
         self.setText(self.info)
+        self.is_clear = True
+     
 

@@ -40,8 +40,21 @@ class BookRatingsLayout(QVBoxLayout):
 
         overview_hbox.addLayout(left_rating_layout)
 
-        self.right_rating_layout = QVBoxLayout()
-        overview_hbox.addLayout(self.right_rating_layout)
+        right_layout_vbox = QVBoxLayout()
+
+        self.rating_progress_bar_5 = RatingProgressBar(5)
+        self.rating_progress_bar_4 = RatingProgressBar(4)
+        self.rating_progress_bar_3 = RatingProgressBar(3)
+        self.rating_progress_bar_2 = RatingProgressBar(2)
+        self.rating_progress_bar_1 = RatingProgressBar(1)
+
+        right_layout_vbox.addLayout(self.rating_progress_bar_5)
+        right_layout_vbox.addLayout(self.rating_progress_bar_4)
+        right_layout_vbox.addLayout(self.rating_progress_bar_3)
+        right_layout_vbox.addLayout(self.rating_progress_bar_2)
+        right_layout_vbox.addLayout(self.rating_progress_bar_1)
+
+        overview_hbox.addLayout(right_layout_vbox)
 
         self.addLayout(overview_hbox)
 
@@ -102,13 +115,11 @@ class BookRatingsLayout(QVBoxLayout):
         self.total_ratings_label.setText(str(len(self.book_ratings.ratings)))
         print(self.book_ratings.ratings)
 
-        delete_layouts_in_layout(self.right_rating_layout)
-        self.right_rating_layout.addLayout(self.get_rating_progress_bar_for_rating(5))
-        self.right_rating_layout.addLayout(self.get_rating_progress_bar_for_rating(4))
-        self.right_rating_layout.addLayout(self.get_rating_progress_bar_for_rating(3))
-        self.right_rating_layout.addLayout(self.get_rating_progress_bar_for_rating(2))
-        self.right_rating_layout.addLayout(self.get_rating_progress_bar_for_rating(1))
-
+        self.rating_progress_bar_1.load(self.book_ratings)
+        self.rating_progress_bar_2.load(self.book_ratings)
+        self.rating_progress_bar_3.load(self.book_ratings)
+        self.rating_progress_bar_4.load(self.book_ratings)
+        self.rating_progress_bar_5.load(self.book_ratings)
 
 
         if not self.book.is_eligible_to_rate(self.current_user.username):
@@ -139,4 +150,22 @@ class BookRatingsLayout(QVBoxLayout):
         hbox.addWidget(rating_bar)
         return hbox        
 
-        
+class RatingProgressBar(QHBoxLayout):
+
+    def __init__(self, rating):
+        super(RatingProgressBar, self).__init__(None)
+    
+        self.rating = rating
+        self.rate_label = QLabel(str(self.rating))
+        self.rating_bar = QProgressBar()
+
+        self.addWidget(self.rate_label)
+        self.addWidget(self.rating_bar)
+    
+    def load(self, book_ratings):
+        if len(book_ratings.ratings) == 0:
+            self.rating_bar.setValue(0)
+        else:
+            self.rating_bar.setValue(book_ratings.get_ratings_by_proportion(self.rating))
+
+
