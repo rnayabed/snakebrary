@@ -18,7 +18,7 @@ def start():
     except RuntimeError:
         app = QCoreApplication.instance() 
         
-    QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
+    #QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
     apply_stylesheet(app, theme='light_purple.xml')
 
     Database.create_connection()
