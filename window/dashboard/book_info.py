@@ -15,10 +15,10 @@ from qt_material import apply_stylesheet, QtStyleTools
 
 class BookInfo(QScrollArea):
 
-    def __init__(self, ISBN, dashboard_on_books_edited, current_user: User, parent=None):
+    def __init__(self, book, dashboard_on_books_edited, current_user: User, parent=None):
         super(BookInfo, self).__init__(parent)
 
-        self.ISBN = ISBN
+        self.book = book
         self.dashboard_on_books_edited = dashboard_on_books_edited
         self.current_user = current_user
 
@@ -64,6 +64,7 @@ class BookInfo(QScrollArea):
         self.delete_book_button.clicked.connect(self.on_delete_button_clicked)
 
         self.edit_delete_button_hbox = QHBoxLayout()
+        self.edit_delete_button_hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
         self.edit_delete_button_hbox.addWidget(self.edit_book_button)
         self.edit_delete_button_hbox.addWidget(self.delete_book_button)
 
@@ -113,8 +114,6 @@ class BookInfo(QScrollArea):
         self.configure_ui()
     
     def configure_ui(self):
-        self.book = Database.get_books_by_ISBN(self.ISBN)[0]
-
         if self.book.photo == None:
             self.cover_photo.clear_image()
             self.cover_photo.hide()
@@ -227,4 +226,5 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     
     def on_book_edited(self):
         self.dashboard_on_books_edited()
+        self.book = Database.get_books_by_ISBN(self.book.ISBN)[0]
         self.configure_ui()

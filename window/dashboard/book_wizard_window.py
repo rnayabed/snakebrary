@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtGui import QPixmap
 from logic.book import Book
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton, QWidget
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton, QWidget
 
 from logic.database import Database
 from window.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
@@ -10,18 +10,18 @@ class BookWizardWindowMode:
     ADD = 1,
     EDIT = 2
 
-class BookWizardWindow(QWidget):
+class BookWizardWindow(QDialog):
 
-    def __init__(self, on_success, book=None, parent=None):
+    def __init__(self, on_success, old_book=None, parent=None):
         super(BookWizardWindow, self).__init__(parent)
 
-        self.resize(500, 500)
+        self.resize(700, 500)
 
         self.on_success = on_success
 
         self.new_book_cover_photo_path_field = FilePicker('Cover Picture (Optional)', on_select=self.on_cover_photo_selected, on_clear=self.on_cover_photo_cleared)
 
-        self.new_book_cover_photo_preview = ImageView('Preview will appear here', 200, 200)
+        self.new_book_cover_photo_preview = ImageView('Preview will appear here', 300, 300)
 
         self.photo_hbox = QHBoxLayout()
         self.photo_hbox.addLayout(self.new_book_cover_photo_path_field)
@@ -53,12 +53,12 @@ class BookWizardWindow(QWidget):
         self.setLayout(vbox)
 
 
-        if book == None:
+        if old_book == None:
             self.setWindowTitle('Add Book')
             self.mode = BookWizardWindowMode.ADD
         else:
             self.setWindowTitle('Edit Book')
-            self.old_book = book
+            self.old_book = old_book
             self.load_values_for_old_book()
             self.mode = BookWizardWindowMode.EDIT
             self.new_book_isbn_field.line_edit.setReadOnly(True)
@@ -159,8 +159,6 @@ Price: {old_books[0].price}''', QMessageBox.Ok)
 
             close_message = 'Book was successfully added!'
         elif self.mode == BookWizardWindowMode.EDIT:
-            new_book.holders = self.old_book.holders
-            new_book.date_time_added = self.old_book.date_time_added
             Database.update_book(new_book)
             close_message = 'Book was successfully edited!'
             

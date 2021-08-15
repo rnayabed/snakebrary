@@ -1,4 +1,6 @@
-from window.dashboard.admin_add_user import AdminAddUser
+from window.dashboard.add_user import AddUser
+from PySide6.QtCore import QMargins
+from window.dashboard.user_info import UserInfo
 from window.helpers.helpers import center_screen
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QMessageBox, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
@@ -28,16 +30,21 @@ class AdminUsersTab(QWidget):
         button_bar.addWidget(self.add_normal_button)
 
         self.users_table = QTableWidget()
+        self.users_table.clicked.connect(self.users_table_clicked)
         
         self.search_bar = LineEdit('Search for user')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
-
+        self.search_bar.line_edit.setPlaceholderText('Search by Name or Username')
 
         layout.addLayout(button_bar)
         layout.addLayout(self.search_bar)
         layout.addWidget(self.users_table)
 
         self.setLayout(layout)
+        
+        if self.current_user.privilege == UserPrivilege.ADMIN:
+            self.add_admin_button.hide()
+
         self.configure_users_table()
     
     def search_bar_value_changed(self):
@@ -45,16 +52,15 @@ class AdminUsersTab(QWidget):
 
         for i in range(self.users_table.rowCount()):
             name = self.users_table.cellWidget(i, 0).text().lower()
+            username = self.users_table.cellWidget(i, 1).text().lower()
 
-            if not search in name:
+            if not search in (name+username):
                 self.users_table.hideRow(i)
             else:
                 self.users_table.showRow(i)
 
-
-
     def add_new_user(self, user_privilege):
-        new_user_window = AdminAddUser(user_privilege, self.configure_users_table)
+        new_user_window = AddUser(user_privilege, self.configure_users_table)
         new_user_window.show()
         center_screen(new_user_window)
 
@@ -64,61 +70,33 @@ class AdminUsersTab(QWidget):
         self.users_table.clear()
         self.users_table.setSortingEnabled(True)
         self.users_table.setRowCount(len(l_users))
-        self.users_table.setColumnCount(4) 
-        self.users_table.setHorizontalHeaderLabels(["Name", " Username ", " Privilege ", "Actions"])
+        self.users_table.setColumnCount(3) 
+        self.users_table.setHorizontalHeaderLabels(["Name", " Username ", " Privilege "])
 
         self.users_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.users_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         self.users_table.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-        self.users_table.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeToContents)
         
         self.users_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.users_table.verticalHeader().setDefaultSectionSize(70)
 
         for i in range(len(l_users)):
             each_user = l_users[i]
-            name_item = QLabel(each_user.name)
-            username_item = QLabel(each_user.username)
-            privilege_item = QLabel(UserPrivilege.get_ui_name(each_user.privilege))
+            name_widget = QLabel(each_user.name)
+            username_widget = QLabel(each_user.username)
+            privilege_widget = QLabel(UserPrivilege.get_ui_name(each_user.privilege))
 
-            self.users_table.setCellWidget(i, 0, name_item)
-            self.users_table.setCellWidget(i, 1, username_item)
-            self.users_table.setCellWidget(i, 2, privilege_item)
-            self.users_table.setCellWidget(i, 3, self.get_actions_bar_each_row(each_user))
+            name_widget.setProperty('user_obj', each_user)
+            username_widget.setProperty('user_obj', each_user)
+            privilege_widget.setProperty('user_obj', each_user)
 
+            self.users_table.setCellWidget(i, 0, name_widget)
+            self.users_table.setCellWidget(i, 1, username_widget)
+            self.users_table.setCellWidget(i, 2, privilege_widget)
 
-
-    def get_actions_bar_each_row(self, user:User):
-        final_widget = QWidget()
-        l = QHBoxLayout()
-
-        delete_user_button = QPushButton('Delete')
-        delete_user_button.clicked.connect(lambda: self.delete_user(user.username))
-        delete_user_button.setProperty('class', 'danger')
-        delete_user_button.setProperty('flat', 'true')
-
-        view_info_button = QPushButton(' More Info  ')
-        view_info_button.setProperty('flat', 'true')
-
-        l.addWidget(view_info_button)
-        l.addWidget(delete_user_button)
-
-        if(user.username == self.current_user.username):
-            delete_user_button.setEnabled(False)
-
-        if(user.privilege == UserPrivilege.MASTER and self.current_user.privilege == UserPrivilege.ADMIN):
-            delete_user_button.setEnabled(False)
-
-        final_widget.setLayout(l)
-        return final_widget
-    
-    def delete_user(self, username):
-        user_req = Database.get_users_by_username(username)[0]
-        warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following user
-Name: {user_req.name}
-Username: {user_req.username}''', QMessageBox.Yes, QMessageBox.No)
-
-        if warning_box == QMessageBox.Yes:
-            Database.delete_user(username)
-            self.configure_books_table()
+    def users_table_clicked(self, index):
+        user = self.users_table.cellWidget(index.row(), index.column()).property('user_obj')
+        self.users_info_window = UserInfo(user, self.configure_users_table, self.current_user)
+        self.users_info_window.show()
+        center_screen(self.users_info_window)
     

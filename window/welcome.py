@@ -1,9 +1,9 @@
+from window.helpers.user_wizard import UserWizard
 from PySide6.QtWidgets import (QVBoxLayout, QWidget, QLabel, QMessageBox)
 
 from PySide6.QtCore import Qt
 
 from window.helpers.helpers import get_font_size, center_screen
-from window.helpers.new_user_layout import NewUserLayout
 
 from logic.user import UserPrivilege
 from window.login_prompt import LoginPrompt
@@ -38,7 +38,7 @@ class Welcome(QWidget):
         layout.addWidget(sub_heading_1)
         layout.addWidget(sub_heading_2)
 
-        master_user_layout = NewUserLayout(on_success=self.on_success, user_privilege=UserPrivilege.MASTER)
+        master_user_layout = UserWizard(on_success=self.on_success, new_user_privilege=UserPrivilege.MASTER)
 
         layout.addLayout(master_user_layout)
 

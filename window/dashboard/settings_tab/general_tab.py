@@ -10,13 +10,13 @@ from window.helpers.enhanced_controls import ComboBox
 
 class GeneralTab(QWidget, QtStyleTools):
 
-    def __init__(self, app, logout, current_user_settings):
+    def __init__(self, app, logout, current_user_account_settings):
         super(GeneralTab, self).__init__()
 
         self.app = app
         self.logout = logout
 
-        self.current_user_settings = current_user_settings
+        self.current_user_account_settings = current_user_account_settings
 
         layout = QVBoxLayout()
 
@@ -39,10 +39,10 @@ class GeneralTab(QWidget, QtStyleTools):
         ]
 
         self.theme_combo_box = ComboBox('Theme', self.themes_ui)
-        self.theme_combo_box.combo_box.setCurrentIndex(self.themes.index(self.current_user_settings.theme))
+        self.theme_combo_box.combo_box.setCurrentIndex(self.themes.index(self.current_user_account_settings.theme))
         self.theme_combo_box.combo_box.currentIndexChanged.connect(self.change_theme)
         self.accent_colour_combo_box = ComboBox('Accent Colour', self.accent_colours_ui)
-        self.accent_colour_combo_box.combo_box.setCurrentIndex(self.accent_colours.index(self.current_user_settings.accent_colour))
+        self.accent_colour_combo_box.combo_box.setCurrentIndex(self.accent_colours.index(self.current_user_account_settings.accent_colour))
         self.accent_colour_combo_box.combo_box.currentIndexChanged.connect(self.change_theme)
 
         layout.addLayout(self.theme_combo_box)
@@ -65,7 +65,7 @@ class GeneralTab(QWidget, QtStyleTools):
         print(stylesheet_name)
         apply_stylesheet(self.app, stylesheet_name)
 
-        self.current_user_settings.theme = chosen_theme
-        self.current_user_settings.accent_colour = chosen_accent_colour
-        Database.set_user_settings(self.current_user_settings)
+        self.current_user_account_settings.theme = chosen_theme
+        self.current_user_account_settings.accent_colour = chosen_accent_colour
+        Database.update_user_account_settings(self.current_user_account_settings)
     

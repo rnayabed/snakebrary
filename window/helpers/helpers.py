@@ -13,6 +13,6 @@ def get_font_size(size):
     font.setPixelSize(size)
     return font
 
-def delete_layouts_in_layout(layout):
+def delete_layouts_in_layout(layout: QLayout):
     for i in range(layout.count()): 
-        layout.itemAt(i).layout().close()
+        layout.itemAt(i).layout().deleteLater()

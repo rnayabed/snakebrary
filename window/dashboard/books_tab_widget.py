@@ -1,9 +1,8 @@
 from window.dashboard.book_wizard_window import BookWizardWindow
 from window.dashboard.book_info import BookInfo
 from logic.book import Book
-from window.dashboard.admin_add_user import AdminAddUser
 from window.helpers.helpers import center_screen
-from PySide6 import QtWidgets
+from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QMessageBox, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
 
 from logic.database import Database
@@ -27,7 +26,7 @@ class BooksTabWidget(QWidget):
         
         self.search_bar = LineEdit('Search for book')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
-        self.search_bar.line_edit.setPlaceholderText('Search by Name, Author, ISBN ...')
+        self.search_bar.line_edit.setPlaceholderText('Search by Name, Author or ISBN')
 
         layout.addWidget(self.add_book_button)
         layout.addLayout(self.search_bar)
@@ -54,7 +53,7 @@ class BooksTabWidget(QWidget):
 
     def add_new_book(self):
         self.new_book_window = BookWizardWindow(self.configure_books_table)
-        self.new_book_window.show()
+        self.new_book_window.exec()
         center_screen(self.new_book_window)
 
     def configure_books_table(self):
@@ -79,9 +78,9 @@ class BooksTabWidget(QWidget):
             author_widget = QLabel(each_book.author)
             genre_widget = QLabel(each_book.get_stylish_genres())
 
-            name_widget.setProperty('ISBN', each_book.ISBN)
-            author_widget.setProperty('ISBN', each_book.ISBN)
-            genre_widget.setProperty('ISBN', each_book.ISBN)
+            name_widget.setProperty('book_obj', each_book)
+            author_widget.setProperty('book_obj', each_book)
+            genre_widget.setProperty('book_obj', each_book)
 
 
             self.books_table.setCellWidget(i, 0, name_widget)
@@ -89,8 +88,8 @@ class BooksTabWidget(QWidget):
             self.books_table.setCellWidget(i, 2, genre_widget)
 
     def books_table_clicked(self, index):
-        isbn = self.books_table.cellWidget(index.row(), index.column()).property('ISBN')
-        self.book_info_window = BookInfo(isbn, self.configure_books_table, self.current_user)
+        book = self.books_table.cellWidget(index.row(), index.column()).property('book_obj')
+        self.book_info_window = BookInfo(book, self.configure_books_table, self.current_user)
         self.book_info_window.show()
         center_screen(self.book_info_window)
     

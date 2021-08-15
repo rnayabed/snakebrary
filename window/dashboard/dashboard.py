@@ -16,7 +16,7 @@ class Dashboard(QWidget, QtStyleTools):
 
         self.app = app
         self.current_user = current_user
-        self.current_user_settings = Database.get_user_settings(self.current_user.username)
+        self.current_user_account_settings = Database.get_user_account_settings(self.current_user.username)
 
         self.setWindowTitle(f'Snakebrary - Logged in as {self.current_user.username} ({self.current_user.name})')
 
@@ -39,10 +39,10 @@ class Dashboard(QWidget, QtStyleTools):
 
         self.tabs.addTab(BooksTabWidget(self.current_user), 'Books')
 
-        self.tabs.addTab(SettingsTab(self.app, self.logout, self.current_user_settings), "Settings")
+        self.tabs.addTab(SettingsTab(self.app, self.logout, self.current_user_account_settings), "Settings")
 
     def configure_theme_and_accent_colour(self):
-        stylesheet_name = f'{self.current_user_settings.theme.lower()}_{self.current_user_settings.accent_colour.lower().replace(" ", "")}.xml'
+        stylesheet_name = f'{self.current_user_account_settings.theme.lower()}_{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml'
 
         print(stylesheet_name)
         apply_stylesheet(self.app, stylesheet_name)

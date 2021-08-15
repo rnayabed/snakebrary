@@ -7,7 +7,7 @@ import os
 
 class LineEdit(QVBoxLayout):
 
-    def __init__(self, info, init_value=None, password_mode=False):
+    def __init__(self, info=None, init_value=None, password_mode=False):
         super(LineEdit, self).__init__()
 
         self.info_label = QLabel(info)

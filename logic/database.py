@@ -90,6 +90,23 @@ class Database:
         VALUES ("{new_user.username}", "light", "purple")''')
 
         Database.save_database()
+    
+    @staticmethod
+    def update_user(user: User):
+        global __db_con
+
+        if user.photo == None:
+            __db_con.execute(f'''UPDATE users
+            SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
+            privilege="{user.privilege}", photo=NULL
+            WHERE username="{user.username}"''')
+        else:
+            __db_con.execute(f'''UPDATE users
+            SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
+            privilege="{user.privilege}", photo=?
+            WHERE username="{user.username}"''', [sqlite3.Binary(user.photo)])
+
+        Database.save_database()
 
     @staticmethod
     def create_new_book(new_book: Book):
@@ -184,13 +201,13 @@ class Database:
 
 
     @staticmethod
-    def get_user_settings(username):
+    def get_user_account_settings(username):
         global __db_con
         s = list(__db_con.execute(f'SELECT * FROM account_settings WHERE username="{username}"'))[0]
         return UserSettings(s[0], s[1], s[2])
 
     @staticmethod
-    def set_user_settings(user_settings: UserSettings):
+    def update_user_account_settings(user_settings: UserSettings):
         global __db_con
         __db_con.execute(f'''UPDATE account_settings 
                              SET theme="{user_settings.theme}", accent_colour="{user_settings.accent_colour}" 
