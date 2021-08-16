@@ -32,7 +32,10 @@ class About(QWidget):
         source_code_hyperlink.setOpenExternalLinks(True)
         layout.addWidget(source_code_hyperlink)
 
-        layout.addWidget(QLabel(f'This software is Free and Open Source Software and is licensed under the <a href="{license_url}">GNU GPLv3</a> license.'))
+        license_label = QLabel(f'This software is <b>Free</b> and <b>Open Source</b> and is licensed under the <a href="{license_url}">GNU GPLv3</a> license.')
+        license_label.setOpenExternalLinks(True)
+        layout.addWidget(license_label)
+
         layout.addWidget(QLabel(f'Version {version}'))
         layout.addWidget(QLabel(f'Qt {QtCore.qVersion()}'))
         layout.addWidget(QLabel(f'Python {platform.python_version()}'))

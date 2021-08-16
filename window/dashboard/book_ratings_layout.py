@@ -112,7 +112,7 @@ class BookRatingsLayout(QVBoxLayout):
     def configure_ui(self):
         self.book_ratings = Database.get_book_ratings(self.book.ISBN)
         self.large_rating_label.setText(str(self.book_ratings.get_average_rating()))
-        self.total_ratings_label.setText(f'{self.book_ratings.ratings} ratings')
+        self.total_ratings_label.setText(f'{len(self.book_ratings.ratings)} ratings')
         print(self.book_ratings.ratings)
 
         self.rating_progress_bar_1.load(self.book_ratings)
