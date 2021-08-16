@@ -130,7 +130,7 @@ class UserWizard(QVBoxLayout):
 
         self.set_disable(True)
 
-        if Database.is_new_setup():
+        if Database.is_new_server_setup():
             Database.create_new_tables()
 
         new_user = User(proposed_new_user_username, proposed_new_user_password,
@@ -162,8 +162,6 @@ Date Time Created: {old_users[0].date_time_created}''', QMessageBox.Ok)
             
 
         new_user.print_details()
-
-        Database.print_all_users()
 
         if self.on_success is not None:
             self.on_success()

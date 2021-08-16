@@ -1,3 +1,4 @@
+from window.connection_details_widget import ConnectionDetailsWidget
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
 
@@ -10,13 +11,11 @@ from window.helpers.helpers import get_font_size, center_screen
 
 class LoginPrompt(QWidget):
 
-    def __init__(self, app, parent=None):
+    def __init__(self, parent=None):
         super(LoginPrompt, self).__init__(parent)
 
-        self.app = app
-
         self.setWindowTitle('Snakebrary')
-        self.setFixedSize(400, 350)
+        self.setFixedSize(400, 420)
 
         heading = QLabel('Sign in')
         heading.setAlignment(Qt.AlignCenter)
@@ -41,6 +40,9 @@ class LoginPrompt(QWidget):
         self.forgot_password_button.clicked.connect(self.on_forgot_password_button_click)
         self.forgot_password_button.setProperty('class', 'danger')
 
+        self.sql_server_settings_button = QPushButton('MySQL Settings')
+        self.sql_server_settings_button.clicked.connect(self.sql_server_settings_button_clicked)
+
         self.error_label = QLabel()
         self.error_label.setStyleSheet("color: red;")
         self.error_label.setAlignment(Qt.AlignCenter)
@@ -51,17 +53,33 @@ class LoginPrompt(QWidget):
         layout.addWidget(self.error_label)
         layout.addWidget(self.login_button)
         layout.addWidget(self.forgot_password_button)
+        layout.addWidget(self.sql_server_settings_button)
 
         layout.setSpacing(10)
 
         # Set dialog layout
         self.setLayout(layout)
+    
+    def sql_server_settings_button_clicked(self):
+        Database.close_connection()
+        self.connection_details = ConnectionDetailsWidget(self.on_connection_configure_success)
+        self.connection_details.show()
+        center_screen(self.connection_details)
+        self.close()
+
+    def on_connection_configure_success(self):
+        self.login_prompt = LoginPrompt()
+        self.login_prompt.show()
+        center_screen(self.login_prompt)
+        
 
     def on_login_button_click(self):
         try_username = self.username_field.line_edit.text()
         try_password = self.password_field.line_edit.text()
 
         users = Database.get_users_by_username(try_username)
+
+        print ('Users', users)
 
         if len(users) == 0:
             self.set_error("Invalid username/password")
@@ -74,7 +92,7 @@ class LoginPrompt(QWidget):
         self.set_error(None)
         self.disable_prompt(True)
 
-        self.dash = Dashboard(users[0], self.app)
+        self.dash = Dashboard(users[0])
         self.dash.show()
         center_screen(self.dash)
         self.close()

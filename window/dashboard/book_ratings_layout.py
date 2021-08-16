@@ -112,7 +112,7 @@ class BookRatingsLayout(QVBoxLayout):
     def configure_ui(self):
         self.book_ratings = Database.get_book_ratings(self.book.ISBN)
         self.large_rating_label.setText(str(self.book_ratings.get_average_rating()))
-        self.total_ratings_label.setText(str(len(self.book_ratings.ratings)))
+        self.total_ratings_label.setText(f'{self.book_ratings.ratings} ratings')
         print(self.book_ratings.ratings)
 
         self.rating_progress_bar_1.load(self.book_ratings)
@@ -132,7 +132,7 @@ class BookRatingsLayout(QVBoxLayout):
                 self.rating_current_status_label.setText('You have read but not rated this book yet. Go ahead and rate it!')
                 self.delete_rating_button.hide()
             else:
-                self.rating_current_status_label.setText(f'You have rated this book {existing_rating} out of 5.0')
+                self.rating_current_status_label.setText(f'You have rated this book {existing_rating} out of 5')
                 self.rating_slider.setValue(existing_rating)
                 self.delete_rating_button.show()
     
