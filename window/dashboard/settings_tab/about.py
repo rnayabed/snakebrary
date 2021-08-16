@@ -18,10 +18,12 @@ class About(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignTop)
 
-        maker_label = QLabel('Made by Debayan Sutradhar (rnayabed)')
+        maker_label = QLabel('Made by Debayan Sutradhar, 12M')
         maker_label.setFont(get_font_size(17))
         layout.addWidget(maker_label)
 
+
+        layout.addWidget(QLabel('DPS Ruby Park, Kolkata'))
         layout.addWidget(QLabel('This software was written as CBSE Class 12 Computer Science project assignment.'))
 
         synopsis_label = QLabel(f'<a href="{synopsis_url}">Project Synopsis</a>')
@@ -35,6 +37,8 @@ class About(QWidget):
         license_label = QLabel(f'This software is <b>Free</b> and <b>Open Source</b> and is licensed under the <a href="{license_url}">GNU GPLv3</a> license.')
         license_label.setOpenExternalLinks(True)
         layout.addWidget(license_label)
+
+        license_label.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
 
         layout.addWidget(QLabel(f'Version {version}'))
         layout.addWidget(QLabel(f'Qt {QtCore.qVersion()}'))
