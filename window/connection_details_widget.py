@@ -18,7 +18,7 @@ class ConnectionDetailsWidget(QWidget):
         self.on_success = on_success
         self.setFixedSize(420, 420)
 
-        heading = QLabel('Connection Details')
+        heading = QLabel('Connect to MySQL Server')
         heading.setAlignment(Qt.AlignCenter)
         heading.setFont(get_font_size(20))
 
@@ -31,7 +31,7 @@ class ConnectionDetailsWidget(QWidget):
         self.user_field = LineEdit('User')
         self.password_field = LineEdit('Password', password_mode=True)
 
-        self.connect_server_button = QPushButton('Connect to MySQL Server')
+        self.connect_server_button = QPushButton('Connect')
         self.connect_server_button.clicked.connect(self.connect_server_button_clicked)
 
         self.error_label = QLabel()
@@ -88,8 +88,9 @@ class ConnectionDetailsWidget(QWidget):
             Database.set_local_database_server_user(user)
             Database.set_local_database_server_password(password)
 
-            
             Database.save_local_database()
+
+
             self.error_label.setText('')
 
             if self.on_success != None:

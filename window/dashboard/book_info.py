@@ -1,7 +1,7 @@
+from window.dashboard.book_ratings_widget import BookRatingsWidget
 from window.dashboard.book_reviewers_window import BookReviewersWindow
 from window.dashboard.book_wizard_window import BookWizardWindow
 from window.dashboard.book_holders_window import BookHoldersWindow
-from window.dashboard.book_ratings_layout import BookRatingsLayout
 from logic.user import User, UserPrivilege
 from logic.database import Database
 from os import name
@@ -9,7 +9,7 @@ from window.helpers.helpers import center_screen, delete_layouts_in_layout, get_
 from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder
+from logic.book import Book, BookHolder, BookRatings
 from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
@@ -106,28 +106,36 @@ class BookInfo(QDialog):
         main_vbox.addLayout(hbox_1)
 
 
+
+        self.ratings_widget = BookRatingsWidget(self.book, self.current_user)
+        self.setContentsMargins(QtCore.QMargins(0,0,0,0))
+
+        main_vbox.addWidget(self.ratings_widget)
+
+        
         self.about_label_header = QLabel('About')
         self.about_label_header.setContentsMargins(QtCore.QMargins(0,10,0,0))
         self.about_label_header.setFont(get_font_size(18))
 
         self.about_label = QLabel()
+        self.about_label.setAlignment(QtCore.Qt.AlignJustify)
+        self.about_label.setWordWrap(True)
 
         
-        about_label_scroll_area = QScrollArea()
-        about_label_scroll_area.setWidgetResizable(True)
-        about_label_scroll_area.setWidget(self.about_label)
+        self.about_label_scroll_area = QScrollArea()
+        self.about_label_scroll_area.setWidgetResizable(True)
+        self.about_label_scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.about_label_scroll_area.setWidget(self.about_label)
 
 
         about_layout = QVBoxLayout()
         about_layout.addWidget(self.about_label_header)
-        about_layout.addWidget(about_label_scroll_area)
+        about_layout.addWidget(self.about_label_scroll_area)
 
-        main_vbox.addLayout(about_layout)
+        self.about_widget = QWidget()
+        self.about_widget.setLayout(about_layout)
 
-        self.ratings_layout_parent = QVBoxLayout()
-        self.setContentsMargins(QtCore.QMargins(0,0,0,0))
-
-        main_vbox.addLayout(self.ratings_layout_parent)
+        main_vbox.addWidget(self.about_widget)
 
         self.setLayout(main_vbox)
         self.configure_ui()
@@ -153,10 +161,9 @@ class BookInfo(QDialog):
 
         if self.book.about != '':
             self.about_label.setText(self.book.about)
-            self.about_label.show()
+            self.about_widget.show()
         else:
-            self.about_label_header.hide()
-            self.about_label.hide()
+            self.about_widget.hide()
 
         self.configure_get_return_button()
 
@@ -173,10 +180,8 @@ class BookInfo(QDialog):
 
                 
                 self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
-            
-        delete_layouts_in_layout(self.ratings_layout_parent)
-        self.ratings_layout = BookRatingsLayout(self.book, self.current_user)
-        self.ratings_layout_parent.addLayout(self.ratings_layout)
+        
+        self.ratings_widget.reload(self.book)
     
     def on_delete_button_clicked(self):
         warning_box = QMessageBox.warning(self, 'Warning', f'''Are you sure you want to delete the following book
@@ -207,8 +212,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         Database.update_book(self.book)
 
         self.configure_get_return_button()
-        self.ratings_layout.book = self.book
-        self.ratings_layout.configure_ui()
+        self.ratings_widget.reload(self.book)
 
         self.get_return_button.setDisabled(False)
     
@@ -245,6 +249,9 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     def on_book_edited(self):
         self.dashboard_on_books_edited()
         self.book = Database.get_books_by_ISBN(self.book.ISBN)[0]
+        print('LSODADASDLJSANDLANSLDKNASLKDNSALDNK')
+        print()
+        print(self.book.holders)
         self.configure_ui()
 
     def show_book_reviewers_list_window(self):

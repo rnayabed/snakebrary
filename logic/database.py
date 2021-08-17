@@ -29,7 +29,7 @@ class Database:
 
     @staticmethod
     def get_local_database_location():
-        return str(Path.home()) + "/SnakeBrary.db"
+        return str(Path.home()) + "/snakebrary.db"
 
     @staticmethod
     def create_connection(host, user, password, port):
@@ -42,8 +42,8 @@ class Database:
         print('Password', password)
 
         __db_con = mysql.connector.connect(host=host, user=user, password=password, port=int(port))
-        __db_con.cursor().execute('create database if not exists SnakeBrary')
-        __db_con.cmd_init_db('SnakeBrary')
+        __db_con.cursor().execute('create database if not exists snakebrary')
+        __db_con.cmd_init_db('snakebrary')
         __db_con_cursor = __db_con.cursor(buffered=True) 
 
     @staticmethod
@@ -113,22 +113,18 @@ class Database:
     @staticmethod
     def set_local_database_server_host(host):
         Database.set_local_setting('server_host', host)
-        Database.save_local_database()
     
     @staticmethod
     def set_local_database_server_user(user):
         Database.set_local_setting('server_user', user)
-        Database.save_local_database()
     
     @staticmethod
     def set_local_database_server_password(password):
         Database.set_local_setting('server_password', password)
-        Database.save_local_database()
 
     @staticmethod
     def set_local_database_server_port(port):
         Database.set_local_setting('server_port', port)
-        Database.save_local_database()
 
     @staticmethod
     def create_new_tables():
@@ -237,18 +233,18 @@ class Database:
     @staticmethod
     def update_book(book: Book):
         global __db_con_cursor
-
+        
         if book.photo == None:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=NULL
             WHERE ISBN="{book.ISBN}"''')
         else:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=%s
             WHERE ISBN="{book.ISBN}"''', (book.photo, ))
-        
+    
         Database.save_database()
 
     @staticmethod
@@ -373,3 +369,17 @@ class Database:
         __db_con_cursor.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')  
 
         Database.save_database()
+
+    @staticmethod
+    def delete_database():
+        global __db_con_cursor
+        __db_con_cursor.execute('DROP DATABASE snakebrary')
+        
+        Database.save_database()
+    
+    @staticmethod
+    def delete_local_database():
+        global __local_db_con_cursor
+        __local_db_con_cursor.execute('DROP TABLE local_settings')
+
+        Database.save_local_database()

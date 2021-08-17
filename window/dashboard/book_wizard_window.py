@@ -75,6 +75,7 @@ class BookWizardWindow(QDialog):
         self.new_book_isbn_field.line_edit.setText(self.old_book.ISBN)
         self.new_book_genres_field.line_edit.setText((', '.join(self.old_book.genres)))
         self.new_book_price_field.line_edit.setText(str(self.old_book.price))
+        self.new_book_about_field.plain_text_edit.setPlainText(self.old_book.about)
 
     def on_cover_photo_selected(self, img_path):
         self.new_book_cover_photo_preview.set_image_from_path(img_path)
@@ -161,6 +162,7 @@ Price: {old_books[0].price}''', QMessageBox.Ok)
 
             close_message = 'Book was successfully added!'
         elif self.mode == BookWizardWindowMode.EDIT:
+            new_book.holders = self.old_book.holders
             Database.update_book(new_book)
             close_message = 'Book was successfully edited!'
             
@@ -176,3 +178,4 @@ Price: {old_books[0].price}''', QMessageBox.Ok)
         self.new_book_author_field.line_edit.setReadOnly(disable)
         self.new_book_genres_field.line_edit.setReadOnly(disable)
         self.new_book_price_field.line_edit.setReadOnly(disable)
+        self.new_book_about_field.plain_text_edit.setReadOnly(disable)

@@ -11,10 +11,8 @@ from window.login_prompt import LoginPrompt
 
 class Welcome(QWidget):
 
-    def __init__(self, app):
+    def __init__(self):
         super(Welcome, self).__init__(None)
-
-        self.app = app
 
         self.setWindowTitle('Welcome')
         self.setFixedSize(500, 650)
@@ -46,7 +44,7 @@ class Welcome(QWidget):
 
         self.setLayout(layout)
 
-        self.login_prompt = LoginPrompt(self.app)
+        self.login_prompt = LoginPrompt()
 
     def on_success(self):
         QMessageBox.information(self, 'Congratulations', 'Snakebrary is now all set. You may now login as your master '

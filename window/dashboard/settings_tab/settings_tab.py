@@ -8,14 +8,14 @@ from window.dashboard.settings_tab.general_tab import GeneralTab
 
 class SettingsTab(QWidget):
 
-    def __init__(self, logout, current_user_settings):
+    def __init__(self, current_user_settings):
         super(SettingsTab, self).__init__()
 
 
         layout = QVBoxLayout()
 
         self.tabs = QTabWidget()
-        self.tabs.addTab(GeneralTab(logout, current_user_settings), 'General')
+        self.tabs.addTab(GeneralTab(current_user_settings), 'General')
         self.tabs.addTab(AccountTab(), 'Account')
         self.tabs.addTab(About(), 'About')
         layout.addWidget(self.tabs)

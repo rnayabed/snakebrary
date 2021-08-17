@@ -35,6 +35,7 @@ def start():
 
     print('Over')
     exit_code = app.exec()
+
     Database.close_local_connection()
     Database.close_connection()
 
@@ -45,7 +46,7 @@ def start():
 def decide_window():
     if Database.is_new_local_setup():
         print('NEW SETUP')
-        connection_details = ConnectionDetailsWidget(QApplication.instance(), decide_window)
+        connection_details = ConnectionDetailsWidget(decide_window)
         connection_details.show()
         center_screen(connection_details) 
         return connection_details

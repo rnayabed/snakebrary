@@ -11,10 +11,10 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QProgre
 from qt_material import apply_stylesheet, QtStyleTools
 
 
-class BookRatingsLayout(QVBoxLayout):
+class BookRatingsWidget(QWidget):
 
     def __init__(self, book: Book, current_user: User):
-        super(BookRatingsLayout, self).__init__(None)
+        super(BookRatingsWidget, self).__init__(None)
 
         self.book = book
         self.current_user = current_user
@@ -23,7 +23,9 @@ class BookRatingsLayout(QVBoxLayout):
         header_label.setContentsMargins(QtCore.QMargins(0,10,0,0))
         header_label.setFont(get_font_size(18))
 
-        self.addWidget(header_label)
+        self.vbox = QVBoxLayout()
+
+        self.vbox.addWidget(header_label)
 
 
         overview_hbox = QHBoxLayout()
@@ -56,7 +58,7 @@ class BookRatingsLayout(QVBoxLayout):
 
         overview_hbox.addLayout(right_layout_vbox)
 
-        self.addLayout(overview_hbox)
+        self.vbox.addLayout(overview_hbox)
 
 
         self.rating_slider = QSlider(QtCore.Qt.Horizontal)
@@ -94,7 +96,9 @@ class BookRatingsLayout(QVBoxLayout):
         self.rating_layout_widget = QWidget()
         self.rating_layout_widget.setLayout(rating_layout)
 
-        self.addWidget(self.rating_layout_widget)
+        self.vbox.addWidget(self.rating_layout_widget)
+
+        self.setLayout(self.vbox)
 
         
         self.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -113,6 +117,10 @@ class BookRatingsLayout(QVBoxLayout):
     def submit_rating_button_clicked(self):
         self.book_ratings.set_rating_by_username(self.current_user.username, self.rating_slider.value())
         Database.update_book_ratings(self.book_ratings)
+        self.configure_ui()
+
+    def reload(self, book):
+        self.book = book
         self.configure_ui()
 
     def configure_ui(self):

@@ -1,7 +1,6 @@
 from window.dashboard.edit_user import EditUser
 from window.dashboard.book_wizard_window import BookWizardWindow
 from window.dashboard.book_holders_window import BookHoldersWindow
-from window.dashboard.book_ratings_layout import BookRatingsLayout
 from logic.user import User, UserPrivilege
 from logic.database import Database
 from os import name, stat

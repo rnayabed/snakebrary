@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from window.helpers.helpers import center_screen
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QPushButton, QWidget, QVBoxLayout
+from PySide6.QtCore import QCoreApplication, Qt
+from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database
@@ -10,10 +10,8 @@ from window.helpers.enhanced_controls import ComboBox
 
 class GeneralTab(QWidget, QtStyleTools):
 
-    def __init__(self, logout, current_user_account_settings):
+    def __init__(self, current_user_account_settings):
         super(GeneralTab, self).__init__()
-
-        self.logout = logout
 
         self.current_user_account_settings = current_user_account_settings
 
@@ -49,9 +47,15 @@ class GeneralTab(QWidget, QtStyleTools):
 
         self.logout_button = QPushButton('Logout')
         self.logout_button.setProperty('class', 'danger')
-        self.logout_button.clicked.connect(self.logout)
+        self.logout_button.clicked.connect(self.restart)
 
         layout.addWidget(self.logout_button)
+
+        self.reset_button = QPushButton('Reset')
+        self.reset_button.setProperty('class', 'danger')
+        self.reset_button.clicked.connect(self.reset)
+
+        layout.addWidget(self.reset_button)
 
         self.setLayout(layout)
 
@@ -67,4 +71,18 @@ class GeneralTab(QWidget, QtStyleTools):
         self.current_user_account_settings.theme = chosen_theme
         self.current_user_account_settings.accent_colour = chosen_accent_colour
         Database.update_user_account_settings(self.current_user_account_settings)
+
+    def reset(self):
+        confirm_delete_box = QMessageBox.warning(self, 'Warning', f'''This will DELETE EVERYTHING - books, users, etc. No data can be recovered. 
+Continue?''', QMessageBox.Yes, QMessageBox.No)
+
+        if confirm_delete_box == QMessageBox.Yes:
+            Database.delete_database()
+            Database.delete_local_database()
+            
+            self.restart()
+            
     
+    def restart(self):
+        QApplication.closeAllWindows()
+        QCoreApplication.exit(6504)

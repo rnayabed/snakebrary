@@ -38,14 +38,10 @@ class Dashboard(QWidget, QtStyleTools):
 
         self.tabs.addTab(BooksTabWidget(self.current_user), 'Books')
 
-        self.tabs.addTab(SettingsTab(self.logout, self.current_user_account_settings), "Settings")
+        self.tabs.addTab(SettingsTab(self.current_user_account_settings), "Settings")
 
     def configure_theme_and_accent_colour(self):
         stylesheet_name = f'{self.current_user_account_settings.theme.lower()}_{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml'
 
         print(stylesheet_name)
         apply_stylesheet(QApplication.instance(), stylesheet_name)
-    
-    def logout(self):
-        self.close()
-        return QCoreApplication.exit(6504)

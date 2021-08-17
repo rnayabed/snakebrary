@@ -1,5 +1,4 @@
 from PySide6 import QtWidgets
-from window.dashboard.book_ratings_layout import BookRatingsLayout
 from logic.user import User, UserPrivilege
 from logic.database import Database
 from os import name
