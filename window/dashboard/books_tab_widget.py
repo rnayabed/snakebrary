@@ -89,8 +89,8 @@ class BooksTabWidget(QWidget):
 
     def books_table_clicked(self, index):
         book = self.books_table.cellWidget(index.row(), index.column()).property('book_obj')
-        self.book_info_window = BookInfo(book, self.configure_books_table, self.current_user)
-        self.book_info_window.show()
+        self.book_info_window = BookInfo(book, self.configure_books_table, self.current_user, self)
+        self.book_info_window.exec()
         center_screen(self.book_info_window)
     
 

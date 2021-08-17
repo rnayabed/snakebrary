@@ -10,14 +10,16 @@ from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
 from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 
-class UserInfo(QWidget):
+class UserInfo(QDialog):
 
     def __init__(self, user: User, dashboard_on_users_edited, current_user: User, parent=None):
         super(UserInfo, self).__init__(parent)
+        
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.dashboard_on_users_edited = dashboard_on_users_edited
         self.current_user = current_user
@@ -109,8 +111,8 @@ Username: {self.user.username}''', QMessageBox.Yes, QMessageBox.No)
             self.close()
     
     def edit_user_button_onclick(self):
-        self.edit_user_window = EditUser(self.user, self.on_user_edited)
-        self.edit_user_window.show()
+        self.edit_user_window = EditUser(self.user, self.on_user_edited, self)
+        self.edit_user_window.exec()
         center_screen(self.edit_user_window)
     
     def on_user_edited(self):

@@ -60,8 +60,8 @@ class AdminUsersTab(QWidget):
                 self.users_table.showRow(i)
 
     def add_new_user(self, user_privilege):
-        new_user_window = AddUser(user_privilege, self.configure_users_table)
-        new_user_window.show()
+        new_user_window = AddUser(user_privilege, self.configure_users_table, self)
+        new_user_window.exec()
         center_screen(new_user_window)
 
     def configure_users_table(self):
@@ -96,7 +96,7 @@ class AdminUsersTab(QWidget):
 
     def users_table_clicked(self, index):
         user = self.users_table.cellWidget(index.row(), index.column()).property('user_obj')
-        self.users_info_window = UserInfo(user, self.configure_users_table, self.current_user)
-        self.users_info_window.show()
+        self.users_info_window = UserInfo(user, self.configure_users_table, self.current_user, self)
+        self.users_info_window.exec()
         center_screen(self.users_info_window)
     

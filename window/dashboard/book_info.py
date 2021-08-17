@@ -10,14 +10,16 @@ from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
 from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 
-class BookInfo(QScrollArea):
+class BookInfo(QDialog):
 
     def __init__(self, book, dashboard_on_books_edited, current_user: User, parent=None):
         super(BookInfo, self).__init__(parent)
+
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.book = book
         self.dashboard_on_books_edited = dashboard_on_books_edited
@@ -107,11 +109,18 @@ class BookInfo(QScrollArea):
         self.about_label_header = QLabel('About')
         self.about_label_header.setContentsMargins(QtCore.QMargins(0,10,0,0))
         self.about_label_header.setFont(get_font_size(18))
+
         self.about_label = QLabel()
+
+        
+        about_label_scroll_area = QScrollArea()
+        about_label_scroll_area.setWidgetResizable(True)
+        about_label_scroll_area.setWidget(self.about_label)
+
 
         about_layout = QVBoxLayout()
         about_layout.addWidget(self.about_label_header)
-        about_layout.addWidget(self.about_label)
+        about_layout.addWidget(about_label_scroll_area)
 
         main_vbox.addLayout(about_layout)
 
@@ -120,12 +129,7 @@ class BookInfo(QScrollArea):
 
         main_vbox.addLayout(self.ratings_layout_parent)
 
-        widget = QWidget()
-        widget.setLayout(main_vbox)
-    
-        self.setWidget(widget)
-        self.setWidgetResizable(True)
-
+        self.setLayout(main_vbox)
         self.configure_ui()
     
     def configure_ui(self):
@@ -229,8 +233,8 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
             pass
     
     def show_book_holders_list_window(self):
-        self.book_holders_list_window = BookHoldersWindow(self.book.holders)
-        self.book_holders_list_window.show()
+        self.book_holders_list_window = BookHoldersWindow(self.book.holders, self)
+        self.book_holders_list_window.exec()
         center_screen(self.book_holders_list_window)
 
     def on_edit_button_clicked(self):
@@ -244,6 +248,6 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         self.configure_ui()
 
     def show_book_reviewers_list_window(self):
-        self.book_reviewers_list_window = BookReviewersWindow(self.book, self.current_user)
-        self.book_reviewers_list_window.show()
+        self.book_reviewers_list_window = BookReviewersWindow(self.book, self.current_user, self)
+        self.book_reviewers_list_window.exec()
         center_screen(self.book_reviewers_list_window)

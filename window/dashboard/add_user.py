@@ -1,5 +1,6 @@
+from PySide6 import QtCore
 from window.helpers.user_wizard import UserWizard
-from PySide6.QtWidgets import (QVBoxLayout, QWidget, QLabel, QMessageBox)
+from PySide6.QtWidgets import (QDialog, QVBoxLayout, QWidget, QLabel, QMessageBox)
 
 from PySide6.QtCore import Qt
 
@@ -8,11 +9,13 @@ from window.helpers.helpers import get_font_size, center_screen
 from logic.user import UserPrivilege
 
 
-class AddUser(QWidget):
+class AddUser(QDialog):
 
     def __init__(self, new_user_privilege:UserPrivilege, on_successful, parent=None):
         super(AddUser, self).__init__(parent)
 
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
+        
         self.setWindowTitle('Add new User')
         self.setFixedSize(500, 500)
 

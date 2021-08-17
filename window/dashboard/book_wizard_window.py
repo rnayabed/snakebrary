@@ -15,6 +15,8 @@ class BookWizardWindow(QDialog):
     def __init__(self, on_success, old_book=None, parent=None):
         super(BookWizardWindow, self).__init__(parent)
 
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
+
         self.resize(700, 500)
 
         self.on_success = on_success
@@ -62,9 +64,6 @@ class BookWizardWindow(QDialog):
             self.load_values_for_old_book()
             self.mode = BookWizardWindowMode.EDIT
             self.new_book_isbn_field.line_edit.setReadOnly(True)
-
-        
-        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
     
     def load_values_for_old_book(self):

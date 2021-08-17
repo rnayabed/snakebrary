@@ -8,14 +8,16 @@ from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
 from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QPushButton, QScrollArea, QTableWidget, QVBoxLayout, QWidget, QTabWidget)
+from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QPushButton, QScrollArea, QTableWidget, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 
-class BookReviewersWindow(QWidget):
+class BookReviewersWindow(QDialog):
 
     def __init__(self, book, current_user, parent=None):
         super(BookReviewersWindow, self).__init__(parent)
+
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.current_user = current_user
         self.book = book
