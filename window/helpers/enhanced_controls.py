@@ -184,7 +184,7 @@ class ImageView(QLabel):
         self.is_clear = False
 
     def set_image_from_path(self, path):
-        self.setPixmap(QPixmap(path).scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio))
+        self.setPixmap(QPixmap(path).scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
         self.is_clear = False
 
     def clear_image(self):

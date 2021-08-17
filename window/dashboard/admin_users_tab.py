@@ -96,7 +96,7 @@ class AdminUsersTab(QWidget):
 
     def users_table_clicked(self, index):
         user = self.users_table.cellWidget(index.row(), index.column()).property('user_obj')
-        self.users_info_window = UserInfo(user, self.configure_users_table, self.current_user, self)
+        self.users_info_window = UserInfo(user, self.current_user, self.configure_users_table, self)
         self.users_info_window.exec()
         center_screen(self.users_info_window)
     

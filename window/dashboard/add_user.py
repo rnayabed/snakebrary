@@ -16,7 +16,12 @@ class AddUser(QDialog):
 
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
         
-        self.setWindowTitle('Add new User')
+        if new_user_privilege == UserPrivilege.ADMIN:
+            prefix_label = 'Administrator'
+        else:
+            prefix_label = 'User'
+
+        self.setWindowTitle(f'Add New {prefix_label}')
         self.resize(800, 600)
 
         self.setLayout(UserWizard(on_success=self.on_success1, new_user_privilege=new_user_privilege))

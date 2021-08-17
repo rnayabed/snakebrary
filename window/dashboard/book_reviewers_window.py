@@ -53,7 +53,7 @@ class BookReviewersWindow(QDialog):
         i = 0
         for each_reviewer in self.book_ratings.ratings.keys():            
             username_widget = QLabel(each_reviewer)
-            name_widget = QLabel(Database.get_users_by_username(each_reviewer)[0].name)
+            name_widget = QLabel(Database.get_user_by_username(each_reviewer).name)
             rating_widget = QLabel(str(self.book_ratings.ratings[each_reviewer]))
 
             self.book_reviewers_table.setCellWidget(i, 0, username_widget)

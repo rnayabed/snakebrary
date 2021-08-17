@@ -57,19 +57,10 @@ class UserWizard(QVBoxLayout):
             self.new_user_username_field.line_edit.setReadOnly(True)
 
 
-        
-        if self.user_privilege == UserPrivilege.ADMIN:
-            prefix_label = 'Administrator'
-        elif self.user_privilege == UserPrivilege.MASTER:
-            prefix_label = 'Master'
-        else:
-            prefix_label = 'User'
-
-        
-        self.new_user_name_field.info_label.setText(f'{prefix_label} Name')
-        self.new_user_username_field.info_label.setText(f'{prefix_label} Username')
-        self.new_user_password_field.info_label.setText(f'{prefix_label} Password')
-        self.new_user_password_confirm_field.info_label.setText(f'Confirm {prefix_label} Password')
+        self.new_user_name_field.info_label.setText('Name')
+        self.new_user_username_field.info_label.setText('Username')
+        self.new_user_password_field.info_label.setText('Password')
+        self.new_user_password_confirm_field.info_label.setText('Confirm Password')
     
     def load_values_for_old_user(self):
         if self.old_user.photo != None:
@@ -151,12 +142,12 @@ class UserWizard(QVBoxLayout):
 
 
         if self.mode == UserWizardMode.ADD:
-            old_users = Database.get_users_by_username(proposed_new_user_username)
-            if len(old_users) > 0:
+            old_user = Database.get_user_by_username(proposed_new_user_username)
+            if old_user != None:
                 QMessageBox.critical(None, 'Error', f'''User with same username already exists.
-Name: {old_users[0].name}
-Privilege: {UserPrivilege.get_ui_name(old_users[0].privilege)}
-Date Time Created: {old_users[0].date_time_created}''', QMessageBox.Ok)
+Name: {old_user.name}
+Privilege: {UserPrivilege.get_ui_name(old_user.privilege)}
+Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
                 return
             Database.create_new_user(new_user)
         

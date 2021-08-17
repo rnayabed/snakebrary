@@ -151,12 +151,12 @@ class BookWizardWindow(QDialog):
 
 
         if self.mode == BookWizardWindowMode.ADD:
-            old_books = Database.get_books_by_ISBN(proposed_new_book_isbn)
-            if len(old_books) > 0:
+            old_book = Database.get_book_by_ISBN(proposed_new_book_isbn)
+            if old_book !=None:
                 QMessageBox.critical(None, 'Error', f'''Book with same ISBN already exists.
-Name: {old_books[0].name}
-Author: {old_books[0].author}
-Price: {old_books[0].price}''', QMessageBox.Ok)
+Name: {old_book.name}
+Author: {old_book.author}
+Price: {old_book.price}''', QMessageBox.Ok)
                 return
             Database.create_new_book(new_book)
 

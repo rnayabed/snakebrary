@@ -176,7 +176,7 @@ class BookInfo(QDialog):
             if current_holder == None:
                 self.current_holder_label.hide()
             else:
-                current_holder_user = Database.get_users_by_username(current_holder)[0]
+                current_holder_user = Database.get_user_by_username(current_holder)
 
                 
                 self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
@@ -248,10 +248,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     
     def on_book_edited(self):
         self.dashboard_on_books_edited()
-        self.book = Database.get_books_by_ISBN(self.book.ISBN)[0]
-        print('LSODADASDLJSANDLANSLDKNASLKDNSALDNK')
-        print()
-        print(self.book.holders)
+        self.book = Database.get_book_by_ISBN(self.book.ISBN)
         self.configure_ui()
 
     def show_book_reviewers_list_window(self):

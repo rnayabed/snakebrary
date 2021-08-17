@@ -1,3 +1,6 @@
+from sqlite3.dbapi2 import sqlite_version
+
+import importlib.metadata
 from window.helpers.helpers import get_font_size
 from PySide6 import QtCore
 import platform
@@ -37,7 +40,7 @@ class About(QWidget):
         school_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(school_label)
 
-        small_info_label = QLabel('This software was written as CBSE Class 12 Computer Science project assignment.')
+        small_info_label = QLabel('CBSE Class 12 Computer Science project assignment')
         small_info_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(small_info_label)
 
@@ -66,6 +69,12 @@ class About(QWidget):
         version_info_hbox.addWidget(QLabel(f'Qt {QtCore.qVersion()}'))
         version_info_hbox.addWidget(self.get_seperator())
         version_info_hbox.addWidget(QLabel(f'Python {platform.python_version()}'))
+        version_info_hbox.addWidget(self.get_seperator())
+        version_info_hbox.addWidget(QLabel(f'SQLite {sqlite_version}'))
+        version_info_hbox.addWidget(self.get_seperator())
+        version_info_hbox.addWidget(QLabel(f'MySQL Connector {importlib.metadata.version("mysql-connector-python")}'))
+        version_info_hbox.addWidget(self.get_seperator())
+        version_info_hbox.addWidget(QLabel(f'qt-material {importlib.metadata.version("qt-material")}'))
         version_info_hbox.addWidget(self.get_seperator())
         version_info_hbox.addWidget(QLabel(f'{platform.system()} {platform.release()}'))
 

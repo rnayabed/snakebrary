@@ -265,12 +265,20 @@ class Database:
         Database.save_database()
 
     @staticmethod
-    def get_users_by_username(username):
-        return Database.__filter_users(f'SELECT * FROM users WHERE username="{username}"')
+    def get_user_by_username(username):
+        tbr = Database.__filter_users(f'SELECT * FROM users WHERE username="{username}"')
+        if tbr == []:
+            return None
+        else:
+            return tbr[0]
 
     @staticmethod
     def get_books_by_ISBN(ISBN):
-        return Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
+        tbr = Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
+        if tbr == []:
+            return None
+        else:
+            return tbr[0]
 
     @staticmethod
     def get_all_users():
@@ -368,6 +376,17 @@ class Database:
         __db_con_cursor.execute(f'DELETE FROM account_settings WHERE username="{username}"')  
 
         Database.save_database()
+
+        for each_book in Database.get_all_books():
+            each_book.holders[:] = [x for x in each_book.holders if not x[0] == username]
+            Database.update_book_holders(each_book.holders)
+
+            each_book.ratings.pop(username, None)
+            Database.update_book_ratings(each_book.ratings)
+        
+
+        Database.update_book_ratings
+
     
     @staticmethod
     def delete_book(ISBN):

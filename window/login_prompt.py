@@ -81,23 +81,21 @@ class LoginPrompt(QWidget):
         try_username = self.username_field.line_edit.text()
         try_password = self.password_field.line_edit.text()
 
-        users = Database.get_users_by_username(try_username)
+        user = Database.get_user_by_username(try_username)
 
-        print ('Users', users)
-
-        if len(users) == 0:
+        if user == None:
             self.set_error("Invalid username/password")
             self.disable_prompt(False)
             return
 
-        if users[0].password != try_password:
+        if user.password != try_password:
             self.set_error("Invalid username/password")
             self.disable_prompt(False)
             return
 
         self.set_error(None)
 
-        self.dash = Dashboard(users[0])
+        self.dash = Dashboard(user)
         self.dash.show()
         center_screen(self.dash)
         self.close()
@@ -111,21 +109,21 @@ class LoginPrompt(QWidget):
 
         self.username_field.on_success()
 
-        users = Database.get_users_by_username(try_username)
+        user = Database.get_user_by_username(try_username)
 
-        if len(users) < 1:
+        if user == None:
             msg_text = 'No user with the provided username was found. Contact administrator.'
         else:
-            hint = users[0].password_hint
+            hint = user.password_hint
 
             if hint == '':
                 msg_text = 'Your account has no password hint.'
             else:
                 msg_text = f'Your password hint is:\n{hint}\n'
 
-            if users[0].privilege == UserPrivilege.NORMAL:
+            if user.privilege == UserPrivilege.NORMAL:
                 msg_text += '\nContact administrator(s) for further help.'
-            elif users[0].privilege == UserPrivilege.ADMIN:
+            elif user.privilege == UserPrivilege.ADMIN:
                 msg_text += '\nContact master administrator for further help.'
             else:
                 msg_text += '\nThis account cannot be recovered if password is forgotten.'

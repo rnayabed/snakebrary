@@ -53,7 +53,7 @@ class BookHoldersWindow(QDialog):
             each_holder = self.book_holders[i]
             
             username_widget = QLabel(each_holder[0])
-            name_widget = QLabel(Database.get_users_by_username(each_holder[0])[0].name)
+            name_widget = QLabel(Database.get_user_by_username(each_holder[0]).name)
             issued_on_widget = QLabel(each_holder[1])
             returned_on_widget = QLabel(each_holder[2])
 
