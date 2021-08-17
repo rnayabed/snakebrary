@@ -17,7 +17,7 @@ class ConnectionDetailsWidget(QWidget):
 
         self.setWindowTitle('SnakeBrary')
         self.on_success = on_success
-        self.setFixedSize(420, 450)
+        self.setFixedSize(420, 480)
 
         layout = QVBoxLayout()
 

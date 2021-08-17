@@ -236,12 +236,12 @@ class Database:
         global __db_con_cursor
         if book.photo == None:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=NULL
             WHERE ISBN="{book.ISBN}"''')
         else:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=%s
             WHERE ISBN="{book.ISBN}"''', (book.photo, ))
     
