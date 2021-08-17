@@ -37,7 +37,7 @@ class AdminUsersTab(QWidget):
         self.search_bar.line_edit.setPlaceholderText('Search by Name or Username')
 
         layout.addLayout(button_bar)
-        layout.addLayout(self.search_bar)
+        layout.addWidget(self.search_bar)
         layout.addWidget(self.users_table)
 
         self.setLayout(layout)

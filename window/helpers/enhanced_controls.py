@@ -1,11 +1,11 @@
 from PySide6 import QtCore
 from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, QComboBox
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, QComboBox, QWidget
+from PySide6.QtCore import QMargins, Qt
 import os
 
 
-class LineEdit(QVBoxLayout):
+class LineEdit(QWidget):
 
     def __init__(self, info=None, init_value=None, password_mode=False):
         super(LineEdit, self).__init__()
@@ -28,9 +28,14 @@ class LineEdit(QVBoxLayout):
 
         self.line_edit.setText(init_value)
 
-        self.setSpacing(3)
-        self.addLayout(self.upper)
-        self.addWidget(self.line_edit)
+
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.addLayout(self.upper)
+        vbox.addWidget(self.line_edit)
+        vbox.setSpacing(3)
+
+        self.setLayout(vbox)
 
     def on_error(self, error):
         self.error_label.setText(error)
@@ -38,7 +43,7 @@ class LineEdit(QVBoxLayout):
     def on_success(self):
         self.error_label.clear()
 
-class PlainTextEdit(QVBoxLayout):
+class PlainTextEdit(QWidget):
 
     def __init__(self, info, init_value=None):
         super(PlainTextEdit, self).__init__()
@@ -50,17 +55,22 @@ class PlainTextEdit(QVBoxLayout):
 
         self.error_label.setAlignment(Qt.AlignRight)
 
-        self.upper = QHBoxLayout()
-        self.upper.addWidget(self.info_label)
-        self.upper.addWidget(self.error_label)
+        upper = QHBoxLayout()
+        upper.addWidget(self.info_label)
+        upper.addWidget(self.error_label)
 
         self.plain_text_edit = QPlainTextEdit()
 
         self.plain_text_edit.setPlainText(init_value)
+        
+        
+        vbox = QVBoxLayout()
+        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.addLayout(upper)
+        vbox.addWidget(self.plain_text_edit)
+        vbox.setSpacing(3)
 
-        self.setSpacing(3)
-        self.addLayout(self.upper)
-        self.addWidget(self.plain_text_edit)
+        self.setLayout(vbox)
 
     def on_error(self, error):
         self.error_label.setText(error)
@@ -69,7 +79,7 @@ class PlainTextEdit(QVBoxLayout):
         self.error_label.clear()
 
 
-class ComboBox(QHBoxLayout):
+class ComboBox(QWidget):
 
     def __init__(self, info, l):
         super(ComboBox, self).__init__()
@@ -79,11 +89,16 @@ class ComboBox(QHBoxLayout):
         self.combo_box = QComboBox()
         self.combo_box.addItems(l)
 
-        self.addWidget(self.label)
-        self.addWidget(self.combo_box)
+        hbox = QHBoxLayout()
+        hbox.setContentsMargins(QMargins(0,0,0,0))
+        hbox.addWidget(self.label)
+        hbox.addWidget(self.combo_box)
+        hbox.setSpacing(3)
+        
+        self.setLayout(hbox)
 
 
-class FilePicker(QVBoxLayout):
+class FilePicker(QWidget):
 
     def __init__(self, info, init_value=None, on_select=None, on_clear=None):
         super(FilePicker, self).__init__()
@@ -99,9 +114,9 @@ class FilePicker(QVBoxLayout):
 
         self.error_label.setAlignment(Qt.AlignRight)
 
-        self.upper = QHBoxLayout()
-        self.upper.addWidget(self.info_label)
-        self.upper.addWidget(self.error_label)
+        upper = QHBoxLayout()
+        upper.addWidget(self.info_label)
+        upper.addWidget(self.error_label)
 
 
         self.line_edit = QLineEdit()
@@ -114,15 +129,19 @@ class FilePicker(QVBoxLayout):
         self.clear_button = QPushButton('Clear')
         self.clear_button.clicked.connect(self.__clear_file)
 
-        self.lower = QHBoxLayout()
-        self.lower.addWidget(self.line_edit)
-        self.lower.addWidget(self.select_button)
-        self.lower.addWidget(self.clear_button)
+        lower = QHBoxLayout()
+        lower.addWidget(self.line_edit)
+        lower.addWidget(self.select_button)
+        lower.addWidget(self.clear_button)
 
-        self.setSpacing(3)
-        self.setAlignment(QtCore.Qt.AlignCenter)
-        self.addLayout(self.upper)
-        self.addLayout(self.lower)
+        vbox = QVBoxLayout()
+        vbox.setAlignment(QtCore.Qt.AlignCenter)
+        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.addLayout(upper)
+        vbox.addLayout(lower)
+        vbox.setSpacing(3)
+
+        self.setLayout(vbox)
 
     def on_error(self, error):
         self.error_label.setText(error)
@@ -173,4 +192,3 @@ class ImageView(QLabel):
         self.setText(self.info)
         self.is_clear = True
      
-

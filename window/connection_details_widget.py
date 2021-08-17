@@ -1,3 +1,4 @@
+from re import sub
 from logic.database import Database
 from window.helpers.enhanced_controls import LineEdit
 from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QVBoxLayout, QWidget, QLabel)
@@ -16,15 +17,19 @@ class ConnectionDetailsWidget(QWidget):
 
         self.setWindowTitle('SnakeBrary')
         self.on_success = on_success
-        self.setFixedSize(420, 420)
+        self.setFixedSize(420, 450)
+
+        layout = QVBoxLayout()
 
         heading = QLabel('Connect to MySQL Server')
         heading.setAlignment(Qt.AlignCenter)
         heading.setFont(get_font_size(20))
-
-        # Create layout and add widgets
-        layout = QVBoxLayout()
         layout.addWidget(heading)
+
+        sub_heading = QLabel('to use SnakeBrary')
+        sub_heading.setAlignment(Qt.AlignCenter)
+        sub_heading.setFont(get_font_size(15))
+        layout.addWidget(sub_heading)
 
         self.host_field = LineEdit('Host')
         self.port_field = LineEdit('Port')
@@ -40,10 +45,10 @@ class ConnectionDetailsWidget(QWidget):
         self.error_label.setAlignment(Qt.AlignCenter)
 
         # Create layout and add widgets
-        layout.addLayout(self.host_field)
-        layout.addLayout(self.port_field)
-        layout.addLayout(self.user_field)
-        layout.addLayout(self.password_field)
+        layout.addWidget(self.host_field)
+        layout.addWidget(self.port_field)
+        layout.addWidget(self.user_field)
+        layout.addWidget(self.password_field)
         layout.addWidget(self.error_label)
         layout.addWidget(self.connect_server_button)
 
@@ -69,9 +74,28 @@ class ConnectionDetailsWidget(QWidget):
         user = self.user_field.line_edit.text()
         password = self.password_field.line_edit.text()
 
-        if host == '' or user == '':
-            self.error_label.setText('Invalid hostname/user/password')
-            return
+
+        error = False
+
+        if len(host) < 1:
+            self.host_field.on_error('Invalid host')
+            error = True
+        else:
+            self.host_field.on_success()
+
+        if not port.isnumeric():
+            self.port_field.on_error('Invalid port')
+            error = True
+        else:
+            self.port_field.on_success()
+    
+        if error:
+            self.error_label.setText('')
+            self.disable_prompt(False)
+            return      
+
+        
+        QApplication.instance().processEvents()
 
 
         try:

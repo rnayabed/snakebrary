@@ -17,7 +17,7 @@ class EditUser(QDialog):
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.setWindowTitle('Edit User')
-        self.setFixedSize(500, 500)
+        self.resize(800, 600)
 
         self.setLayout(UserWizard(on_success=self.on_success1, old_user=user))
         self.on_successful = on_successful

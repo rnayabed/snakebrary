@@ -1,3 +1,4 @@
+from logic.user import UserPrivilege
 from PySide6 import QtCore
 from window.helpers.helpers import center_screen
 from PySide6.QtCore import QCoreApplication, Qt
@@ -10,7 +11,7 @@ from window.helpers.enhanced_controls import ComboBox
 
 class GeneralTab(QWidget, QtStyleTools):
 
-    def __init__(self, current_user_account_settings):
+    def __init__(self, current_user, current_user_account_settings):
         super(GeneralTab, self).__init__()
 
         self.current_user_account_settings = current_user_account_settings
@@ -42,8 +43,8 @@ class GeneralTab(QWidget, QtStyleTools):
         self.accent_colour_combo_box.combo_box.setCurrentIndex(self.accent_colours.index(self.current_user_account_settings.accent_colour))
         self.accent_colour_combo_box.combo_box.currentIndexChanged.connect(self.change_theme)
 
-        layout.addLayout(self.theme_combo_box)
-        layout.addLayout(self.accent_colour_combo_box)
+        layout.addWidget(self.theme_combo_box)
+        layout.addWidget(self.accent_colour_combo_box)
 
         self.logout_button = QPushButton('Logout')
         self.logout_button.setProperty('class', 'danger')
@@ -55,7 +56,8 @@ class GeneralTab(QWidget, QtStyleTools):
         self.reset_button.setProperty('class', 'danger')
         self.reset_button.clicked.connect(self.reset)
 
-        layout.addWidget(self.reset_button)
+        if current_user.privilege == UserPrivilege.MASTER:
+            layout.addWidget(self.reset_button)
 
         self.setLayout(layout)
 

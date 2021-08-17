@@ -25,7 +25,7 @@ class UserInfo(QDialog):
         self.user = user
 
         self.setWindowTitle("User Information")
-        self.resize(800,600)
+        self.resize(700,400)
 
 
         main_vbox = QVBoxLayout()

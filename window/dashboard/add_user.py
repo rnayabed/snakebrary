@@ -17,7 +17,7 @@ class AddUser(QDialog):
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
         
         self.setWindowTitle('Add new User')
-        self.setFixedSize(500, 500)
+        self.resize(800, 600)
 
         self.setLayout(UserWizard(on_success=self.on_success1, new_user_privilege=new_user_privilege))
         self.on_successful = on_successful

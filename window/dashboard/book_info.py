@@ -26,7 +26,7 @@ class BookInfo(QDialog):
         self.current_user = current_user
 
         self.setWindowTitle("Book Information")
-        self.resize(800,600)
+        self.resize(800,700)
 
 
         main_vbox = QVBoxLayout()

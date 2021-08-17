@@ -232,8 +232,8 @@ class Database:
     
     @staticmethod
     def update_book(book: Book):
-        global __db_con_cursor
         
+        global __db_con_cursor
         if book.photo == None:
             __db_con_cursor.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", genres="{book.genres}", 

@@ -15,9 +15,9 @@ class Welcome(QWidget):
         super(Welcome, self).__init__(None)
 
         self.setWindowTitle('Welcome')
-        self.setFixedSize(500, 650)
+        self.resize(800,600)
 
-        heading = QLabel('Welcome to snakebrary!')
+        heading = QLabel('Welcome to SnakeBrary!')
         heading.setAlignment(Qt.AlignCenter)
         heading.setFont(get_font_size(30))
 
@@ -47,7 +47,7 @@ class Welcome(QWidget):
         self.login_prompt = LoginPrompt()
 
     def on_success(self):
-        QMessageBox.information(self, 'Congratulations', 'Snakebrary is now all set. You may now login as your master '
+        QMessageBox.information(self, 'Congratulations', 'SnakeBrary is now all set. You may now login as your master '
                                                          'account and start adding books, create new administrators, '
                                                          'users, etc.',
                                 QMessageBox.Ok)

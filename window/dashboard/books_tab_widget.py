@@ -29,7 +29,7 @@ class BooksTabWidget(QWidget):
         self.search_bar.line_edit.setPlaceholderText('Search by Name, Author or ISBN')
 
         layout.addWidget(self.add_book_button)
-        layout.addLayout(self.search_bar)
+        layout.addWidget(self.search_bar)
         layout.addWidget(self.books_table)
 
         self.setLayout(layout)

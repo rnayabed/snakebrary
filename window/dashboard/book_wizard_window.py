@@ -26,7 +26,7 @@ class BookWizardWindow(QDialog):
         self.new_book_cover_photo_preview = ImageView('Preview will appear here', 300, 300)
 
         self.photo_hbox = QHBoxLayout()
-        self.photo_hbox.addLayout(self.new_book_cover_photo_path_field)
+        self.photo_hbox.addWidget(self.new_book_cover_photo_path_field)
         self.photo_hbox.addWidget(self.new_book_cover_photo_preview)
 
         self.new_book_name_field = LineEdit('Name')
@@ -44,12 +44,12 @@ class BookWizardWindow(QDialog):
         vbox = QVBoxLayout()
         
         vbox.addLayout(self.photo_hbox)
-        vbox.addLayout(self.new_book_name_field)
-        vbox.addLayout(self.new_book_author_field)
-        vbox.addLayout(self.new_book_isbn_field)
-        vbox.addLayout(self.new_book_genres_field)
-        vbox.addLayout(self.new_book_price_field)
-        vbox.addLayout(self.new_book_about_field)
+        vbox.addWidget(self.new_book_name_field)
+        vbox.addWidget(self.new_book_author_field)
+        vbox.addWidget(self.new_book_isbn_field)
+        vbox.addWidget(self.new_book_genres_field)
+        vbox.addWidget(self.new_book_price_field)
+        vbox.addWidget(self.new_book_about_field)
         vbox.addWidget(self.proceed_button)
 
         self.setLayout(vbox)
@@ -107,7 +107,7 @@ class BookWizardWindow(QDialog):
         else:
             self.new_book_author_field.on_success()
         
-        if len(proposed_new_book_isbn) > 13:
+        if len(proposed_new_book_isbn) > 13 or len(proposed_new_book_isbn) < 1:
             self.new_book_isbn_field.on_error('Invalid ISBN!')
             error = True
         else:

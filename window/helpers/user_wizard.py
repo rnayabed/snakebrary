@@ -21,10 +21,10 @@ class UserWizard(QVBoxLayout):
 
         self.new_user_photo_path_field = FilePicker('Profile picture (Optional)', on_select=self.on_user_photo_selected, on_clear=self.on_user_photo_cleared)
 
-        self.new_user_photo_preview = ImageView('Preview', 100, 100)
+        self.new_user_photo_preview = ImageView('Preview', 200, 200)
 
         self.photo_hbox = QHBoxLayout()
-        self.photo_hbox.addLayout(self.new_user_photo_path_field)
+        self.photo_hbox.addWidget(self.new_user_photo_path_field)
         self.photo_hbox.addWidget(self.new_user_photo_preview)
 
         self.new_user_name_field = LineEdit()
@@ -39,11 +39,11 @@ class UserWizard(QVBoxLayout):
 
         # Create layout and add widgets
         self.addLayout(self.photo_hbox)
-        self.addLayout(self.new_user_name_field)
-        self.addLayout(self.new_user_username_field)
-        self.addLayout(self.new_user_password_field)
-        self.addLayout(self.new_user_password_confirm_field)
-        self.addLayout(self.new_user_password_field_hint)
+        self.addWidget(self.new_user_name_field)
+        self.addWidget(self.new_user_username_field)
+        self.addWidget(self.new_user_password_field)
+        self.addWidget(self.new_user_password_confirm_field)
+        self.addWidget(self.new_user_password_field_hint)
         self.addWidget(self.proceed_button)
 
         if old_user == None:
@@ -107,6 +107,9 @@ class UserWizard(QVBoxLayout):
 
         if len(proposed_new_user_username) < 1:
             self.new_user_username_field.on_error('Too short!')
+            error = True
+        elif len(proposed_new_user_username) > 50:
+            self.new_user_username_field.on_error('Too long!')
             error = True
         else:
             self.new_user_username_field.on_success()

@@ -14,14 +14,14 @@ class LoginPrompt(QWidget):
     def __init__(self, parent=None):
         super(LoginPrompt, self).__init__(parent)
 
-        self.setWindowTitle('Snakebrary')
+        self.setWindowTitle('SnakeBrary')
         self.setFixedSize(400, 420)
 
         heading = QLabel('Sign in')
         heading.setAlignment(Qt.AlignCenter)
         heading.setFont(get_font_size(30))
 
-        sub_heading = QLabel('to continue to Snakebrary')
+        sub_heading = QLabel('to continue to SnakeBrary')
         sub_heading.setAlignment(Qt.AlignCenter)
         sub_heading.setFont(get_font_size(15))
 
@@ -48,8 +48,8 @@ class LoginPrompt(QWidget):
         self.error_label.setAlignment(Qt.AlignCenter)
 
         # Create layout and add widgets
-        layout.addLayout(self.username_field)
-        layout.addLayout(self.password_field)
+        layout.addWidget(self.username_field)
+        layout.addWidget(self.password_field)
         layout.addWidget(self.error_label)
         layout.addWidget(self.login_button)
         layout.addWidget(self.forgot_password_button)
@@ -75,6 +75,8 @@ class LoginPrompt(QWidget):
 
     def on_login_button_click(self):
         self.disable_prompt(True)
+        
+        self.username_field.on_success()
 
         try_username = self.username_field.line_edit.text()
         try_password = self.password_field.line_edit.text()
@@ -103,29 +105,35 @@ class LoginPrompt(QWidget):
     def on_forgot_password_button_click(self):
         try_username = self.username_field.line_edit.text()
 
-        if len(try_username) == 0:
-            msg_text = 'No username was provided.'
+        if len(try_username) < 1:
+            self.username_field.on_error('Empty username!')
+            return
+
+        self.username_field.on_success()
+
+        users = Database.get_users_by_username(try_username)
+
+        if len(users) < 1:
+            msg_text = 'No user with the provided username was found. Contact administrator.'
         else:
-            users = Database.get_users_by_username(try_username)
+            hint = users[0].password_hint
 
-            if len(users) == 0:
-                msg_text = 'No user with the provided username was found. Contact administrator.'
+            if hint == '':
+                msg_text = 'Your account has no password hint.'
             else:
-                hint = users[0].password_hint
+                msg_text = f'Your password hint is:\n{hint}\n'
 
-                if hint == '':
-                    msg_text = 'Your account has no password hint.'
-                else:
-                    msg_text = f'Your password hint is:\n{hint}\n'
-
-                if users[0].privilege == UserPrivilege.NORMAL:
-                    msg_text += '\nContact administrator(s) for further help.'
-                elif users[0].privilege == UserPrivilege.ADMIN:
-                    msg_text += '\nContact master administrator for further help.'
-                else:
-                    msg_text += '\nThis account cannot be recovered if password is forgotten.'
-
+            if users[0].privilege == UserPrivilege.NORMAL:
+                msg_text += '\nContact administrator(s) for further help.'
+            elif users[0].privilege == UserPrivilege.ADMIN:
+                msg_text += '\nContact master administrator for further help.'
+            else:
+                msg_text += '\nThis account cannot be recovered if password is forgotten.'
+            
+            
+            
         QMessageBox.warning(self, 'Warning', msg_text, QMessageBox.Ok)
+
 
     def set_error(self, error):
         self.error_label.setText(error)
