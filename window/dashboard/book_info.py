@@ -200,7 +200,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
 
         new_holder = BookHolder(self.current_user.username)
         self.book.holders.append(new_holder.get_raw_list())
-        Database.update_book(self.book)
+        Database.update_book_holders(self.book.holders, self.book.ISBN)
         
         self.configure_get_return_button()
 
@@ -209,7 +209,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     def return_button(self):
         self.get_return_button.setDisabled(True)
         self.book.return_now()
-        Database.update_book(self.book)
+        Database.update_book_holders(self.book.holders, self.book.ISBN)
 
         self.configure_get_return_button()
         self.ratings_widget.reload(self.book)

@@ -232,20 +232,27 @@ class Database:
     
     @staticmethod
     def update_book(book: Book):
-        
         global __db_con_cursor
         if book.photo == None:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=NULL
             WHERE ISBN="{book.ISBN}"''')
         else:
             __db_con_cursor.execute(f'''UPDATE books
-            SET name="{book.name}", author="{book.author}", holders="{book.holders}", genres="{book.genres}", 
+            SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", about="{book.about}", photo=%s
             WHERE ISBN="{book.ISBN}"''', (book.photo, ))
     
         Database.save_database()
+
+    @staticmethod
+    def update_book_holders(holders, ISBN):
+        global __db_con_cursor
+        __db_con_cursor.execute(f'UPDATE books SET holders="{holders}" WHERE ISBN="{ISBN}"')
+    
+        Database.save_database()
+
 
     @staticmethod
     def update_book_ratings(book_ratings: BookRatings):

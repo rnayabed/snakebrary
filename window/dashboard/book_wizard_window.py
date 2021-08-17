@@ -162,7 +162,6 @@ Price: {old_books[0].price}''', QMessageBox.Ok)
 
             close_message = 'Book was successfully added!'
         elif self.mode == BookWizardWindowMode.EDIT:
-            new_book.holders = Database.get_books_by_ISBN(new_book.ISBN)[0].holders
             Database.update_book(new_book)
             close_message = 'Book was successfully edited!'
             
