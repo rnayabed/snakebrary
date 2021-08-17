@@ -1,7 +1,7 @@
 from window.connection_details_widget import ConnectionDetailsWidget
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QFontDatabase, QScreen
+from PySide6.QtGui import QFont, QFontDatabase, QScreen
 
 from logic.database import Database
 from qt_material import apply_stylesheet
@@ -21,8 +21,13 @@ def start():
     except RuntimeError:
         app = QCoreApplication.instance() 
         
-    apply_stylesheet(app, theme='light_purple.xml')
+    #QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
 
+
+    #font = QFont('Roboto')
+    #font.setHintingPreference(QFont.PreferNoHinting)
+
+    apply_stylesheet(app, theme='light_purple.xml')
     Database.create_local_connection()
 
     win = decide_window()

@@ -1,6 +1,6 @@
 from window.connection_details_widget import ConnectionDetailsWidget
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
 
 from logic.database import Database
 from logic.user import UserPrivilege
@@ -74,6 +74,8 @@ class LoginPrompt(QWidget):
         
 
     def on_login_button_click(self):
+        self.disable_prompt(True)
+
         try_username = self.username_field.line_edit.text()
         try_password = self.password_field.line_edit.text()
 
@@ -83,14 +85,15 @@ class LoginPrompt(QWidget):
 
         if len(users) == 0:
             self.set_error("Invalid username/password")
+            self.disable_prompt(False)
             return
 
         if users[0].password != try_password:
             self.set_error("Invalid username/password")
+            self.disable_prompt(False)
             return
 
         self.set_error(None)
-        self.disable_prompt(True)
 
         self.dash = Dashboard(users[0])
         self.dash.show()
@@ -132,3 +135,4 @@ class LoginPrompt(QWidget):
         self.password_field.line_edit.setReadOnly(disable)
         self.login_button.setDisabled(disable)
         self.forgot_password_button.setDisabled(disable)
+        QApplication.instance().processEvents()

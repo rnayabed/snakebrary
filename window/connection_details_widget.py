@@ -1,6 +1,6 @@
 from logic.database import Database
 from window.helpers.enhanced_controls import LineEdit
-from PySide6.QtWidgets import (QDialog, QPushButton, QVBoxLayout, QWidget, QLabel)
+from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QVBoxLayout, QWidget, QLabel)
 
 from PySide6.QtCore import Qt
 
@@ -61,6 +61,7 @@ class ConnectionDetailsWidget(QWidget):
         self.password_field.line_edit.setText(Database.get_local_database_server_password())
     
     def connect_server_button_clicked(self):
+        
         self.disable_prompt(True)
 
         host = self.host_field.line_edit.text()
@@ -92,7 +93,8 @@ class ConnectionDetailsWidget(QWidget):
             self.error_label.setText('')
 
             if self.on_success != None:
-                self.on_success()
+                print('sasd')
+                self.x = self.on_success()
 
             self.close()
         except Exception as e:
@@ -107,3 +109,4 @@ class ConnectionDetailsWidget(QWidget):
         self.user_field.line_edit.setReadOnly(status)
         self.password_field.line_edit.setReadOnly(status)
         self.connect_server_button.setDisabled(status)
+        QApplication.instance().processEvents()

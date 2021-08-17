@@ -63,6 +63,9 @@ class BookWizardWindow(QDialog):
             self.mode = BookWizardWindowMode.EDIT
             self.new_book_isbn_field.line_edit.setReadOnly(True)
 
+        
+        self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
+
     
     def load_values_for_old_book(self):
         if self.old_book.photo != None:

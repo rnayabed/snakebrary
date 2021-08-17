@@ -43,8 +43,6 @@ class UserInfo(QWidget):
 
         self.privilege_label = QLabel()
 
-        self.book_history_button = QPushButton('Show Book history')
-
         self.edit_user_button = QPushButton('Edit')
         self.edit_user_button.clicked.connect(self.edit_user_button_onclick)
 
@@ -68,7 +66,6 @@ class UserInfo(QWidget):
         vbox_labels_1.addWidget(self.username_label)
         vbox_labels_1.addWidget(self.privilege_label)
         vbox_labels_1.addWidget(self.password_widget)
-        vbox_labels_1.addWidget(self.book_history_button)
         vbox_labels_1.addWidget(self.edit_delete_button_widget)
 
         hbox_1.addLayout(vbox_labels_1)

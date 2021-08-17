@@ -20,7 +20,7 @@ class BookRatingsLayout(QVBoxLayout):
         self.current_user = current_user
 
         header_label = QLabel('Ratings')
-        header_label.setStyleSheet('padding-top: 10px')
+        header_label.setContentsMargins(QtCore.QMargins(0,10,0,0))
         header_label.setFont(get_font_size(18))
 
         self.addWidget(header_label)
@@ -29,7 +29,7 @@ class BookRatingsLayout(QVBoxLayout):
         overview_hbox = QHBoxLayout()
 
         self.large_rating_label = QLabel()
-        self.large_rating_label.setStyleSheet('padding-right: 50px')
+        self.large_rating_label.setContentsMargins(QtCore.QMargins(0,0,50,0))
         self.large_rating_label.setFont(get_font_size(35))
 
         self.total_ratings_label = QLabel()
@@ -76,11 +76,14 @@ class BookRatingsLayout(QVBoxLayout):
         self.delete_rating_button.clicked.connect(self.delete_rating_button_clicked)
 
         rating_layout = QVBoxLayout()
+        
+        rating_layout.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
         self.rating_current_status_label = QLabel()
         rating_layout.addWidget(self.rating_current_status_label)
 
         rating_layout_hbox = QHBoxLayout()
+        rating_layout_hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
         rating_layout_hbox.addWidget(self.rating_slider)
         rating_layout_hbox.addWidget(self.rating_slider_status_label)
         rating_layout_hbox.addWidget(self.submit_rating_button)
@@ -92,6 +95,9 @@ class BookRatingsLayout(QVBoxLayout):
         self.rating_layout_widget.setLayout(rating_layout)
 
         self.addWidget(self.rating_layout_widget)
+
+        
+        self.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
 
         self.configure_ui()
