@@ -155,6 +155,7 @@ class BookWizardWindow(QDialog):
 Name: {old_book.name}
 Author: {old_book.author}
 Price: {old_book.price}''', QMessageBox.Ok)
+                self.set_disable(False)
                 return
             Database.create_new_book(new_book)
 

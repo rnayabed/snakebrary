@@ -144,6 +144,7 @@ class UserWizard(QVBoxLayout):
 Name: {old_user.name}
 Privilege: {UserPrivilege.get_ui_name(old_user.privilege)}
 Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
+                self.set_disable(False)
                 return
             Database.create_new_user(new_user)
 
