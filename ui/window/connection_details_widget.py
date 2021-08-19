@@ -1,6 +1,7 @@
-from logic.database import Database
-from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
+
+from logic.database import Database
 from ui.helpers.enhanced_controls import LineEdit
 from ui.helpers.helpers import get_font_size
 
@@ -51,24 +52,23 @@ class ConnectionDetailsWidget(QWidget):
 
         # Set dialog layout
         self.setLayout(layout)
-        
+
         self.get_local_saved_settings()
-    
+
     def get_local_saved_settings(self):
         self.host_field.line_edit.setText(Database.get_local_database_server_host())
         self.user_field.line_edit.setText(Database.get_local_database_server_user())
         self.port_field.line_edit.setText(Database.get_local_database_server_port())
         self.password_field.line_edit.setText(Database.get_local_database_server_password())
-    
+
     def connect_server_button_clicked(self):
-        
+
         self.disable_prompt(True)
 
         host = self.host_field.line_edit.text()
         port = self.port_field.line_edit.text()
         user = self.user_field.line_edit.text()
         password = self.password_field.line_edit.text()
-
 
         error = False
 
@@ -83,15 +83,13 @@ class ConnectionDetailsWidget(QWidget):
             error = True
         else:
             self.port_field.on_success()
-    
+
         if error:
             self.error_label.setText('')
             self.disable_prompt(False)
-            return      
+            return
 
-        
         QApplication.instance().processEvents()
-
 
         try:
             Database.create_connection(host, user, password, port)
@@ -109,7 +107,6 @@ class ConnectionDetailsWidget(QWidget):
 
             Database.save_local_database()
 
-
             self.error_label.setText('')
 
             if self.on_success != None:
@@ -122,7 +119,7 @@ class ConnectionDetailsWidget(QWidget):
             self.error_label.setText(str(e))
 
         self.disable_prompt(False)
-    
+
     def disable_prompt(self, status):
         self.host_field.line_edit.setReadOnly(status)
         self.port_field.line_edit.setReadOnly(status)

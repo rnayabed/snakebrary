@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
+
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
@@ -30,7 +31,7 @@ class AdminUsersTab(QWidget):
 
         self.users_table = QTableWidget()
         self.users_table.clicked.connect(self.users_table_clicked)
-        
+
         self.search_bar = LineEdit('Search for user')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
         self.search_bar.line_edit.setPlaceholderText('Search by Name or Username')
@@ -40,12 +41,12 @@ class AdminUsersTab(QWidget):
         layout.addWidget(self.users_table)
 
         self.setLayout(layout)
-        
+
         if self.current_user.privilege == UserPrivilege.ADMIN:
             self.add_admin_button.hide()
 
         self.configure_users_table()
-    
+
     def search_bar_value_changed(self):
         search = self.search_bar.line_edit.text().lower()
 
@@ -53,7 +54,7 @@ class AdminUsersTab(QWidget):
             name = self.users_table.cellWidget(i, 0).text().lower()
             username = self.users_table.cellWidget(i, 1).text().lower()
 
-            if not search in (name+username):
+            if not search in (name + username):
                 self.users_table.hideRow(i)
             else:
                 self.users_table.showRow(i)
@@ -69,13 +70,13 @@ class AdminUsersTab(QWidget):
         self.users_table.clear()
         self.users_table.setSortingEnabled(True)
         self.users_table.setRowCount(len(l_users))
-        self.users_table.setColumnCount(3) 
+        self.users_table.setColumnCount(3)
         self.users_table.setHorizontalHeaderLabels(["Name", " Username ", " Privilege "])
 
         self.users_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.users_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         self.users_table.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-        
+
         self.users_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.users_table.verticalHeader().setDefaultSectionSize(70)
 
@@ -98,4 +99,3 @@ class AdminUsersTab(QWidget):
         self.users_info_window = UserInfo(user, self.current_user, self.configure_users_table, self)
         self.users_info_window.exec()
         center_screen(self.users_info_window)
-    

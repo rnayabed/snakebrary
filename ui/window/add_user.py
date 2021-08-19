@@ -1,16 +1,17 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog, QMessageBox
+
 from logic.user import UserPrivilege
 from ui.layouts_and_widgets.user_wizard import UserWizard
 
 
 class AddUser(QDialog):
 
-    def __init__(self, new_user_privilege:UserPrivilege, on_successful, parent=None):
+    def __init__(self, new_user_privilege: UserPrivilege, on_successful, parent=None):
         super(AddUser, self).__init__(parent)
 
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
-        
+
         if new_user_privilege == UserPrivilege.ADMIN:
             prefix_label = 'Administrator'
         else:

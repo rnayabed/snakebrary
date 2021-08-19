@@ -1,8 +1,10 @@
 from PySide6 import QtCore
-from logic.book import Book
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+
+from logic.book import Book
 from logic.database import Database
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
+
 
 class BookWizardWindowMode:
     ADD = 1,
@@ -20,7 +22,9 @@ class BookWizardWindow(QDialog):
 
         self.on_success = on_success
 
-        self.new_book_cover_photo_path_field = FilePicker('Cover Picture (Optional)', on_select=self.on_cover_photo_selected, on_clear=self.on_cover_photo_cleared)
+        self.new_book_cover_photo_path_field = FilePicker('Cover Picture (Optional)',
+                                                          on_select=self.on_cover_photo_selected,
+                                                          on_clear=self.on_cover_photo_cleared)
 
         self.new_book_cover_photo_preview = ImageView('Preview will appear here', 300, 300)
 
@@ -41,7 +45,7 @@ class BookWizardWindow(QDialog):
         # Create layout and add widgets
 
         vbox = QVBoxLayout()
-        
+
         vbox.addLayout(self.photo_hbox)
         vbox.addWidget(self.new_book_name_field)
         vbox.addWidget(self.new_book_author_field)
@@ -53,7 +57,6 @@ class BookWizardWindow(QDialog):
 
         self.setLayout(vbox)
 
-
         if old_book == None:
             self.setWindowTitle('Add Book')
             self.mode = BookWizardWindowMode.ADD
@@ -64,7 +67,6 @@ class BookWizardWindow(QDialog):
             self.mode = BookWizardWindowMode.EDIT
             self.new_book_isbn_field.line_edit.setReadOnly(True)
 
-    
     def load_values_for_old_book(self):
         if self.old_book.photo != None:
             self.new_book_cover_photo_preview.set_image_from_blob(self.old_book.photo)
@@ -78,7 +80,7 @@ class BookWizardWindow(QDialog):
 
     def on_cover_photo_selected(self, img_path):
         self.new_book_cover_photo_preview.set_image_from_path(img_path)
-            
+
     def on_cover_photo_cleared(self):
         self.new_book_cover_photo_path_field.line_edit.clear()
         self.new_book_cover_photo_preview.clear_image()
@@ -99,25 +101,25 @@ class BookWizardWindow(QDialog):
             error = True
         else:
             self.new_book_name_field.on_success()
-        
+
         if len(proposed_new_book_author) < 1:
             self.new_book_author_field.on_error('Too short!')
             error = True
         else:
             self.new_book_author_field.on_success()
-        
+
         if len(proposed_new_book_isbn) > 13 or len(proposed_new_book_isbn) < 1:
             self.new_book_isbn_field.on_error('Invalid ISBN!')
             error = True
         else:
             self.new_book_isbn_field.on_success()
-        
+
         if len(proposed_new_book_genres) < 1:
             self.new_book_genres_field.on_error('Too short!')
             error = True
         else:
             self.new_book_genres_field.on_success()
-        
+
         try:
             float(proposed_new_book_price)
             self.new_book_price_field.on_success()
@@ -134,11 +136,9 @@ class BookWizardWindow(QDialog):
         for i in range(len(genres)):
             genres[i] = genres[i].strip().lower()
 
-        
         new_book = Book(proposed_new_book_isbn, proposed_new_book_name,
-                        proposed_new_book_author, [], genres, proposed_new_book_price, 
+                        proposed_new_book_author, [], genres, proposed_new_book_price,
                         proposed_new_book_about)
-
 
         if proposed_new_book_cover_photo_path != '':
             file = open(proposed_new_book_cover_photo_path, 'rb')
@@ -148,10 +148,9 @@ class BookWizardWindow(QDialog):
             if self.mode == BookWizardWindowMode.EDIT and self.new_book_cover_photo_preview.is_clear == False:
                 new_book.photo = self.old_book.photo
 
-
         if self.mode == BookWizardWindowMode.ADD:
             old_book = Database.get_book_by_ISBN(proposed_new_book_isbn)
-            if old_book !=None:
+            if old_book != None:
                 QMessageBox.critical(None, 'Error', f'''Book with same ISBN already exists.
 Name: {old_book.name}
 Author: {old_book.author}
@@ -163,8 +162,7 @@ Price: {old_book.price}''', QMessageBox.Ok)
         else:
             Database.update_book(new_book)
             close_message = 'Book was successfully edited!'
-            
-        
+
         self.on_success()
         QMessageBox.information(self, 'Congratulations', close_message, QMessageBox.Ok)
         self.close()

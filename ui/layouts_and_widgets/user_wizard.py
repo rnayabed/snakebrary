@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
@@ -17,8 +18,8 @@ class UserWizard(QVBoxLayout):
         self.on_success = on_success
         self.on_error = on_error
 
-
-        self.new_user_photo_path_field = FilePicker('Profile picture (Optional)', on_select=self.on_user_photo_selected, on_clear=self.on_user_photo_cleared)
+        self.new_user_photo_path_field = FilePicker('Profile picture (Optional)', on_select=self.on_user_photo_selected,
+                                                    on_clear=self.on_user_photo_cleared)
 
         self.new_user_photo_preview = ImageView('Preview', 200, 200)
 
@@ -46,7 +47,7 @@ class UserWizard(QVBoxLayout):
         self.addWidget(self.proceed_button)
 
         if old_user == None:
-            self.mode = UserWizardMode.ADD 
+            self.mode = UserWizardMode.ADD
             self.user_privilege = new_user_privilege
         else:
             self.old_user = old_user
@@ -55,12 +56,11 @@ class UserWizard(QVBoxLayout):
             self.mode = UserWizardMode.EDIT
             self.new_user_username_field.line_edit.setReadOnly(True)
 
-
         self.new_user_name_field.info_label.setText('Name')
         self.new_user_username_field.info_label.setText('Username')
         self.new_user_password_field.info_label.setText('Password')
         self.new_user_password_confirm_field.info_label.setText('Confirm Password')
-    
+
     def load_values_for_old_user(self):
         if self.old_user.photo != None:
             self.new_user_photo_preview.set_image_from_blob(self.old_user.photo)
@@ -71,10 +71,9 @@ class UserWizard(QVBoxLayout):
         self.new_user_password_confirm_field.line_edit.setText(self.old_user.password)
         self.new_user_password_field_hint.line_edit.setText(self.old_user.password_hint)
 
-    
     def on_user_photo_selected(self, img_path):
         self.new_user_photo_preview.set_image_from_path(img_path)
-            
+
     def on_user_photo_cleared(self):
         self.new_user_photo_path_field.line_edit.clear()
         self.new_user_photo_preview.clear_image()
@@ -127,10 +126,9 @@ class UserWizard(QVBoxLayout):
             Database.create_new_tables()
 
         new_user = User(proposed_new_user_username, proposed_new_user_password,
-                                 proposed_new_user_password_hint, proposed_new_user_name,
-                                 privilege=self.user_privilege)
+                        proposed_new_user_password_hint, proposed_new_user_name,
+                        privilege=self.user_privilege)
 
-        
         if proposed_new_user_photo_path != '':
             file = open(proposed_new_user_photo_path, 'rb')
             new_user.photo = file.read()
@@ -151,7 +149,6 @@ Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
 
         else:
             Database.update_user(new_user)
-            
 
         new_user.print_details()
 

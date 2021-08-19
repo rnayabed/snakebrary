@@ -1,6 +1,7 @@
-from logic.user import User
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialog
+
+from logic.user import User
 from ui.layouts_and_widgets.user_info_vbox import UserInfoVBox
 
 
@@ -16,6 +17,3 @@ class UserInfo(QDialog):
 
         self.user_info_vbox = UserInfoVBox(user, current_user, dashboard_on_user_edited, self)
         self.setLayout(self.user_info_vbox)
-
-    
-    

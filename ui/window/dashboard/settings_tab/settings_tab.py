@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+
 from ui.window.dashboard.settings_tab.about import About
 from ui.window.dashboard.settings_tab.account_tab import AccountTab
 from ui.window.dashboard.settings_tab.general_tab import GeneralTab
@@ -18,5 +19,3 @@ class SettingsTab(QWidget):
         layout.addWidget(self.tabs)
 
         self.setLayout(layout)
-
-

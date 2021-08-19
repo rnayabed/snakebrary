@@ -1,7 +1,8 @@
-from logic.user import User, UserPrivilege
-from logic.database import Database
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
+
+from logic.database import Database
+from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
 from ui.helpers.helpers import get_font_size, center_screen
 from ui.window.edit_user import EditUser
@@ -41,14 +42,13 @@ class UserInfoVBox(QVBoxLayout):
         self.delete_user_button.clicked.connect(self.delete_user_button_onclick)
 
         self.edit_delete_button_hbox = QHBoxLayout()
-        self.edit_delete_button_hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        self.edit_delete_button_hbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         self.edit_delete_button_hbox.addWidget(self.edit_user_button)
         self.edit_delete_button_hbox.addWidget(self.delete_user_button)
 
         self.edit_delete_button_widget = QWidget()
-        self.edit_delete_button_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        self.edit_delete_button_widget.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         self.edit_delete_button_widget.setLayout(self.edit_delete_button_hbox)
-
 
         vbox_labels_1 = QVBoxLayout()
         vbox_labels_1.setAlignment(QtCore.Qt.AlignTop)
@@ -60,11 +60,10 @@ class UserInfoVBox(QVBoxLayout):
 
         hbox_1.addLayout(vbox_labels_1)
 
-
         self.addLayout(hbox_1)
 
         self.configure_ui()
-    
+
     def configure_ui(self):
         if self.user.photo == None:
             self.profile_photo.clear_image()
@@ -72,19 +71,19 @@ class UserInfoVBox(QVBoxLayout):
         else:
             self.profile_photo.set_image_from_blob(self.user.photo)
             self.profile_photo.show()
-        
 
         self.name_label.setText(self.user.name)
         self.username_label.setText(f'Username: {self.user.username}')
         self.privilege_label.setText(f'Privilege: {UserPrivilege.get_ui_name(self.user.privilege)}')
 
-        if (self.current_user.privilege == UserPrivilege.ADMIN and self.user.privilege == UserPrivilege.MASTER) or (self.current_user.privilege == self.user.privilege and self.current_user.username != self.user.username and self.current_user.privilege == UserPrivilege.ADMIN):
+        if (self.current_user.privilege == UserPrivilege.ADMIN and self.user.privilege == UserPrivilege.MASTER) or (
+                self.current_user.privilege == self.user.privilege and self.current_user.username != self.user.username and self.current_user.privilege == UserPrivilege.ADMIN):
             self.password_widget.hide()
             self.edit_delete_button_widget.hide()
             self.edit_delete_button_widget.hide()
         elif self.current_user.privilege == UserPrivilege.NORMAL:
             self.password_widget.hide()
-        
+
         if self.current_user.username == self.user.username:
             self.delete_user_button.hide()
 
@@ -98,22 +97,23 @@ Username: {self.user.username}''', QMessageBox.Yes, QMessageBox.No)
             if self.dashboard_on_user_edited != None:
                 self.dashboard_on_user_edited()
             self.parent.close()
-    
+
     def edit_user_button_onclick(self):
         self.edit_user_window = EditUser(self.user, self.on_user_edited, self.parent)
         self.edit_user_window.exec()
         center_screen(self.edit_user_window)
-    
+
     def on_user_edited(self):
         if self.dashboard_on_user_edited != None:
-                self.dashboard_on_user_edited()
+            self.dashboard_on_user_edited()
         self.user = Database.get_user_by_username(self.user.username)
         self.configure_ui()
 
-class PasswordWidgetMode:
 
+class PasswordWidgetMode:
     HIDE = 0,
     SHOW = 1
+
 
 class PasswordWidget(QWidget):
 
@@ -128,7 +128,7 @@ class PasswordWidget(QWidget):
         self.password_show_hide_button.clicked.connect(self.toggle_mode)
 
         password_vbox = QVBoxLayout()
-        password_vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        password_vbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         password_vbox.addWidget(self.password_label)
         password_vbox.addWidget(self.password_hint_label)
         password_vbox.addWidget(self.password_show_hide_button)
@@ -136,7 +136,7 @@ class PasswordWidget(QWidget):
         self.setLayout(password_vbox)
 
         self.set_current_mode(PasswordWidgetMode.HIDE)
-    
+
     def set_current_mode(self, mode: PasswordWidgetMode):
         self.mode = mode
         if self.mode == PasswordWidgetMode.HIDE:
@@ -150,13 +150,11 @@ class PasswordWidget(QWidget):
                 self.password_hint_label.setText('Password Hint not configured')
             else:
                 self.password_hint_label.setText(f'Password Hint: {self.user.password_hint}')
-            
+
             self.password_show_hide_button.setText('Hide Password and Hint')
-                
 
     def toggle_mode(self):
         if self.mode == PasswordWidgetMode.HIDE:
             self.set_current_mode(PasswordWidgetMode.SHOW)
         else:
             self.set_current_mode(PasswordWidgetMode.HIDE)
-        

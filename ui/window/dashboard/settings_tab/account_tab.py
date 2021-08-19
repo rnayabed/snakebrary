@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QWidget
+
 from ui.layouts_and_widgets.user_info_vbox import UserInfoVBox
 
 

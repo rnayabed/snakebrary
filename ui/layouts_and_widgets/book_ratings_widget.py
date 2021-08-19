@@ -1,9 +1,9 @@
-from logic.user import User
-from logic.database import Database
 from PySide6 import QtCore
-from logic.book import Book
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
 
+from logic.book import Book
+from logic.database import Database
+from logic.user import User
 from ui.helpers.helpers import get_font_size
 
 
@@ -16,18 +16,17 @@ class BookRatingsWidget(QWidget):
         self.current_user = current_user
 
         header_label = QLabel('Ratings')
-        header_label.setContentsMargins(QtCore.QMargins(0,10,0,0))
+        header_label.setContentsMargins(QtCore.QMargins(0, 10, 0, 0))
         header_label.setFont(get_font_size(18))
 
         self.vbox = QVBoxLayout()
 
         self.vbox.addWidget(header_label)
 
-
         overview_hbox = QHBoxLayout()
 
         self.large_rating_label = QLabel()
-        self.large_rating_label.setContentsMargins(QtCore.QMargins(0,0,50,0))
+        self.large_rating_label.setContentsMargins(QtCore.QMargins(0, 0, 50, 0))
         self.large_rating_label.setFont(get_font_size(35))
 
         self.total_ratings_label = QLabel()
@@ -56,7 +55,6 @@ class BookRatingsWidget(QWidget):
 
         self.vbox.addLayout(overview_hbox)
 
-
         self.rating_slider = QSlider(QtCore.Qt.Horizontal)
         self.rating_slider.setMinimum(1)
         self.rating_slider.setMaximum(5)
@@ -74,14 +72,14 @@ class BookRatingsWidget(QWidget):
         self.delete_rating_button.clicked.connect(self.delete_rating_button_clicked)
 
         rating_layout = QVBoxLayout()
-        
-        rating_layout.setContentsMargins(QtCore.QMargins(0,0,0,0))
+
+        rating_layout.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
 
         self.rating_current_status_label = QLabel()
         rating_layout.addWidget(self.rating_current_status_label)
 
         rating_layout_hbox = QHBoxLayout()
-        rating_layout_hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        rating_layout_hbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         rating_layout_hbox.addWidget(self.rating_slider)
         rating_layout_hbox.addWidget(self.rating_slider_status_label)
         rating_layout_hbox.addWidget(self.submit_rating_button)
@@ -96,20 +94,18 @@ class BookRatingsWidget(QWidget):
 
         self.setLayout(self.vbox)
 
-        
-        self.setContentsMargins(QtCore.QMargins(0,0,0,0))
-
+        self.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
 
         self.configure_ui()
-    
+
     def rating_slider_value_changed(self):
         self.rating_slider_status_label.setText(str(self.rating_slider.value()))
-    
+
     def delete_rating_button_clicked(self):
         self.book_ratings.delete_rating_by_username(self.current_user.username)
         Database.update_book_ratings(self.book_ratings)
         self.configure_ui()
-    
+
     def submit_rating_button_clicked(self):
         self.book_ratings.set_rating_by_username(self.current_user.username, self.rating_slider.value())
         Database.update_book_ratings(self.book_ratings)
@@ -131,7 +127,6 @@ class BookRatingsWidget(QWidget):
         self.rating_progress_bar_4.load(self.book_ratings)
         self.rating_progress_bar_5.load(self.book_ratings)
 
-
         if not self.book.is_eligible_to_rate(self.current_user.username):
             self.rating_layout_widget.hide()
         else:
@@ -139,17 +134,18 @@ class BookRatingsWidget(QWidget):
             existing_rating = self.book_ratings.get_rating_by_username(self.current_user.username)
 
             if existing_rating == None:
-                self.rating_current_status_label.setText('You have read but not rated this book yet. Go ahead and rate it!')
+                self.rating_current_status_label.setText(
+                    'You have read but not rated this book yet. Go ahead and rate it!')
                 self.delete_rating_button.hide()
             else:
                 self.rating_current_status_label.setText(f'You have rated this book {existing_rating} out of 5')
                 self.rating_slider.setValue(existing_rating)
                 self.delete_rating_button.show()
-    
+
     def get_rating_progress_bar_for_rating(self, rating):
         rate_label = QLabel(str(rating))
         rating_bar = QProgressBar()
-        
+
         if len(self.book_ratings.ratings) == 0:
             rating_bar.setValue(0)
         else:
@@ -158,24 +154,23 @@ class BookRatingsWidget(QWidget):
         hbox = QHBoxLayout()
         hbox.addWidget(rate_label)
         hbox.addWidget(rating_bar)
-        return hbox        
+        return hbox
+
 
 class RatingProgressBar(QHBoxLayout):
 
     def __init__(self, rating):
         super(RatingProgressBar, self).__init__(None)
-    
+
         self.rating = rating
         self.rate_label = QLabel(str(self.rating))
         self.rating_bar = QProgressBar()
 
         self.addWidget(self.rate_label)
         self.addWidget(self.rating_bar)
-    
+
     def load(self, book_ratings):
         if len(book_ratings.ratings) == 0:
             self.rating_bar.setValue(0)
         else:
             self.rating_bar.setValue(book_ratings.get_ratings_by_proportion(self.rating))
-
-

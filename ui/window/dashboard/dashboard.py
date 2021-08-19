@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
+
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.window.dashboard.admin_users_tab import AdminUsersTab
@@ -33,11 +34,12 @@ class Dashboard(QWidget, QtStyleTools):
         if self.current_user.privilege != UserPrivilege.NORMAL:
             self.admin_users_table = AdminUsersTab(self.current_user)
             self.tabs.addTab(self.admin_users_table, 'Users')
-        
 
         self.tabs.addTab(BooksTabWidget(self.current_user), 'Books')
 
-        self.tabs.addTab(SettingsTab(self.current_user, self.current_user_account_settings, self.dashboard_on_user_edited), "Settings")
+        self.tabs.addTab(
+            SettingsTab(self.current_user, self.current_user_account_settings, self.dashboard_on_user_edited),
+            "Settings")
 
     def configure_theme_and_accent_colour(self):
         stylesheet_name = f'{self.current_user_account_settings.theme.lower()}_{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml'

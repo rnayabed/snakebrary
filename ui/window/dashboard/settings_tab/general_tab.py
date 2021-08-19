@@ -1,8 +1,9 @@
-from logic.user import UserPrivilege
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
+
 from logic.database import Database
+from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import ComboBox
 
 
@@ -37,7 +38,8 @@ class GeneralTab(QWidget, QtStyleTools):
         self.theme_combo_box.combo_box.setCurrentIndex(self.themes.index(self.current_user_account_settings.theme))
         self.theme_combo_box.combo_box.currentIndexChanged.connect(self.change_theme)
         self.accent_colour_combo_box = ComboBox('Accent Colour', self.accent_colours_ui)
-        self.accent_colour_combo_box.combo_box.setCurrentIndex(self.accent_colours.index(self.current_user_account_settings.accent_colour))
+        self.accent_colour_combo_box.combo_box.setCurrentIndex(
+            self.accent_colours.index(self.current_user_account_settings.accent_colour))
         self.accent_colour_combo_box.combo_box.currentIndexChanged.connect(self.change_theme)
 
         layout.addWidget(self.theme_combo_box)
@@ -78,10 +80,9 @@ Continue?''', QMessageBox.Yes, QMessageBox.No)
         if confirm_delete_box == QMessageBox.Yes:
             Database.delete_database()
             Database.delete_local_database()
-            
+
             self.restart()
-            
-    
+
     def restart(self):
         QApplication.closeAllWindows()
         QCoreApplication.exit(6504)

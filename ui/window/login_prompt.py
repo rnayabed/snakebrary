@@ -1,5 +1,6 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
+
 from logic.database import Database
 from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import LineEdit
@@ -58,7 +59,7 @@ class LoginPrompt(QWidget):
 
         # Set dialog layout
         self.setLayout(layout)
-    
+
     def sql_server_settings_button_clicked(self):
         Database.close_connection()
         self.connection_details = ConnectionDetailsWidget(self.on_connection_configure_success)
@@ -70,11 +71,10 @@ class LoginPrompt(QWidget):
         self.login_prompt = LoginPrompt()
         self.login_prompt.show()
         center_screen(self.login_prompt)
-        
 
     def on_login_button_click(self):
         self.disable_prompt(True)
-        
+
         self.username_field.on_success()
 
         try_username = self.username_field.line_edit.text()
@@ -126,11 +126,8 @@ class LoginPrompt(QWidget):
                 msg_text += '\nContact master administrator for further help.'
             else:
                 msg_text += '\nThis account cannot be recovered if password is forgotten.'
-            
-            
-            
-        QMessageBox.warning(self, 'Warning', msg_text, QMessageBox.Ok)
 
+        QMessageBox.warning(self, 'Warning', msg_text, QMessageBox.Ok)
 
     def set_error(self, error):
         self.error_label.setText(error)

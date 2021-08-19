@@ -1,8 +1,10 @@
-from PySide6 import QtCore
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, QComboBox, QWidget
-from PySide6.QtCore import QMargins, Qt
 import os
+
+from PySide6 import QtCore
+from PySide6.QtCore import QMargins, Qt
+from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
+    QComboBox, QWidget
 
 
 class LineEdit(QWidget):
@@ -28,9 +30,8 @@ class LineEdit(QWidget):
 
         self.line_edit.setText(init_value)
 
-
         vbox = QVBoxLayout()
-        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.setContentsMargins(QMargins(0, 0, 0, 0))
         vbox.addLayout(self.upper)
         vbox.addWidget(self.line_edit)
         vbox.setSpacing(3)
@@ -42,6 +43,7 @@ class LineEdit(QWidget):
 
     def on_success(self):
         self.error_label.clear()
+
 
 class PlainTextEdit(QWidget):
 
@@ -62,10 +64,9 @@ class PlainTextEdit(QWidget):
         self.plain_text_edit = QPlainTextEdit()
 
         self.plain_text_edit.setPlainText(init_value)
-        
-        
+
         vbox = QVBoxLayout()
-        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.setContentsMargins(QMargins(0, 0, 0, 0))
         vbox.addLayout(upper)
         vbox.addWidget(self.plain_text_edit)
         vbox.setSpacing(3)
@@ -90,11 +91,11 @@ class ComboBox(QWidget):
         self.combo_box.addItems(l)
 
         hbox = QHBoxLayout()
-        hbox.setContentsMargins(QMargins(0,0,0,0))
+        hbox.setContentsMargins(QMargins(0, 0, 0, 0))
         hbox.addWidget(self.label)
         hbox.addWidget(self.combo_box)
         hbox.setSpacing(3)
-        
+
         self.setLayout(hbox)
 
 
@@ -118,7 +119,6 @@ class FilePicker(QWidget):
         upper.addWidget(self.info_label)
         upper.addWidget(self.error_label)
 
-
         self.line_edit = QLineEdit()
         self.line_edit.setEnabled(False)
         self.line_edit.setText(init_value)
@@ -136,7 +136,7 @@ class FilePicker(QWidget):
 
         vbox = QVBoxLayout()
         vbox.setAlignment(QtCore.Qt.AlignCenter)
-        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.setContentsMargins(QMargins(0, 0, 0, 0))
         vbox.addLayout(upper)
         vbox.addLayout(lower)
         vbox.setSpacing(3)
@@ -151,18 +151,18 @@ class FilePicker(QWidget):
 
     def __select_file(self):
         img_path = QFileDialog.getOpenFileName(None, 'Open File', os.getcwd(), 'Image Files (*.jpg *.png)')[0]
-        
+
         if img_path != '':
             self.line_edit.setText(img_path)
             if self.on_select != None:
                 self.on_select(img_path)
-    
+
     def __clear_file(self):
         self.line_edit.clear()
         if self.on_clear != None:
             self.on_clear()
 
-    
+
 class ImageView(QLabel):
 
     def __init__(self, info, width, height, style='border: 2px solid black;'):
@@ -174,21 +174,21 @@ class ImageView(QLabel):
         self.setText(self.info)
         self.setStyleSheet(self.style)
         self.setAlignment(QtCore.Qt.AlignCenter)
-        self.setFixedSize(width,height)
+        self.setFixedSize(width, height)
         self.is_clear = True
-    
+
     def set_image_from_blob(self, blob):
         self.setPixmap(QPixmap.fromImage(QImage.fromData(blob))
-                        .scaled(self.width(),self.height(),
-                            QtCore.Qt.KeepAspectRatio))   
+                       .scaled(self.width(), self.height(),
+                               QtCore.Qt.KeepAspectRatio))
         self.is_clear = False
 
     def set_image_from_path(self, path):
-        self.setPixmap(QPixmap(path).scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+        self.setPixmap(QPixmap(path).scaled(self.width(), self.height(), QtCore.Qt.KeepAspectRatio,
+                                            QtCore.Qt.SmoothTransformation))
         self.is_clear = False
 
     def clear_image(self):
         self.clear()
         self.setText(self.info)
         self.is_clear = True
-     
