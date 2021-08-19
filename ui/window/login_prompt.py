@@ -44,7 +44,6 @@ class LoginPrompt(QWidget):
         self.sql_server_settings_button.clicked.connect(self.sql_server_settings_button_clicked)
 
         self.error_label = QLabel()
-        self.error_label.setStyleSheet("color: red;")
         self.error_label.setAlignment(Qt.AlignCenter)
 
         # Create layout and add widgets
@@ -92,7 +91,7 @@ class LoginPrompt(QWidget):
             self.disable_prompt(False)
             return
 
-        self.set_error(None)
+        self.set_success('Successfully Logged in!')
 
         self.dash = Dashboard(user)
         self.dash.show()
@@ -131,6 +130,12 @@ class LoginPrompt(QWidget):
 
     def set_error(self, error):
         self.error_label.setText(error)
+        self.error_label.setStyleSheet("color: red;")
+        QApplication.instance().processEvents()
+    
+    def set_success(self, error):
+        self.error_label.setText(error)
+        self.error_label.setStyleSheet("color: green;")
         QApplication.instance().processEvents()
 
     def disable_prompt(self, disable):

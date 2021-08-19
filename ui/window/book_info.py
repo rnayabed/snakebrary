@@ -37,10 +37,9 @@ class BookInfo(QDialog):
 
         self.name_label = QLabel()
         self.name_label.setFont(get_font_size(30))
-        self.name_label.setContentsMargins(QtCore.QMargins(0, 0, 0, 10))
 
         self.author_label = QLabel()
-        self.author_label.setFont(get_font_size(20))
+        self.author_label.setFont(get_font_size(17))
 
         self.genres_label = QLabel()
 
@@ -48,6 +47,8 @@ class BookInfo(QDialog):
         self.price_label = QLabel()
 
         self.current_holder_label = QLabel()
+
+        self.date_time_added_label = QLabel()
 
         self.get_return_button = QPushButton()
 
@@ -90,6 +91,7 @@ class BookInfo(QDialog):
         vbox_labels_1.addWidget(self.isbn_label)
         vbox_labels_1.addWidget(self.price_label)
         vbox_labels_1.addWidget(self.current_holder_label)
+        vbox_labels_1.addWidget(self.date_time_added_label)
         vbox_labels_1.addWidget(self.get_return_button)
         vbox_labels_1.addWidget(self.non_normal_buttons_widget)
 
@@ -156,10 +158,12 @@ class BookInfo(QDialog):
 
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.current_holder_label.hide()
+            self.date_time_added_label.hide()
             self.non_normal_buttons_widget.hide()
         else:
             current_holder = self.book.get_current_holder()
 
+            self.date_time_added_label.setText(f'Date/Time added: {self.book.date_time_added}')
             if current_holder == None:
                 self.current_holder_label.hide()
             else:

@@ -10,13 +10,14 @@ from ui.window.edit_user import EditUser
 
 class UserInfoVBox(QVBoxLayout):
 
-    def __init__(self, user: User, current_user: User, dashboard_on_user_edited, parent):
+    def __init__(self, user: User, current_user: User, dashboard_on_user_edited, parent, is_account_tab=False):
         super(UserInfoVBox, self).__init__(parent)
 
         self.dashboard_on_user_edited = dashboard_on_user_edited
         self.current_user = current_user
         self.parent = parent
         self.user = user
+        self.is_account_tab = is_account_tab
 
         self.setAlignment(QtCore.Qt.AlignTop)
 
@@ -33,6 +34,8 @@ class UserInfoVBox(QVBoxLayout):
         self.password_widget = PasswordWidget(self.user)
 
         self.privilege_label = QLabel()
+
+        self.date_time_created_label = QLabel()
 
         self.edit_user_button = QPushButton('Edit')
         self.edit_user_button.clicked.connect(self.edit_user_button_onclick)
@@ -55,6 +58,7 @@ class UserInfoVBox(QVBoxLayout):
         vbox_labels_1.addWidget(self.name_label)
         vbox_labels_1.addWidget(self.username_label)
         vbox_labels_1.addWidget(self.privilege_label)
+        vbox_labels_1.addWidget(self.date_time_created_label)
         vbox_labels_1.addWidget(self.password_widget)
         vbox_labels_1.addWidget(self.edit_delete_button_widget)
 
@@ -75,14 +79,21 @@ class UserInfoVBox(QVBoxLayout):
         self.name_label.setText(self.user.name)
         self.username_label.setText(f'Username: {self.user.username}')
         self.privilege_label.setText(f'Privilege: {UserPrivilege.get_ui_name(self.user.privilege)}')
+        self.date_time_created_label.setText(f'Date/Time created: {self.user.date_time_created}')
 
         if (self.current_user.privilege == UserPrivilege.ADMIN and self.user.privilege == UserPrivilege.MASTER) or (
                 self.current_user.privilege == self.user.privilege and self.current_user.username != self.user.username and self.current_user.privilege == UserPrivilege.ADMIN):
             self.password_widget.hide()
             self.edit_delete_button_widget.hide()
             self.edit_delete_button_widget.hide()
-        elif self.current_user.privilege == UserPrivilege.NORMAL:
+        
+        if self.current_user.privilege == UserPrivilege.NORMAL:
             self.password_widget.hide()
+
+        if self.is_account_tab:
+            self.password_widget.hide()
+            self.privilege_label.hide()
+            self.date_time_created_label.hide()
 
         if self.current_user.username == self.user.username:
             self.delete_user_button.hide()
@@ -107,7 +118,8 @@ Username: {self.user.username}''', QMessageBox.Yes, QMessageBox.No)
         if self.dashboard_on_user_edited != None:
             self.dashboard_on_user_edited()
         self.user = Database.get_user_by_username(self.user.username)
-        self.configure_ui()
+        self.configure_ui() 
+        center_screen(self.parent)
 
 
 class PasswordWidgetMode:

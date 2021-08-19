@@ -11,10 +11,11 @@ from ui.window.user_info import UserInfo
 
 class AdminUsersTab(QWidget):
 
-    def __init__(self, current_user: User, parent=None):
+    def __init__(self, current_user: User, dashboard_on_user_edited, parent=None):
         super(AdminUsersTab, self).__init__(parent)
 
         self.current_user = current_user
+        self.dashboard_on_user_edited = dashboard_on_user_edited
 
         layout = QVBoxLayout()
 
@@ -106,6 +107,6 @@ class AdminUsersTab(QWidget):
 
     def users_table_clicked(self, index):
         user = self.users_table.cellWidget(index.row(), index.column()).property('user_obj')
-        self.users_info_window = UserInfo(user, self.current_user, self.configure_users_table, self)
+        self.users_info_window = UserInfo(user, self.current_user, self.dashboard_on_user_edited, self)
         self.users_info_window.exec()
         center_screen(self.users_info_window)

@@ -12,10 +12,11 @@ class SettingsTab(QWidget):
 
         layout = QVBoxLayout()
 
-        self.tabs = QTabWidget()
-        self.tabs.addTab(GeneralTab(current_user, current_user_settings), 'General')
-        self.tabs.addTab(AccountTab(current_user, dashboard_on_user_edited), 'Account')
-        self.tabs.addTab(About(), 'About')
-        layout.addWidget(self.tabs)
+        tabs = QTabWidget()
+        tabs.addTab(GeneralTab(current_user, current_user_settings), 'General')
+        self.account_tab = AccountTab(current_user, dashboard_on_user_edited)
+        tabs.addTab(self.account_tab, 'Account')
+        tabs.addTab(About(), 'About')
+        layout.addWidget(tabs)
 
         self.setLayout(layout)
