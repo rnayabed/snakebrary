@@ -396,3 +396,11 @@ class Database:
         __local_db_con_cursor.execute('DROP TABLE local_settings')
 
         Database.save_local_database()
+
+    @staticmethod
+    def get_random_book():
+        tbr = Database.__filter_books(f'SELECT * FROM books ORDER BY RAND() LIMIT 1')
+        if tbr == []:
+            return None
+        else:
+            return tbr[0]

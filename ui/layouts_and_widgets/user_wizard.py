@@ -89,13 +89,13 @@ class UserWizard(QVBoxLayout):
         error = False
 
         if len(proposed_new_user_name) < 1:
-            self.new_user_name_field.on_error('Too short!')
+            self.new_user_name_field.on_error('Required')
             error = True
         else:
             self.new_user_name_field.on_success()
 
         if len(proposed_new_user_username) < 1:
-            self.new_user_username_field.on_error('Too short!')
+            self.new_user_username_field.on_error('Required')
             error = True
         elif len(proposed_new_user_username) > 50:
             self.new_user_username_field.on_error('Too long!')

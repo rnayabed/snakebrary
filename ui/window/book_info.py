@@ -46,9 +46,11 @@ class BookInfo(QDialog):
         self.isbn_label = QLabel()
         self.price_label = QLabel()
 
-        self.current_holder_label = QLabel()
-
         self.date_time_added_label = QLabel()
+        self.current_holder_label = QLabel()
+        size_policy = self.current_holder_label.sizePolicy()
+        size_policy.setRetainSizeWhenHidden(True)
+        self.current_holder_label.setSizePolicy(size_policy)
 
         self.get_return_button = QPushButton()
 
@@ -90,8 +92,8 @@ class BookInfo(QDialog):
         vbox_labels_1.addWidget(self.genres_label)
         vbox_labels_1.addWidget(self.isbn_label)
         vbox_labels_1.addWidget(self.price_label)
-        vbox_labels_1.addWidget(self.current_holder_label)
         vbox_labels_1.addWidget(self.date_time_added_label)
+        vbox_labels_1.addWidget(self.current_holder_label)
         vbox_labels_1.addWidget(self.get_return_button)
         vbox_labels_1.addWidget(self.non_normal_buttons_widget)
 
@@ -161,15 +163,8 @@ class BookInfo(QDialog):
             self.date_time_added_label.hide()
             self.non_normal_buttons_widget.hide()
         else:
-            current_holder = self.book.get_current_holder()
-
             self.date_time_added_label.setText(f'Date/Time added: {self.book.date_time_added}')
-            if current_holder == None:
-                self.current_holder_label.hide()
-            else:
-                current_holder_user = Database.get_user_by_username(current_holder)
-
-                self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
+            self.configure_current_holder_label()
 
         self.ratings_widget.reload(self.book)
 
@@ -185,7 +180,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
             self.dashboard_on_books_edited()
             self.close()
 
-    def get_button(self):
+    def get_book(self):
         self.get_return_button.setDisabled(True)
 
         new_holder = BookHolder(self.current_user.username)
@@ -193,29 +188,40 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         Database.update_book_holders(self.book.holders, self.book.ISBN)
 
         self.configure_get_return_button()
-
         self.get_return_button.setDisabled(False)
+        self.configure_current_holder_label()
+    
+    def configure_current_holder_label(self):
+        current_holder = self.book.get_current_holder()
+        if current_holder == None:
+            self.current_holder_label.hide()
+        else:
+            current_holder_user = Database.get_user_by_username(current_holder)
+            self.current_holder_label.setText(f'Current Holder: {current_holder} ({current_holder_user.name})')
+            self.current_holder_label.show()
 
-    def return_button(self):
+    def return_book(self):
+        
         self.get_return_button.setDisabled(True)
         self.book.return_now()
         Database.update_book_holders(self.book.holders, self.book.ISBN)
 
         self.configure_get_return_button()
         self.ratings_widget.reload(self.book)
-
         self.get_return_button.setDisabled(False)
+        self.configure_current_holder_label()
 
     def configure_get_return_button(self):
         self.disconnect_slots_get_return_button()
 
         if self.book.get_current_holder() == None:
             self.get_return_button.setText('Get it')
-            self.get_return_button.clicked.connect(self.get_button)
+            self.get_return_button.clicked.connect(self.get_book)
         else:
-            if self.book.get_current_holder() == self.current_user.username:
+            current_holder_privilege = Database.get_user_by_username(self.book.get_current_holder()).privilege
+            if self.book.get_current_holder() == self.current_user.username or (self.current_user.privilege != UserPrivilege.NORMAL and current_holder_privilege != self.current_user.privilege and current_holder_privilege != UserPrivilege.MASTER):
                 self.get_return_button.setText('Return')
-                self.get_return_button.clicked.connect(self.return_button)
+                self.get_return_button.clicked.connect(self.return_book)
             else:
                 self.get_return_button.setDisabled(True)
                 self.get_return_button.setText('Unavailable')

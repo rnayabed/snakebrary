@@ -97,13 +97,13 @@ class BookWizardWindow(QDialog):
         error = False
 
         if len(proposed_new_book_name) < 1:
-            self.new_book_name_field.on_error('Too short!')
+            self.new_book_name_field.on_error('Required')
             error = True
         else:
             self.new_book_name_field.on_success()
 
         if len(proposed_new_book_author) < 1:
-            self.new_book_author_field.on_error('Too short!')
+            self.new_book_author_field.on_error('Required')
             error = True
         else:
             self.new_book_author_field.on_success()
@@ -115,7 +115,7 @@ class BookWizardWindow(QDialog):
             self.new_book_isbn_field.on_success()
 
         if len(proposed_new_book_genres) < 1:
-            self.new_book_genres_field.on_error('Too short!')
+            self.new_book_genres_field.on_error('Required')
             error = True
         else:
             self.new_book_genres_field.on_success()

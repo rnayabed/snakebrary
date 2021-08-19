@@ -1,10 +1,10 @@
-from PySide6 import QtWidgets
+from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import center_screen
+from ui.helpers.helpers import center_screen, get_font_size
 from ui.window.book_info import BookInfo
 from ui.window.book_wizard_window import BookWizardWindow
 
@@ -36,15 +36,49 @@ class BooksTabWidget(QWidget):
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
         self.search_bar.line_edit.setPlaceholderText('Search by Name, Author or ISBN')
 
+        self.get_random_book_button = QPushButton('I\'m feeling lucky!')
+        self.get_random_book_button.clicked.connect(self.get_random_book)
+
         layout.addLayout(button_bar)
-        layout.addWidget(self.search_bar)
-        layout.addWidget(self.books_table)
+
+        self.books_widget = QWidget()
+        self.books_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        books_widget_vbox = QVBoxLayout()
+        books_widget_vbox.addWidget(self.search_bar)
+        books_widget_vbox.addWidget(self.get_random_book_button)
+        books_widget_vbox.addWidget(self.books_table)
+        self.books_widget.setLayout(books_widget_vbox)
+
+        layout.addWidget(self.books_widget)
+
+        self.no_books_widget = QWidget()
+        self.no_books_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        no_books_vbox = QVBoxLayout()
+        no_books_vbox.setAlignment(QtCore.Qt.AlignCenter)
+
+        no_books_found_label = QLabel('No books found')
+        no_books_found_label.setAlignment(QtCore.Qt.AlignCenter)
+        no_books_found_label.setFont(get_font_size(18))
+
+        self.no_books_non_admin_sub_heading_label = QLabel('Ask the administrator to add some books!')
+        self.no_books_non_admin_sub_heading_label.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.no_books_admin_sub_heading_label = QLabel('Click on "New Book" to add one!')
+        self.no_books_admin_sub_heading_label.setAlignment(QtCore.Qt.AlignCenter)
+
+        no_books_vbox.addWidget(no_books_found_label)
+        no_books_vbox.addWidget(self.no_books_non_admin_sub_heading_label)
+        no_books_vbox.addWidget(self.no_books_admin_sub_heading_label)
+        self.no_books_widget.setLayout(no_books_vbox)
+        
+        layout.addWidget(self.no_books_widget)
 
         self.setLayout(layout)
         self.configure_books_table()
 
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.add_book_button.hide()
+
     
     def reload_button_clicked(self):
         self.reload_button.setDisabled(True)
@@ -86,6 +120,21 @@ class BooksTabWidget(QWidget):
         self.books_table.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.books_table.verticalHeader().setDefaultSectionSize(70)
 
+        if len(l_books) == 0:
+            self.books_widget.hide()
+
+            if self.current_user.privilege == UserPrivilege.NORMAL:
+                self.no_books_non_admin_sub_heading_label.show()
+                self.no_books_admin_sub_heading_label.hide()
+            else:
+                self.no_books_non_admin_sub_heading_label.hide()
+                self.no_books_admin_sub_heading_label.show()
+
+            self.no_books_widget.show()
+        else:
+            self.books_widget.show()
+            self.no_books_widget.hide()
+
         for i in range(len(l_books)):
             each_book = l_books[i]
             name_widget = QLabel(each_book.name)
@@ -102,6 +151,13 @@ class BooksTabWidget(QWidget):
 
     def books_table_clicked(self, index):
         book = self.books_table.cellWidget(index.row(), index.column()).property('book_obj')
+        self.open_book_info(book)
+    
+    def get_random_book(self):
+        book = Database.get_random_book()
+        self.open_book_info(book)
+    
+    def open_book_info(self, book):
         self.book_info_window = BookInfo(book, self.configure_books_table, self.current_user, self)
         self.book_info_window.exec()
         center_screen(self.book_info_window)
