@@ -131,6 +131,7 @@ class LoginPrompt(QWidget):
 
     def set_error(self, error):
         self.error_label.setText(error)
+        QApplication.instance().processEvents()
 
     def disable_prompt(self, disable):
         self.username_field.line_edit.setReadOnly(disable)

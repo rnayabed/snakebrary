@@ -1,9 +1,10 @@
 import importlib.metadata
 import platform
 from sqlite3.dbapi2 import sqlite_version
+from ui.window.license import License
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QLabel
+from PySide6.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QLabel
 
 from ui.helpers.helpers import get_font_size
 
@@ -14,7 +15,6 @@ class About(QWidget):
         super(About, self).__init__(parent)
 
         github_url = 'https://github.com/rnayabed/SnakeBrary'
-        license_url = 'https://github.com/rnayabed/SnakeBrary/blob/master/LICENSE'
         synopsis_url = 'https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/synopsis.docx'
         version = '1.0.0'
 
@@ -55,12 +55,11 @@ class About(QWidget):
         source_code_hyperlink.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(source_code_hyperlink)
 
-        license_label = QLabel(
-            f'This software is <b>Free</b> and <b>Open Source</b> and is licensed under the <a href="{license_url}">GNU GPLv3</a> license.')
-        license_label.setOpenExternalLinks(True)
-        license_label.setAlignment(QtCore.Qt.AlignCenter)
-        license_label.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
-        layout.addWidget(license_label)
+        license_button = QPushButton('License')
+        license_button.setMinimumWidth(5)
+        license_button.clicked.connect(self.license_button_clicked)
+        license_button.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
+        layout.addWidget(license_button)
 
         version_info_hbox = QHBoxLayout()
         version_info_hbox.setAlignment(QtCore.Qt.AlignCenter)
@@ -87,3 +86,7 @@ class About(QWidget):
         seperator_label = QLabel('|')
         seperator_label.setStyleSheet('color: grey;')
         return seperator_label
+    
+    def license_button_clicked(self):
+        license_window = License(self)
+        license_window.exec()

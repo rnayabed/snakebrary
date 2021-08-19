@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.book import Book
 from logic.database import Database
@@ -176,3 +176,4 @@ Price: {old_book.price}''', QMessageBox.Ok)
         self.new_book_genres_field.line_edit.setReadOnly(disable)
         self.new_book_price_field.line_edit.setReadOnly(disable)
         self.new_book_about_field.plain_text_edit.setReadOnly(disable)
+        QApplication.instance().processEvents()

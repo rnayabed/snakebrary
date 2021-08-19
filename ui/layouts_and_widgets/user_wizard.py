@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QApplication, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
@@ -161,3 +161,4 @@ Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
         self.new_user_password_field.line_edit.setReadOnly(disable)
         self.new_user_password_confirm_field.line_edit.setReadOnly(disable)
         self.new_user_password_field_hint.line_edit.setReadOnly(disable)
+        QApplication.instance().processEvents()
