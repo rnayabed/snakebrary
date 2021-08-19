@@ -238,6 +238,6 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         self.configure_ui()
 
     def show_book_reviewers_list_window(self):
-        self.book_reviewers_list_window = BookReviewersWindow(self.book, self.current_user, self)
+        self.book_reviewers_list_window = BookReviewersWindow(self.book, self.current_user, self.configure_ui, self)
         self.book_reviewers_list_window.exec()
         center_screen(self.book_reviewers_list_window)
