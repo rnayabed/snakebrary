@@ -1,12 +1,10 @@
-from window.dashboard.books_tab_widget import BooksTabWidget
-from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
-
 from logic.database import Database
 from logic.user import User, UserPrivilege
-from window.dashboard.admin_users_tab import AdminUsersTab
-from window.dashboard.settings_tab.settings_tab import SettingsTab
+from ui.window.dashboard.admin_users_tab import AdminUsersTab
+from ui.window.dashboard.books_tab_widget import BooksTabWidget
+from ui.window.dashboard.settings_tab.settings_tab import SettingsTab
 
 
 class Dashboard(QWidget, QtStyleTools):

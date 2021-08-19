@@ -1,23 +1,17 @@
-from window.dashboard.edit_user import EditUser
-from window.dashboard.book_wizard_window import BookWizardWindow
-from window.dashboard.book_holders_window import BookHoldersWindow
 from logic.user import User, UserPrivilege
 from logic.database import Database
-from os import name, stat
-from window.helpers.helpers import center_screen, delete_layouts_in_layout, get_font_size
-from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
-from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
-from qt_material import apply_stylesheet, QtStyleTools
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
+from ui.helpers.enhanced_controls import ImageView
+from ui.helpers.helpers import get_font_size, center_screen
+from ui.window.edit_user import EditUser
 
 
 class UserInfoVBox(QVBoxLayout):
 
     def __init__(self, user: User, current_user: User, dashboard_on_user_edited, parent):
         super(UserInfoVBox, self).__init__(parent)
-        
+
         self.dashboard_on_user_edited = dashboard_on_user_edited
         self.current_user = current_user
         self.parent = parent

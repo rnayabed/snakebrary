@@ -1,14 +1,13 @@
 from PySide6 import QtCore
-from PySide6.QtGui import QPixmap
 from logic.book import Book
-from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton, QWidget
-
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 from logic.database import Database
-from window.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
+from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
 
 class BookWizardWindowMode:
     ADD = 1,
     EDIT = 2
+
 
 class BookWizardWindow(QDialog):
 
@@ -161,7 +160,7 @@ Price: {old_book.price}''', QMessageBox.Ok)
             Database.create_new_book(new_book)
 
             close_message = 'Book was successfully added!'
-        elif self.mode == BookWizardWindowMode.EDIT:
+        else:
             Database.update_book(new_book)
             close_message = 'Book was successfully edited!'
             

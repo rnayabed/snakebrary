@@ -1,12 +1,9 @@
-from window.helpers.user_wizard import UserWizard
-from PySide6.QtWidgets import (QVBoxLayout, QWidget, QLabel, QMessageBox)
-
+from PySide6.QtWidgets import QVBoxLayout, QWidget, QLabel, QMessageBox
 from PySide6.QtCore import Qt
-
-from window.helpers.helpers import get_font_size, center_screen
-
 from logic.user import UserPrivilege
-from window.login_prompt import LoginPrompt
+from ui.helpers.helpers import get_font_size, center_screen
+from ui.layouts_and_widgets.user_wizard import UserWizard
+from ui.window.login_prompt import LoginPrompt
 
 
 class Welcome(QWidget):
@@ -15,7 +12,7 @@ class Welcome(QWidget):
         super(Welcome, self).__init__(None)
 
         self.setWindowTitle('Welcome')
-        self.resize(800,600)
+        self.resize(800, 600)
 
         heading = QLabel('Welcome to SnakeBrary!')
         heading.setAlignment(Qt.AlignCenter)

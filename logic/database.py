@@ -1,6 +1,5 @@
-from sqlite3.dbapi2 import Cursor, OperationalError
 from mysql.connector.connection import MySQLConnection
-from mysql.connector.cursor import MySQLCursor, MySQLCursorBuffered
+from mysql.connector.cursor import MySQLCursorBuffered
 from logic.book import Book, BookRatings
 import sqlite3
 
@@ -8,8 +7,6 @@ from pathlib import Path
 from logic.user import User, UserSettings
 from ast import literal_eval
 import mysql.connector
-
-from mysql.connector import Error
 
 class Database:
     __db_con: MySQLConnection 
@@ -273,7 +270,7 @@ class Database:
             return tbr[0]
 
     @staticmethod
-    def get_books_by_ISBN(ISBN):
+    def get_book_by_ISBN(ISBN):
         tbr = Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
         if tbr == []:
             return None
@@ -373,26 +370,23 @@ class Database:
     def delete_user(username):
         global __db_con_cursor
         __db_con_cursor.execute(f'DELETE FROM users WHERE username="{username}"')
-        __db_con_cursor.execute(f'DELETE FROM account_settings WHERE username="{username}"')  
+        __db_con_cursor.execute(f'DELETE FROM account_settings WHERE username="{username}"')
 
         Database.save_database()
 
         for each_book in Database.get_all_books():
             each_book.holders[:] = [x for x in each_book.holders if not x[0] == username]
-            Database.update_book_holders(each_book.holders)
+            Database.update_book_holders(each_book.holders, each_book.ISBN)
 
-            each_book.ratings.pop(username, None)
-            Database.update_book_ratings(each_book.ratings)
-        
+            each_book_ratings = Database.get_book_ratings(each_book.ISBN)
+            each_book_ratings.ratings.pop(username, None)
+            Database.update_book_ratings(each_book_ratings)
 
-        Database.update_book_ratings
-
-    
     @staticmethod
     def delete_book(ISBN):
         global __db_con_cursor
         __db_con_cursor.execute(f'DELETE FROM books WHERE ISBN="{ISBN}"')
-        __db_con_cursor.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')  
+        __db_con_cursor.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')
 
         Database.save_database()
 

@@ -1,17 +1,16 @@
-from window.dashboard.add_user import AddUser
-from PySide6.QtCore import QMargins
-from window.dashboard.user_info import UserInfo
-from window.helpers.helpers import center_screen
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QMessageBox, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
-
+from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
 from logic.database import Database
 from logic.user import UserPrivilege, User
-from window.helpers.enhanced_controls import LineEdit
+from ui.helpers.enhanced_controls import LineEdit
+from ui.helpers.helpers import center_screen
+from ui.window.add_user import AddUser
+from ui.window.user_info import UserInfo
+
 
 class AdminUsersTab(QWidget):
 
-    def __init__(self, current_user:User, parent=None):
+    def __init__(self, current_user: User, parent=None):
         super(AdminUsersTab, self).__init__(parent)
 
         self.current_user = current_user

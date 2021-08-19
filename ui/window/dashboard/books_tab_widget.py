@@ -1,17 +1,16 @@
-from window.dashboard.book_wizard_window import BookWizardWindow
-from window.dashboard.book_info import BookInfo
-from logic.book import Book
-from window.helpers.helpers import center_screen
-from PySide6 import QtCore, QtWidgets
-from PySide6.QtWidgets import QAbstractScrollArea, QHeaderView, QLabel, QMessageBox, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout, QTableWidgetItem
-
+from ui.helpers.enhanced_controls import LineEdit
+from ui.helpers.helpers import center_screen
+from ui.window.book_info import BookInfo
+from ui.window.book_wizard_window import BookWizardWindow
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
 from logic.database import Database
 from logic.user import UserPrivilege, User
-from window.helpers.enhanced_controls import LineEdit
+
 
 class BooksTabWidget(QWidget):
 
-    def __init__(self, current_user:User, parent=None):
+    def __init__(self, current_user: User, parent=None):
         super(BooksTabWidget, self).__init__(parent)
 
         self.current_user = current_user

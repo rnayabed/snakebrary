@@ -1,13 +1,8 @@
-from re import sub
 from logic.database import Database
-from window.helpers.enhanced_controls import LineEdit
-from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QVBoxLayout, QWidget, QLabel)
-
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
 from PySide6.QtCore import Qt
-
-from window.helpers.helpers import get_font_size
-
-from mysql.connector import Error
+from ui.helpers.enhanced_controls import LineEdit
+from ui.helpers.helpers import get_font_size
 
 
 class ConnectionDetailsWidget(QWidget):

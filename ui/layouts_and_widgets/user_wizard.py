@@ -1,14 +1,13 @@
-from PySide6 import QtCore
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QVBoxLayout, QPushButton
-
+from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 from logic.database import Database
-from window.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
 from logic.user import UserPrivilege, User
+from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
+
 
 class UserWizardMode:
     ADD = 1,
     EDIT = 2
+
 
 class UserWizard(QVBoxLayout):
 
@@ -140,7 +139,6 @@ class UserWizard(QVBoxLayout):
             if self.mode == UserWizardMode.EDIT and self.new_user_photo_preview.is_clear == False:
                 new_user.photo = self.old_user.photo
 
-
         if self.mode == UserWizardMode.ADD:
             old_user = Database.get_user_by_username(proposed_new_user_username)
             if old_user != None:
@@ -150,8 +148,8 @@ Privilege: {UserPrivilege.get_ui_name(old_user.privilege)}
 Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
                 return
             Database.create_new_user(new_user)
-        
-        elif self.mode == UserWizardMode.EDIT:
+
+        else:
             Database.update_user(new_user)
             
 

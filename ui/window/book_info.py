@@ -1,17 +1,14 @@
-from window.dashboard.book_ratings_widget import BookRatingsWidget
-from window.dashboard.book_reviewers_window import BookReviewersWindow
-from window.dashboard.book_wizard_window import BookWizardWindow
-from window.dashboard.book_holders_window import BookHoldersWindow
+from ui.helpers.enhanced_controls import ImageView
+from ui.helpers.helpers import get_font_size, center_screen
+from ui.layouts_and_widgets.book_ratings_widget import BookRatingsWidget
+from ui.window.book_holders_window import BookHoldersWindow
+from ui.window.book_reviewers_window import BookReviewersWindow
+from ui.window.book_wizard_window import BookWizardWindow
 from logic.user import User, UserPrivilege
 from logic.database import Database
-from os import name
-from window.helpers.helpers import center_screen, delete_layouts_in_layout, get_font_size
-from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
-from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder, BookRatings
-from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget, QTabWidget)
-from qt_material import apply_stylesheet, QtStyleTools
+from logic.book import BookHolder
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget
 
 
 class BookInfo(QDialog):

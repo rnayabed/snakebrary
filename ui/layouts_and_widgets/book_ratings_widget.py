@@ -1,14 +1,10 @@
-from typing import overload
 from logic.user import User
 from logic.database import Database
-from os import name
-from window.helpers.helpers import delete_layouts_in_layout, get_font_size
-from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
-from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QHBoxLayout, QLabel, QProgressBar, QPushButton, QScrollArea, QSlider, QVBoxLayout, QWidget, QTabWidget)
-from qt_material import apply_stylesheet, QtStyleTools
+from logic.book import Book
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
+
+from ui.helpers.helpers import get_font_size
 
 
 class BookRatingsWidget(QWidget):

@@ -1,10 +1,10 @@
 from sqlite3.dbapi2 import sqlite_version
-
 import importlib.metadata
-from window.helpers.helpers import get_font_size
 from PySide6 import QtCore
 import platform
 from PySide6.QtWidgets import QHBoxLayout, QWidget, QVBoxLayout, QLabel
+
+from ui.helpers.helpers import get_font_size
 
 
 class About(QWidget):

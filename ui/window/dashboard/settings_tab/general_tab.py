@@ -1,12 +1,9 @@
 from logic.user import UserPrivilege
-from PySide6 import QtCore
-from window.helpers.helpers import center_screen
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
-
 from logic.database import Database
-from window.helpers.enhanced_controls import ComboBox
+from ui.helpers.enhanced_controls import ComboBox
 
 
 class GeneralTab(QWidget, QtStyleTools):

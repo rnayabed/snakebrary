@@ -1,12 +1,11 @@
-from window.connection_details_widget import ConnectionDetailsWidget
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
-
 from logic.database import Database
 from logic.user import UserPrivilege
-from window.dashboard.dashboard import Dashboard
-from window.helpers.enhanced_controls import LineEdit
-from window.helpers.helpers import get_font_size, center_screen
+from ui.helpers.enhanced_controls import LineEdit
+from ui.helpers.helpers import get_font_size, center_screen
+from ui.window.connection_details_widget import ConnectionDetailsWidget
+from ui.window.dashboard.dashboard import Dashboard
 
 
 class LoginPrompt(QWidget):

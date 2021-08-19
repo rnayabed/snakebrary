@@ -1,14 +1,7 @@
 from PySide6 import QtWidgets
-from logic.user import User, UserPrivilege
 from logic.database import Database
-from os import name
-from window.helpers.helpers import get_font_size
-from window.helpers.enhanced_controls import ImageView
 from PySide6 import QtCore
-from PySide6.QtGui import QImage, QPixmap
-from logic.book import Book, BookHolder
-from PySide6.QtWidgets import (QAbstractScrollArea, QDialog, QHBoxLayout, QLabel, QPushButton, QScrollArea, QTableWidget, QVBoxLayout, QWidget, QTabWidget)
-from qt_material import apply_stylesheet, QtStyleTools
+from PySide6.QtWidgets import QDialog, QLabel, QTableWidget, QVBoxLayout
 
 
 class BookReviewersWindow(QDialog):

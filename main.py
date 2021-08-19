@@ -1,27 +1,21 @@
-from window.connection_details_widget import ConnectionDetailsWidget
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QFont, QFontDatabase, QScreen
-
 from logic.database import Database
 from qt_material import apply_stylesheet
-
-from window.helpers.helpers import center_screen
-from window.login_prompt import LoginPrompt
-
-from window.welcome import Welcome
-
 from mysql.connector import Error
-
+from ui.helpers.helpers import center_screen
+from ui.window.connection_details_widget import ConnectionDetailsWidget
+from ui.window.login_prompt import LoginPrompt
+from ui.window.welcome import Welcome
 
 
 def start():
     try:
         app = QApplication()
     except RuntimeError:
-        app = QCoreApplication.instance() 
-        
-    #QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
+        app = QCoreApplication.instance()
+
+        # QFontDatabase.addApplicationFont("Roboto/Roboto-Regular.ttf")
 
 
     #font = QFont('Roboto')
@@ -48,7 +42,7 @@ def decide_window():
         print('NEW SETUP')
         connection_details = ConnectionDetailsWidget(decide_window)
         connection_details.show()
-        center_screen(connection_details) 
+        center_screen(connection_details)
         return connection_details
     else:
         print('is Database connected ? ',Database.is_connected())

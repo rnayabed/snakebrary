@@ -1,12 +1,7 @@
 from PySide6 import QtCore
-from window.helpers.user_wizard import UserWizard
-from PySide6.QtWidgets import (QDialog, QVBoxLayout, QWidget, QLabel, QMessageBox)
-
-from PySide6.QtCore import Qt
-
-from window.helpers.helpers import get_font_size, center_screen
-
+from PySide6.QtWidgets import QDialog, QMessageBox
 from logic.user import UserPrivilege
+from ui.layouts_and_widgets.user_wizard import UserWizard
 
 
 class AddUser(QDialog):
