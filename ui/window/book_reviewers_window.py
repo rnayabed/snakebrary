@@ -52,8 +52,9 @@ class BookReviewersWindow(QDialog):
             rating_widget = QLabel(str(self.book_ratings.ratings[each_reviewer]))
 
             delete_button = QPushButton('Delete')
+            delete_button.setProperty('username', each_reviewer)
             delete_button.setProperty('class', 'danger')
-            delete_button.clicked.connect(lambda: self.delete_rating(each_reviewer))
+            delete_button.clicked.connect(self.delete_rating)
 
             vbox = QVBoxLayout()
             vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -70,8 +71,8 @@ class BookReviewersWindow(QDialog):
 
             i += 1
     
-    def delete_rating(self, username):
-        self.book_ratings.ratings.pop(username, None)
+    def delete_rating(self):
+        self.book_ratings.ratings.pop(self.sender().property('username'), None)
         Database.update_book_ratings(self.book_ratings)
         self.configure_reviewers_table()
         self.on_review_deleted()
