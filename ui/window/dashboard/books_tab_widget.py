@@ -1,5 +1,5 @@
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
+from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
@@ -18,8 +18,16 @@ class BooksTabWidget(QWidget):
 
         layout = QVBoxLayout()
 
+        button_bar = QHBoxLayout()
+        
         self.add_book_button = QPushButton('New Book')
         self.add_book_button.clicked.connect(self.add_new_book)
+
+        self.reload_button = QPushButton('Reload')
+        self.reload_button.clicked.connect(self.reload_button_clicked)
+
+        button_bar.addWidget(self.add_book_button)
+        button_bar.addWidget(self.reload_button)
 
         self.books_table = QTableWidget()
         self.books_table.clicked.connect(self.books_table_clicked)
@@ -28,7 +36,7 @@ class BooksTabWidget(QWidget):
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
         self.search_bar.line_edit.setPlaceholderText('Search by Name, Author or ISBN')
 
-        layout.addWidget(self.add_book_button)
+        layout.addLayout(button_bar)
         layout.addWidget(self.search_bar)
         layout.addWidget(self.books_table)
 
@@ -37,6 +45,12 @@ class BooksTabWidget(QWidget):
 
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.add_book_button.hide()
+    
+    def reload_button_clicked(self):
+        self.reload_button.setDisabled(True)
+        QApplication.instance().processEvents()
+        self.configure_books_table()
+        self.reload_button.setDisabled(False)
 
     def search_bar_value_changed(self):
         search = self.search_bar.line_edit.text().lower()

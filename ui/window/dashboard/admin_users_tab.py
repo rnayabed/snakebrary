@@ -1,5 +1,5 @@
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
+from PySide6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
@@ -26,8 +26,12 @@ class AdminUsersTab(QWidget):
         self.add_normal_button = QPushButton('New Normal user')
         self.add_normal_button.clicked.connect(lambda: self.add_new_user(UserPrivilege.NORMAL))
 
+        self.reload_button = QPushButton('Reload')
+        self.reload_button.clicked.connect(self.reload_button_clicked)
+
         button_bar.addWidget(self.add_admin_button)
         button_bar.addWidget(self.add_normal_button)
+        button_bar.addWidget(self.reload_button)
 
         self.users_table = QTableWidget()
         self.users_table.clicked.connect(self.users_table_clicked)
@@ -46,6 +50,12 @@ class AdminUsersTab(QWidget):
             self.add_admin_button.hide()
 
         self.configure_users_table()
+    
+    def reload_button_clicked(self):
+        self.reload_button.setDisabled(True)
+        QApplication.instance().processEvents()
+        self.configure_users_table()
+        self.reload_button.setDisabled(False)
 
     def search_bar_value_changed(self):
         search = self.search_bar.line_edit.text().lower()
