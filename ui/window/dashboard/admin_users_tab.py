@@ -39,7 +39,7 @@ class AdminUsersTab(QWidget):
 
         self.search_bar = LineEdit('Search for user')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
-        self.search_bar.line_edit.setPlaceholderText('Search by Name or Username')
+        self.search_bar.line_edit.setPlaceholderText('Search by Name, Username or Privilege')
 
         layout.addLayout(button_bar)
         layout.addWidget(self.search_bar)
@@ -62,10 +62,9 @@ class AdminUsersTab(QWidget):
         search = self.search_bar.line_edit.text().lower()
 
         for i in range(self.users_table.rowCount()):
-            name = self.users_table.cellWidget(i, 0).text().lower()
-            username = self.users_table.cellWidget(i, 1).text().lower()
+            user = self.users_table.cellWidget(i, 0).property('user_obj')
 
-            if not search in (name + username):
+            if not search in (user.name + user.username + UserPrivilege.get_ui_name(user.privilege).lower()):
                 self.users_table.hideRow(i)
             else:
                 self.users_table.showRow(i)

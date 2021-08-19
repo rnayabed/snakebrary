@@ -34,7 +34,7 @@ class BooksTabWidget(QWidget):
 
         self.search_bar = LineEdit('Search for book')
         self.search_bar.line_edit.textEdited.connect(self.search_bar_value_changed)
-        self.search_bar.line_edit.setPlaceholderText('Search by Name, Author or ISBN')
+        self.search_bar.line_edit.setPlaceholderText('Search by Name, Author, Genre or ISBN')
 
         self.get_random_book_button = QPushButton('I\'m feeling lucky!')
         self.get_random_book_button.clicked.connect(self.get_random_book)
@@ -42,8 +42,8 @@ class BooksTabWidget(QWidget):
         layout.addLayout(button_bar)
 
         self.books_widget = QWidget()
-        self.books_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
         books_widget_vbox = QVBoxLayout()
+        books_widget_vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
         books_widget_vbox.addWidget(self.search_bar)
         books_widget_vbox.addWidget(self.get_random_book_button)
         books_widget_vbox.addWidget(self.books_table)
@@ -52,8 +52,8 @@ class BooksTabWidget(QWidget):
         layout.addWidget(self.books_widget)
 
         self.no_books_widget = QWidget()
-        self.no_books_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
         no_books_vbox = QVBoxLayout()
+        no_books_vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
         no_books_vbox.setAlignment(QtCore.Qt.AlignCenter)
 
         no_books_found_label = QLabel('No books found')
@@ -90,11 +90,8 @@ class BooksTabWidget(QWidget):
         search = self.search_bar.line_edit.text().lower()
 
         for i in range(self.books_table.rowCount()):
-            name = self.books_table.cellWidget(i, 0).text().lower()
-            author = self.books_table.cellWidget(i, 1).text().lower()
-            isbn = self.books_table.cellWidget(i, 2).text().lower()
-
-            if not search in (name + author + isbn):
+            book = self.books_table.cellWidget(i, 0).property('book_obj')
+            if not search in (book.name.lower() + book.author.lower() + ''.join(book.genres) + book.ISBN.lower()):
                 self.books_table.hideRow(i)
             else:
                 self.books_table.showRow(i)
