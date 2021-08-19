@@ -43,8 +43,6 @@ class Dashboard(QWidget, QtStyleTools):
 
     def configure_theme_and_accent_colour(self):
         stylesheet_name = f'{self.current_user_account_settings.theme.lower()}_{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml'
-
-        print(stylesheet_name)
         apply_stylesheet(QApplication.instance(), stylesheet_name)
 
     def dashboard_on_user_edited(self):

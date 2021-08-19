@@ -22,6 +22,7 @@ class UserSettings:
         self.theme = theme
         self.accent_colour = accent_colour
 
+
 class User:
     def __init__(self, username, password, password_hint, name,
                  privilege=UserPrivilege.NORMAL, photo=None, date_time_created=None):
@@ -32,20 +33,7 @@ class User:
         self.privilege = privilege
         self.photo = photo
 
-
         if date_time_created == None:
             date_time_created = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-            
         self.date_time_created = date_time_created
-
-
-    def print_details(self):
-        print(self.username)
-        print(self.password)
-        print(self.password_hint)
-        print(self.name)
-        print(self.privilege)
-        print(self.date_time_created)
-
-

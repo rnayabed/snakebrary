@@ -65,8 +65,6 @@ class GeneralTab(QWidget, QtStyleTools):
         chosen_accent_colour = self.accent_colours[self.accent_colour_combo_box.combo_box.currentIndex()]
 
         stylesheet_name = f'{chosen_theme}_{chosen_accent_colour}.xml'
-
-        print(stylesheet_name)
         apply_stylesheet(QApplication.instance(), stylesheet_name)
 
         self.current_user_account_settings.theme = chosen_theme

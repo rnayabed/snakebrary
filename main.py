@@ -20,8 +20,6 @@ def start():
 
     win = decide_window()
 
-
-    print('Over')
     exit_code = app.exec()
 
     Database.close_local_connection()
@@ -33,27 +31,18 @@ def start():
 
 def decide_window():
     if Database.is_new_local_setup():
-        print('NEW SETUP')
         connection_details = ConnectionDetailsWidget(decide_window)
         connection_details.show()
         center_screen(connection_details)
         return connection_details
     else:
-        print('is Database connected ? ',Database.is_connected())
-
-        print('local db server host: ',Database.get_local_database_server_host())
-
         if not Database.is_connected():
-
             try:
                 Database.create_connection(Database.get_local_database_server_host(),
                                             Database.get_local_database_server_user(),
                                             Database.get_local_database_server_password(),
                                             Database.get_local_database_server_port())
-                
-                print('ISSSSSSSSSS Database connected ? ',Database.is_connected())
                 return decide_window()
-                
             except Error as e:
                 print(e)
                 connection_details = ConnectionDetailsWidget(decide_window)

@@ -24,8 +24,6 @@ class BookHoldersWindow(QDialog):
 
         self.setLayout(vbox)
 
-        print('book holdersss : ', book_holders)
-
         self.configure_table()
 
     def configure_table(self):

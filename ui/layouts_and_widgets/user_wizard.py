@@ -150,8 +150,6 @@ Date Time Created: {old_user.date_time_created}''', QMessageBox.Ok)
         else:
             Database.update_user(new_user)
 
-        new_user.print_details()
-
         if self.on_success is not None:
             self.on_success()
 

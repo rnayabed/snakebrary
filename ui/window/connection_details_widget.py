@@ -94,10 +94,7 @@ class ConnectionDetailsWidget(QWidget):
         try:
             Database.create_connection(host, user, password, port)
 
-            print('Connected')
-
             if Database.is_new_local_setup():
-                print('Creating new local database')
                 Database.create_local_database_settings_table()
 
             Database.set_local_database_server_host(host)
@@ -110,12 +107,10 @@ class ConnectionDetailsWidget(QWidget):
             self.error_label.setText('')
 
             if self.on_success != None:
-                print('sasd')
                 self.x = self.on_success()
 
             self.close()
         except Exception as e:
-            print(e)
             self.error_label.setText(str(e))
 
         self.disable_prompt(False)

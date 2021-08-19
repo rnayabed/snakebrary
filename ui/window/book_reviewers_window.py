@@ -27,8 +27,6 @@ class BookReviewersWindow(QDialog):
 
         self.setLayout(vbox)
 
-        print('book ratingsss : ', self.book_ratings)
-
         self.configure_table()
 
     def configure_table(self):
