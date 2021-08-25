@@ -136,7 +136,7 @@ class Database:
         name    TEXT    NOT NULL,
         is_disabled BOOLEAN,
         privilege   INT NOT NULL,
-        photo   BLOB,
+        photo   LONGBLOB,
         date_time_created    TEXT    NOT NULL);''')
 
     @staticmethod
@@ -159,7 +159,7 @@ class Database:
         price   FLOAT NOT NULL,
         about   TEXT,
         is_unavailable BOOLEAN,
-        photo   BLOB,
+        photo   LONGBLOB,
         date_time_added    TEXT    NOT NULL);''')
 
     @staticmethod
