@@ -1,4 +1,5 @@
 from PySide6.QtCore import QCoreApplication
+from PySide6.QtGui import QFontDatabase
 from PySide6.QtWidgets import QApplication
 from logic.database import Database
 from qt_material import apply_stylesheet
@@ -14,6 +15,8 @@ def start():
         app = QApplication()
     except RuntimeError:
         app = QCoreApplication.instance()
+
+    QFontDatabase.addApplicationFont('assets/icons.ttf')
 
     apply_stylesheet(app, theme='light_purple.xml')
     Database.create_local_connection()

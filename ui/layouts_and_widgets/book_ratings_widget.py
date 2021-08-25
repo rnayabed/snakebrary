@@ -1,10 +1,10 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
-
+import os
 from logic.book import Book
 from logic.database import Database
 from logic.user import User
-from ui.helpers.helpers import get_font_size
+from ui.helpers.helpers import FontAwesomeIcon, get_font_size
 
 
 class BookRatingsWidget(QWidget):
@@ -29,10 +29,17 @@ class BookRatingsWidget(QWidget):
         self.large_rating_label.setContentsMargins(QtCore.QMargins(0, 0, 50, 0))
         self.large_rating_label.setFont(get_font_size(35))
 
+        self.rating_graphic_label = QLabel()
+        self.rating_graphic_label.setFont(get_font_size(20))
+        primary_color = os.environ.get('QTMATERIAL_PRIMARYCOLOR')
+        self.rating_graphic_label.setStyleSheet(f'color: {primary_color}')
+
         self.total_ratings_label = QLabel()
+        self.total_ratings_label.setFont(get_font_size(14))
 
         left_rating_layout = QVBoxLayout()
         left_rating_layout.addWidget(self.large_rating_label)
+        left_rating_layout.addWidget(self.rating_graphic_label)
         left_rating_layout.addWidget(self.total_ratings_label)
 
         overview_hbox.addLayout(left_rating_layout)
@@ -117,8 +124,14 @@ class BookRatingsWidget(QWidget):
 
     def configure_ui(self):
         self.book_ratings = Database.get_book_ratings(self.book.ISBN)
-        self.large_rating_label.setText(str(self.book_ratings.get_average_rating()))
-        self.total_ratings_label.setText(f'{len(self.book_ratings.ratings)} ratings')
+        average_rating = self.book_ratings.get_average_rating()
+        self.large_rating_label.setText(str(average_rating))
+        self.rating_graphic_label.setText(self.get_rating_graphic(average_rating))
+        
+        if len(self.book_ratings.ratings) == 1:
+            self.total_ratings_label.setText(f'{len(self.book_ratings.ratings)} rating')
+        else:
+            self.total_ratings_label.setText(f'{len(self.book_ratings.ratings)} ratings')
 
         self.rating_progress_bar_1.load(self.book_ratings)
         self.rating_progress_bar_2.load(self.book_ratings)
@@ -154,6 +167,29 @@ class BookRatingsWidget(QWidget):
         hbox.addWidget(rate_label)
         hbox.addWidget(rating_bar)
         return hbox
+    
+    def get_rating_graphic(self, rating):
+        r = ''
+        rating_broken = str(rating).split('.')
+        major = int(rating_broken[0])
+        minor = int(rating_broken[1])
+
+
+        for i in range(major):
+            r+=FontAwesomeIcon.STAR
+        
+        if major == 5:
+            return r
+
+        if minor >= 5:
+            r+=FontAwesomeIcon.STAR_HALF
+        else:
+            r+=FontAwesomeIcon.STAR_EMPTY
+        
+        for i in range(4 - major):
+            r+=FontAwesomeIcon.STAR_EMPTY
+        
+        return r
 
 
 class RatingProgressBar(QHBoxLayout):

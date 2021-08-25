@@ -6,7 +6,7 @@ from ui.window.license import License
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QLabel
 
-from ui.helpers.helpers import get_font_size
+from ui.helpers.helpers import FontAwesomeIcon, get_font_size
 
 
 class About(QWidget):
@@ -15,7 +15,7 @@ class About(QWidget):
         super(About, self).__init__(parent)
 
         github_url = 'https://github.com/rnayabed/SnakeBrary'
-        synopsis_url = 'https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/synopsis.docx'
+        synopsis_url = 'https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/synopsis.pdf'
         version = '1.0.0'
 
         layout = QVBoxLayout()
@@ -55,7 +55,7 @@ class About(QWidget):
         source_code_hyperlink.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(source_code_hyperlink)
 
-        license_button = QPushButton('License')
+        license_button = QPushButton(FontAwesomeIcon.FILE+'License')
         license_button.setMinimumWidth(5)
         license_button.clicked.connect(self.license_button_clicked)
         license_button.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))

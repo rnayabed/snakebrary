@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVB
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import FontAwesomeIcon, get_font_size, center_screen
 from ui.window.edit_user import EditUser
 
 
@@ -37,10 +37,10 @@ class UserInfoVBox(QVBoxLayout):
 
         self.date_time_created_label = QLabel()
 
-        self.edit_user_button = QPushButton('Edit')
+        self.edit_user_button = QPushButton(FontAwesomeIcon.EDIT+'Edit')
         self.edit_user_button.clicked.connect(self.edit_user_button_onclick)
 
-        self.delete_user_button = QPushButton('Delete')
+        self.delete_user_button = QPushButton(FontAwesomeIcon.TRASH+'Delete')
         self.delete_user_button.setProperty('class', 'danger')
         self.delete_user_button.clicked.connect(self.delete_user_button_onclick)
 
@@ -154,7 +154,7 @@ class PasswordWidget(QWidget):
         if self.mode == PasswordWidgetMode.HIDE:
             self.password_label.setText('Password: ********')
             self.password_hint_label.setText('Password Hint: *******')
-            self.password_show_hide_button.setText('Show Password and Hint')
+            self.password_show_hide_button.setText(FontAwesomeIcon.EYE+'Show Password and Hint')
         elif self.mode == PasswordWidgetMode.SHOW:
             self.password_label.setText(f'Password : {self.user.password}')
 
@@ -163,7 +163,7 @@ class PasswordWidget(QWidget):
             else:
                 self.password_hint_label.setText(f'Password Hint: {self.user.password_hint}')
 
-            self.password_show_hide_button.setText('Hide Password and Hint')
+            self.password_show_hide_button.setText(FontAwesomeIcon.EYE_SLASH+'Hide Password and Hint')
 
     def toggle_mode(self):
         if self.mode == PasswordWidgetMode.HIDE:

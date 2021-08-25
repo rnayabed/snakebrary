@@ -1,8 +1,8 @@
 import os
-
+from ui.helpers.helpers import FontAwesomeIcon
 from PySide6 import QtCore
-from PySide6.QtCore import QMargins, Qt
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtCore import QMargins, QSize, Qt
+from PySide6.QtGui import QIcon, QImage, QPixmap
 from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
     QComboBox, QWidget
 
@@ -25,15 +25,22 @@ class LineEdit(QWidget):
 
         self.line_edit = QLineEdit()
 
-        if password_mode:
-            self.line_edit.setEchoMode(QLineEdit.EchoMode.Password)
-
         self.line_edit.setText(init_value)
 
         vbox = QVBoxLayout()
-        vbox.setContentsMargins(QMargins(0, 0, 0, 0))
+        vbox.setContentsMargins(QMargins(0,0,0,0))
         vbox.addLayout(self.upper)
-        vbox.addWidget(self.line_edit)
+
+        lower = QHBoxLayout()
+        lower.addWidget(self.line_edit)
+
+        if password_mode:
+            self.show_hide_button = QPushButton()
+            self.show_hide_button.clicked.connect(self.configure_show_hide_button)
+            lower.addWidget(self.show_hide_button)
+            self.password_mode_show(False)
+
+        vbox.addLayout(lower)
         vbox.setSpacing(3)
 
         self.setLayout(vbox)
@@ -43,6 +50,19 @@ class LineEdit(QWidget):
 
     def on_success(self):
         self.error_label.clear()
+    
+    def password_mode_show(self, show):
+        self.current_password_mode = show
+        if show:
+            self.show_hide_button.setText(FontAwesomeIcon.EYE_SLASH)
+            self.line_edit.setEchoMode(QLineEdit.EchoMode.Normal)
+        else:
+            self.show_hide_button.setText(FontAwesomeIcon.EYE)
+            self.line_edit.setEchoMode(QLineEdit.EchoMode.Password)
+
+
+    def configure_show_hide_button(self):
+        self.password_mode_show(not self.current_password_mode)
 
 
 class PlainTextEdit(QWidget):
@@ -192,3 +212,4 @@ class ImageView(QLabel):
         self.clear()
         self.setText(self.info)
         self.is_clear = True
+

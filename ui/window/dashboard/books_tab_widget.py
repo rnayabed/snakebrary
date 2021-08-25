@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxL
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import center_screen, get_font_size
+from ui.helpers.helpers import FontAwesomeIcon, center_screen, get_font_size
 from ui.window.book_info import BookInfo
 from ui.window.book_wizard_window import BookWizardWindow
 
@@ -20,10 +20,10 @@ class BooksTabWidget(QWidget):
 
         button_bar = QHBoxLayout()
         
-        self.add_book_button = QPushButton('New Book')
+        self.add_book_button = QPushButton(FontAwesomeIcon.PLUS+'New Book')
         self.add_book_button.clicked.connect(self.add_new_book)
 
-        self.reload_button = QPushButton('Reload')
+        self.reload_button = QPushButton(FontAwesomeIcon.REFRESH+'Reload')
         self.reload_button.clicked.connect(self.reload_button_clicked)
 
         button_bar.addWidget(self.add_book_button)

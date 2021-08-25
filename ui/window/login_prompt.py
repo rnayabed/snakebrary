@@ -1,10 +1,11 @@
+from PySide6 import QtCore
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
+from PySide6.QtWidgets import QApplication, QGraphicsColorizeEffect, QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
 
 from logic.database import Database
 from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import FontAwesomeIcon, get_font_size, center_screen
 from ui.window.connection_details_widget import ConnectionDetailsWidget
 from ui.window.dashboard.dashboard import Dashboard
 
@@ -33,14 +34,14 @@ class LoginPrompt(QWidget):
         self.username_field = LineEdit('Username')
         self.password_field = LineEdit('Password', password_mode=True)
 
-        self.login_button = QPushButton('Login')
+        self.login_button = QPushButton(FontAwesomeIcon.LOG_IN+'Login')
         self.login_button.clicked.connect(self.on_login_button_click)
 
-        self.forgot_password_button = QPushButton('Forgot Password')
+        self.forgot_password_button = QPushButton(FontAwesomeIcon.KEY+'Forgot Password')
         self.forgot_password_button.clicked.connect(self.on_forgot_password_button_click)
         self.forgot_password_button.setProperty('class', 'danger')
 
-        self.sql_server_settings_button = QPushButton('MySQL Settings')
+        self.sql_server_settings_button = QPushButton(FontAwesomeIcon.SERVER+'MySQL Settings')
         self.sql_server_settings_button.clicked.connect(self.sql_server_settings_button_clicked)
 
         self.error_label = QLabel()

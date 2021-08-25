@@ -1,4 +1,4 @@
-from ui.helpers.helpers import center_screen
+from ui.helpers.helpers import FontAwesomeIcon, center_screen
 from ui.window.user_info import UserInfo
 from logic.user import User, UserPrivilege
 from PySide6 import QtCore
@@ -40,7 +40,7 @@ class BookReviewersWindow(QDialog):
         self.book_reviewers_table.setSortingEnabled(True)
         self.book_reviewers_table.setRowCount(len(self.book_ratings.ratings))
         self.book_reviewers_table.setColumnCount(4)
-        self.book_reviewers_table.setHorizontalHeaderLabels(["Username", "Name", "Rating", "                       Actions                      "])
+        self.book_reviewers_table.setHorizontalHeaderLabels(["Username", "Name", "Rating", "                           Actions                          "])
 
         self.book_reviewers_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.book_reviewers_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -57,30 +57,30 @@ class BookReviewersWindow(QDialog):
             name_widget = QLabel(each_reviewer_user_obj.name)
             rating_widget = QLabel(str(self.book_ratings.ratings[each_reviewer]))
 
-            delete_button = QPushButton('Delete')
+            delete_button = QPushButton(FontAwesomeIcon.TRASH+'Delete')
             delete_button.setProperty('class', 'danger')
             delete_button.setProperty('username', each_reviewer)
             delete_button.clicked.connect(self.delete_rating)
 
-            view_profile_button = QPushButton('View Profile')
+            view_profile_button = QPushButton(FontAwesomeIcon.EYE+'View Profile')
             view_profile_button.setProperty('user_obj', each_reviewer_user_obj)
             view_profile_button.clicked.connect(self.view_reviewer_profile)
 
-            vbox = QHBoxLayout()
-            vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
-            vbox.addWidget(view_profile_button)
+            hbox = QHBoxLayout()
+            hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            hbox.addWidget(view_profile_button)
             if (self.current_user.privilege != each_reviewer_user_obj.privilege and each_reviewer_user_obj.privilege != UserPrivilege.MASTER) or self.current_user.username == each_reviewer:
-                vbox.addWidget(delete_button)
+                hbox.addWidget(delete_button)
             
 
-            delete_button_widget = QWidget()
-            delete_button_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
-            delete_button_widget.setLayout(vbox)
+            view_profile_delete_button_widget = QWidget()
+            view_profile_delete_button_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            view_profile_delete_button_widget.setLayout(hbox)
 
             self.book_reviewers_table.setCellWidget(i, 0, username_widget)
             self.book_reviewers_table.setCellWidget(i, 1, name_widget)
             self.book_reviewers_table.setCellWidget(i, 2, rating_widget)
-            self.book_reviewers_table.setCellWidget(i, 3, delete_button_widget)
+            self.book_reviewers_table.setCellWidget(i, 3, view_profile_delete_button_widget)
 
             i += 1
         

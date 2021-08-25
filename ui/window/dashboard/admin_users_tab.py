@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QTable
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import center_screen
+from ui.helpers.helpers import FontAwesomeIcon, center_screen
 from ui.window.add_user import AddUser
 from ui.window.user_info import UserInfo
 
@@ -21,13 +21,13 @@ class AdminUsersTab(QWidget):
 
         button_bar = QHBoxLayout()
 
-        self.add_admin_button = QPushButton('New Admin user')
+        self.add_admin_button = QPushButton(FontAwesomeIcon.PLUS+'New Admin user')
         self.add_admin_button.clicked.connect(lambda: self.add_new_user(UserPrivilege.ADMIN))
 
-        self.add_normal_button = QPushButton('New Normal user')
+        self.add_normal_button = QPushButton(FontAwesomeIcon.PLUS+'New Normal user')
         self.add_normal_button.clicked.connect(lambda: self.add_new_user(UserPrivilege.NORMAL))
 
-        self.reload_button = QPushButton('Reload')
+        self.reload_button = QPushButton(FontAwesomeIcon.REFRESH+'Reload')
         self.reload_button.clicked.connect(self.reload_button_clicked)
 
         button_bar.addWidget(self.add_admin_button)

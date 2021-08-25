@@ -1,3 +1,4 @@
+from ui.helpers.helpers import FontAwesomeIcon
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
@@ -45,13 +46,13 @@ class GeneralTab(QWidget, QtStyleTools):
         layout.addWidget(self.theme_combo_box)
         layout.addWidget(self.accent_colour_combo_box)
 
-        self.logout_button = QPushButton('Logout')
+        self.logout_button = QPushButton(FontAwesomeIcon.LOG_OUT+'Logout')
         self.logout_button.setProperty('class', 'danger')
         self.logout_button.clicked.connect(self.restart)
 
         layout.addWidget(self.logout_button)
 
-        self.reset_button = QPushButton('Reset')
+        self.reset_button = QPushButton(FontAwesomeIcon.TRASH+'Reset')
         self.reset_button.setProperty('class', 'danger')
         self.reset_button.clicked.connect(self.reset)
 

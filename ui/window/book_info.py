@@ -5,7 +5,7 @@ from logic.book import BookHolder
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import FontAwesomeIcon, get_font_size, center_screen
 from ui.layouts_and_widgets.book_ratings_widget import BookRatingsWidget
 from ui.window.book_holders_window import BookHoldersWindow
 from ui.window.book_reviewers_window import BookReviewersWindow
@@ -65,10 +65,10 @@ class BookInfo(QDialog):
         show_book_holders_reviewers_hbox.addWidget(self.get_book_holders_details)
         show_book_holders_reviewers_hbox.addWidget(self.get_book_reviewers_details)
 
-        self.edit_book_button = QPushButton('Edit')
+        self.edit_book_button = QPushButton(FontAwesomeIcon.EDIT+'Edit')
         self.edit_book_button.clicked.connect(self.on_edit_button_clicked)
 
-        self.delete_book_button = QPushButton('Delete')
+        self.delete_book_button = QPushButton(FontAwesomeIcon.TRASH+'Delete')
         self.delete_book_button.setProperty('class', 'danger')
         self.delete_book_button.clicked.connect(self.on_delete_button_clicked)
 
@@ -233,7 +233,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
             pass
 
     def show_book_holders_list_window(self):
-        self.book_holders_list_window = BookHoldersWindow(self.book.holders, self)
+        self.book_holders_list_window = BookHoldersWindow(self.book.holders, self.current_user, self)
         self.book_holders_list_window.exec()
         center_screen(self.book_holders_list_window)
 
