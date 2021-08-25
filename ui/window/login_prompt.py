@@ -91,9 +91,14 @@ class LoginPrompt(QWidget):
             self.set_error("Invalid username/password")
             self.disable_prompt(False)
             return
+        
+        if user.is_disabled:
+            self.set_error('Account disabled. Contact administrator(s).')
+            self.disable_prompt(False)
+            return
 
+        
         self.set_success('Successfully Logged in!')
-
         self.dash = Dashboard(user)
         self.dash.show()
         center_screen(self.dash)

@@ -58,7 +58,7 @@ class BookHolder:
 
 
 class Book:
-    def __init__(self, ISBN, name, author, holders, genres, price, about, photo=None,
+    def __init__(self, ISBN, name, author, holders, genres, price, about, is_unavailable=False, photo=None,
                  date_time_added=None):
         self.ISBN = ISBN
         self.name = name
@@ -67,6 +67,7 @@ class Book:
         self.genres = genres
         self.price = price
         self.about = about
+        self.is_unavailable = is_unavailable
         self.photo = photo
 
         if date_time_added == None:

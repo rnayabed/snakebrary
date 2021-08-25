@@ -24,12 +24,13 @@ class UserSettings:
 
 
 class User:
-    def __init__(self, username, password, password_hint, name,
+    def __init__(self, username, password, password_hint, name, is_disabled=False,
                  privilege=UserPrivilege.NORMAL, photo=None, date_time_created=None):
         self.username = username
         self.password = password
         self.password_hint = password_hint
         self.name = name
+        self.is_disabled = is_disabled
         self.privilege = privilege
         self.photo = photo
 

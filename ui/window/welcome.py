@@ -22,9 +22,9 @@ class Welcome(QWidget):
         sub_heading_1 = QLabel('<i>A Sweet and Simple Library Management System</i>')
         sub_heading_1.setAlignment(Qt.AlignCenter)
         sub_heading_1.setFont(get_font_size(13))
-        sub_heading_1.setStyleSheet('padding-bottom: 30')
+        sub_heading_1.setStyleSheet('padding-bottom: 20')
 
-        sub_heading_2 = QLabel('Fill the form below to get started!')
+        sub_heading_2 = QLabel('Fill the form below to create Master account and get started!')
         sub_heading_2.setAlignment(Qt.AlignCenter)
         sub_heading_2.setFont(get_font_size(15))
 

@@ -54,6 +54,12 @@ class BookInfo(QDialog):
 
         self.get_return_button = QPushButton()
 
+        self.disable_enable_button = QPushButton()
+
+        get_return_disable_enable_button_hbox = QHBoxLayout()
+        get_return_disable_enable_button_hbox.addWidget(self.get_return_button)
+        get_return_disable_enable_button_hbox.addWidget(self.disable_enable_button)
+
         self.get_book_holders_details = QPushButton('book holders list')
         self.get_book_holders_details.clicked.connect(self.show_book_holders_list_window)
 
@@ -94,7 +100,7 @@ class BookInfo(QDialog):
         vbox_labels_1.addWidget(self.price_label)
         vbox_labels_1.addWidget(self.date_time_added_label)
         vbox_labels_1.addWidget(self.current_holder_label)
-        vbox_labels_1.addWidget(self.get_return_button)
+        vbox_labels_1.addLayout(get_return_disable_enable_button_hbox)
         vbox_labels_1.addWidget(self.non_normal_buttons_widget)
 
         hbox_1.addLayout(vbox_labels_1)
@@ -157,11 +163,14 @@ class BookInfo(QDialog):
             self.about_widget.hide()
 
         self.configure_get_return_button()
+        self.configure_disable_enable_button()
 
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.current_holder_label.hide()
             self.date_time_added_label.hide()
             self.non_normal_buttons_widget.hide()
+            self.disable_enable_button.hide()
+            self.current_holder_label.hide()
         else:
             self.date_time_added_label.setText(f'Date/Time added: {self.book.date_time_added}')
             self.configure_current_holder_label()
@@ -188,10 +197,13 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         Database.update_book_holders(self.book.holders, self.book.ISBN)
 
         self.configure_get_return_button()
-        self.get_return_button.setDisabled(False)
+        self.configure_disable_enable_button()
         self.configure_current_holder_label()
     
     def configure_current_holder_label(self):
+        if self.current_user.privilege == UserPrivilege.NORMAL:
+            return
+
         current_holder = self.book.get_current_holder()
         if current_holder == None:
             self.current_holder_label.hide()
@@ -207,28 +219,68 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         Database.update_book_holders(self.book.holders, self.book.ISBN)
 
         self.configure_get_return_button()
+        self.configure_disable_enable_button()
         self.ratings_widget.reload(self.book)
-        self.get_return_button.setDisabled(False)
         self.configure_current_holder_label()
 
     def configure_get_return_button(self):
         self.disconnect_slots_get_return_button()
 
+        
         if self.book.get_current_holder() == None:
-            self.get_return_button.setText('Get it')
-            self.get_return_button.clicked.connect(self.get_book)
+            if self.book.is_unavailable:
+                self.get_return_button.setDisabled(True)
+                self.get_return_button.setText('Unavailable')
+            else:
+                self.get_return_button.setDisabled(False)
+                self.get_return_button.setText('Get it')
+                self.get_return_button.clicked.connect(self.get_book)
         else:
             current_holder_privilege = Database.get_user_by_username(self.book.get_current_holder()).privilege
             if self.book.get_current_holder() == self.current_user.username or (self.current_user.privilege != UserPrivilege.NORMAL and current_holder_privilege != self.current_user.privilege and current_holder_privilege != UserPrivilege.MASTER):
+                self.get_return_button.setDisabled(False)
                 self.get_return_button.setText('Return')
                 self.get_return_button.clicked.connect(self.return_book)
             else:
                 self.get_return_button.setDisabled(True)
-                self.get_return_button.setText('Unavailable')
+                self.get_return_button.setText('Unavailable')  
 
     def disconnect_slots_get_return_button(self):
         try:
             self.get_return_button.clicked.disconnect()
+        except:
+            pass
+
+    def configure_disable_enable_button(self):
+        if self.current_user.privilege == UserPrivilege.NORMAL:
+            return
+            
+        self.disconnect_slots_disable_enable_button()
+
+        if self.book.get_current_holder() == None:
+            if self.book.is_unavailable:
+                self.disable_enable_button.show()
+                self.disable_enable_button.setText('Enable')
+                self.disable_enable_button.clicked.connect(lambda: self.make_book_unavailable(False))
+            else:
+                self.disable_enable_button.show()
+                self.disable_enable_button.setText('Disable')
+                self.disable_enable_button.clicked.connect(lambda: self.make_book_unavailable(True))
+        else:
+            self.disable_enable_button.hide()
+            self.disable_enable_button.setText('Unavailable')
+
+    def make_book_unavailable(self, is_unavailable):
+        self.book.is_unavailable = is_unavailable
+        Database.update_book(self.book)
+        
+        self.configure_get_return_button()
+        self.configure_disable_enable_button()
+                
+
+    def disconnect_slots_disable_enable_button(self):
+        try:
+            self.disable_enable_button.clicked.disconnect()
         except:
             pass
 

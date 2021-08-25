@@ -15,7 +15,7 @@ class AddUser(QDialog):
         if new_user_privilege == UserPrivilege.ADMIN:
             prefix_label = 'Administrator'
         else:
-            prefix_label = 'User'
+            prefix_label = 'Normal User'
 
         self.setWindowTitle(f'Add New {prefix_label}')
         self.resize(800, 600)

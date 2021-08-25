@@ -134,6 +134,7 @@ class Database:
         password    TEXT    NOT NULL,
         password_hint   TEXT    NOT NULL,
         name    TEXT    NOT NULL,
+        is_disabled BOOLEAN,
         privilege   INT NOT NULL,
         photo   BLOB,
         date_time_created    TEXT    NOT NULL);''')
@@ -157,6 +158,7 @@ class Database:
         genres    TEXT    NOT NULL,
         price   FLOAT NOT NULL,
         about   TEXT,
+        is_unavailable BOOLEAN,
         photo   BLOB,
         date_time_added    TEXT    NOT NULL);''')
 
@@ -172,14 +174,14 @@ class Database:
         global __db_con_cursor
 
         if new_user.photo == None:
-            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
+            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
             VALUES ("{new_user.username}", "{new_user.password}", 
-            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", NULL,
+            "{new_user.password_hint}", "{new_user.name}", {new_user.is_disabled}, "{new_user.privilege}", NULL,
             "{new_user.date_time_created}");''')
         else:
-            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, privilege, photo, date_time_created)
+            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
             VALUES ("{new_user.username}", "{new_user.password}", 
-            "{new_user.password_hint}", "{new_user.name}", "{new_user.privilege}", %s,
+            "{new_user.password_hint}", "{new_user.name}", {new_user.is_disabled}, "{new_user.privilege}", %s,
             "{new_user.date_time_created}");''', (new_user.photo,))
 
         __db_con_cursor.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
@@ -194,12 +196,12 @@ class Database:
         if user.photo == None:
             __db_con_cursor.execute(f'''UPDATE users
             SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
-            privilege="{user.privilege}", photo=NULL
+            is_disabled={user.is_disabled}, privilege="{user.privilege}", photo=NULL
             WHERE username="{user.username}"''')
         else:
             __db_con_cursor.execute(f'''UPDATE users
             SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
-            privilege="{user.privilege}", photo=%s
+            is_disabled={user.is_disabled}, privilege="{user.privilege}", photo=%s
             WHERE username="{user.username}"''', (user.photo,))
 
         Database.save_database()
@@ -209,13 +211,13 @@ class Database:
         global __db_con_cursor
 
         if new_book.photo == None:
-            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, photo, date_time_added)
+            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", NULL, "{new_book.date_time_added}");''')
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", {new_book.is_unavailable}, NULL, "{new_book.date_time_added}");''')
         else:
-            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, photo, date_time_added)
+            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", %s, "{new_book.date_time_added}");''',
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", {new_book.is_unavailable}, %s, "{new_book.date_time_added}");''',
                                     (new_book.photo,))
 
         __db_con_cursor.execute(f'''INSERT INTO books_ratings(ISBN, ratings)
@@ -229,12 +231,12 @@ class Database:
         if book.photo == None:
             __db_con_cursor.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
-            price="{book.price}", about="{book.about}", photo=NULL
+            price="{book.price}", is_unavailable={book.is_unavailable}, about="{book.about}", photo=NULL
             WHERE ISBN="{book.ISBN}"''')
         else:
             __db_con_cursor.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
-            price="{book.price}", about="{book.about}", photo=%s
+            price="{book.price}", is_unavailable={book.is_unavailable}, about="{book.about}", photo=%s
             WHERE ISBN="{book.ISBN}"''', (book.photo,))
 
         Database.save_database()
@@ -283,7 +285,7 @@ class Database:
         __db_con_cursor.execute(sql)
         users = list(__db_con_cursor.fetchall())
         for i in users:
-            tba = User(i[0], i[1], i[2], i[3], i[4], i[5])
+            tba = User(i[0], i[1], i[2], i[3], i[4], i[5], i[6])
             tbr.append(tba)
 
         return tbr
@@ -300,7 +302,7 @@ class Database:
         __db_con_cursor.execute(sql)
         books = list(__db_con_cursor.fetchall())
         for i in books:
-            tba = Book(i[0], i[1], i[2], literal_eval(i[3]), literal_eval(i[4]), i[5], i[6], i[7], i[8])
+            tba = Book(i[0], i[1], i[2], literal_eval(i[3]), literal_eval(i[4]), i[5], i[6], i[7], i[8], i[9])
             tbr.append(tba)
 
         return tbr
