@@ -2,3 +2,6 @@
 venv/
 env/
 .idea/
+build/
+dist/
+*.spec
