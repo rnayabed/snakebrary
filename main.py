@@ -1,6 +1,6 @@
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QFontDatabase
-from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QFontDatabase, QPixmap
+from PySide6.QtWidgets import QApplication, QSplashScreen
 from logic.database import Database
 from qt_material import apply_stylesheet
 from mysql.connector import Error
@@ -16,12 +16,19 @@ def start():
     except RuntimeError:
         app = QCoreApplication.instance()
 
+    splash = QSplashScreen(QPixmap('assets/splash.png'))
+    splash.show()
+    app.processEvents()
+
     QFontDatabase.addApplicationFont('assets/icons.ttf')
 
     apply_stylesheet(app, theme='light_purple.xml')
     Database.create_local_connection()
 
+
     win = decide_window()
+
+    splash.finish(win)
 
     exit_code = app.exec()
 
@@ -64,10 +71,6 @@ def decide_window():
             login_prompt.show()
             center_screen(login_prompt)
             return login_prompt
-
-        
-
-    
 
 
 if __name__ == '__main__':
