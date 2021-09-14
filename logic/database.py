@@ -285,7 +285,7 @@ class Database:
         __db_con_cursor.execute(sql)
         users = list(__db_con_cursor.fetchall())
         for i in users:
-            tba = User(i[0], i[1], i[2], i[3], i[4], i[5], i[6])
+            tba = User(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7])
             tbr.append(tba)
 
         return tbr
