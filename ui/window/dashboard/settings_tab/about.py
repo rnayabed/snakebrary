@@ -2,6 +2,7 @@ import importlib.metadata
 import platform
 from sqlite3.dbapi2 import sqlite_version
 from ui.window.license import License
+from ui.helpers.enhanced_controls import ImageView
 
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QLabel
@@ -21,6 +22,12 @@ class About(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignCenter)
 
+        app_icon_hbox = QHBoxLayout()
+        app_icon = ImageView('App Icon', 150, 150, style=None)
+        app_icon.set_image_from_path('assets/app_icon.png')
+        app_icon_hbox.addWidget(app_icon)
+        layout.addLayout(app_icon_hbox)
+
         heading_label = QLabel('SnakeBrary')
         heading_label.setFont(get_font_size(25))
         heading_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -31,7 +38,7 @@ class About(QWidget):
         sub_heading_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(sub_heading_label)
 
-        maker_label = QLabel('Made by Debayan Sutradhar, 12 M')
+        maker_label = QLabel('Made by Debayan Sutradhar, 12 M (2020/14275)')
         maker_label.setFont(get_font_size(15))
         maker_label.setAlignment(QtCore.Qt.AlignCenter)
         maker_label.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
@@ -41,7 +48,7 @@ class About(QWidget):
         school_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(school_label)
 
-        small_info_label = QLabel('CBSE Class 12 Computer Science project assignment')
+        small_info_label = QLabel('CBSE Class 12 Computer Science Project')
         small_info_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(small_info_label)
 

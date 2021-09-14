@@ -1,4 +1,4 @@
-from PySide6.QtGui import QScreen, QFont
+from PySide6.QtGui import QIcon, QScreen, QFont
 from PySide6.QtWidgets import QApplication, QLayout
 
 
@@ -18,6 +18,7 @@ def get_font_size(size):
 def delete_layouts_in_layout(layout: QLayout):
     for i in range(layout.count()):
         layout.itemAt(i).layout().deleteLater()
+
 
 class FontAwesomeIcon:
     LOG_OUT = '\ue800 '

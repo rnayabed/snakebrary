@@ -1,5 +1,5 @@
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QFontDatabase, QPixmap
+from PySide6.QtGui import QFontDatabase, QIcon, QPixmap
 from PySide6.QtWidgets import QApplication, QSplashScreen
 from logic.database import Database
 from qt_material import apply_stylesheet
@@ -16,6 +16,7 @@ def start():
     except RuntimeError:
         app = QCoreApplication.instance()
 
+    app.setWindowIcon(QIcon('assets/app_icon.png'))
     splash = QSplashScreen(QPixmap('assets/splash.png'))
     splash.show()
     app.processEvents()
