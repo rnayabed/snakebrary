@@ -1,12 +1,15 @@
-from ui.helpers.helpers import FontAwesomeIcon, center_screen
+from ui.helpers.helpers import center_screen
 from ui.window.user_info import UserInfo
 from logic.user import User, UserPrivilege
-from PySide6 import QtCore
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
+from PySide2 import QtCore
+from PySide2 import QtWidgets
+from PySide2.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel, QPushButton, QTableWidget, QVBoxLayout, \
+    QWidget
 from shiboken6.Shiboken import delete
 
 from logic.database import Database
+
+import qtawesome as qta
 
 
 class BookReviewersWindow(QDialog):
@@ -57,12 +60,12 @@ class BookReviewersWindow(QDialog):
             name_widget = QLabel(each_reviewer_user_obj.name)
             rating_widget = QLabel(str(self.book_ratings.ratings[each_reviewer]))
 
-            delete_button = QPushButton(FontAwesomeIcon.TRASH+'Delete')
+            delete_button = QPushButton(qta.icon('mdi.trash'), 'Delete')
             delete_button.setProperty('class', 'danger')
             delete_button.setProperty('username', each_reviewer)
             delete_button.clicked.connect(self.delete_rating)
 
-            view_profile_button = QPushButton(FontAwesomeIcon.EYE+'View Profile')
+            view_profile_button = QPushButton(qta.icon('mdi.eye'), 'View Profile')
             view_profile_button.setProperty('user_obj', each_reviewer_user_obj)
             view_profile_button.clicked.connect(self.view_reviewer_profile)
 

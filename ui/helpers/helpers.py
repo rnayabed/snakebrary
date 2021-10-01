@@ -1,5 +1,5 @@
-from PySide6.QtGui import QIcon, QScreen, QFont
-from PySide6.QtWidgets import QApplication, QLayout
+from PySide2.QtGui import QIcon, QScreen, QFont
+from PySide2.QtWidgets import QApplication, QLayout, QWidget
 
 
 def center_screen(window):
@@ -20,18 +20,19 @@ def delete_layouts_in_layout(layout: QLayout):
         layout.itemAt(i).layout().deleteLater()
 
 
-class FontAwesomeIcon:
-    LOG_OUT = '\ue800 '
-    LOG_IN = '\ue801 '
-    SERVER = '\uf233 '
-    REFRESH = '\ue802 '
-    PLUS = '\ue803 '
-    KEY = '\ue804 '
-    EDIT = '\ue805 '
-    TRASH = '\uf1f8 '
-    FILE = '\ue806 '
-    EYE = '\ue807 '
-    EYE_SLASH = '\ue808 '
-    STAR = '\ue809 '
-    STAR_EMPTY = '\ue80a '
-    STAR_HALF = '\uf123 '
+# def delete_widgets_in_layout(layout: QLayout):
+#    for i in range(layout.count()):
+#        w = layout.itemAt(i)
+#        if w is not None:
+#            layout.removeWidget(w.widget())
+
+
+def delete_widgets_in_layout(layout):
+    if layout is not None:
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.setParent(None)
+            else:
+                deleteItemsOfLayout(item.layout())

@@ -1,5 +1,5 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QVBoxLayout, QWidget, QLabel, QMessageBox
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QVBoxLayout, QWidget, QLabel, QMessageBox
 
 from logic.user import UserPrivilege
 from ui.helpers.helpers import get_font_size, center_screen

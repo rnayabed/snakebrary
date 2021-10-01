@@ -1,10 +1,11 @@
 import os
-from ui.helpers.helpers import FontAwesomeIcon
-from PySide6 import QtCore
-from PySide6.QtCore import QMargins, QSize, Qt
-from PySide6.QtGui import QIcon, QImage, QPixmap
-from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
+from PySide2 import QtCore
+from PySide2.QtCore import QMargins, QSize, Qt
+from PySide2.QtGui import QIcon, QImage, QPixmap
+from PySide2.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
     QComboBox, QWidget
+
+import qtawesome as qta
 
 
 class LineEdit(QWidget):
@@ -54,10 +55,10 @@ class LineEdit(QWidget):
     def password_mode_show(self, show):
         self.current_password_mode = show
         if show:
-            self.show_hide_button.setText(FontAwesomeIcon.EYE_SLASH)
+            self.show_hide_button.setIcon(qta.icon('mdi.eye'))
             self.line_edit.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
-            self.show_hide_button.setText(FontAwesomeIcon.EYE)
+            self.show_hide_button.setIcon(qta.icon('mdi.eye-off'))
             self.line_edit.setEchoMode(QLineEdit.EchoMode.Password)
 
 

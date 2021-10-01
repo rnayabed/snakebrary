@@ -1,13 +1,14 @@
-from PySide6 import QtCore, QtWidgets
-from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
+from PySide2 import QtCore, QtWidgets
+from PySide2.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import FontAwesomeIcon, center_screen, get_font_size
+from ui.helpers.helpers import center_screen, get_font_size
 from ui.window.book_info import BookInfo
 from ui.window.book_wizard_window import BookWizardWindow
 
+import qtawesome as qta
 
 class BooksTabWidget(QWidget):
 
@@ -19,11 +20,11 @@ class BooksTabWidget(QWidget):
         layout = QVBoxLayout()
 
         button_bar = QHBoxLayout()
-        
-        self.add_book_button = QPushButton(FontAwesomeIcon.PLUS+'New Book')
+
+        self.add_book_button = QPushButton(qta.icon('mdi.plus'), 'New Book')
         self.add_book_button.clicked.connect(self.add_new_book)
 
-        self.reload_button = QPushButton(FontAwesomeIcon.REFRESH+'Reload')
+        self.reload_button = QPushButton(qta.icon('mdi.refresh'), 'Reload')
         self.reload_button.clicked.connect(self.reload_button_clicked)
 
         button_bar.addWidget(self.add_book_button)

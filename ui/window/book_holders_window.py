@@ -1,10 +1,11 @@
 from ui.window.user_info import UserInfo
-from ui.helpers.helpers import FontAwesomeIcon, center_screen
-from PySide6 import QtCore
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
+from ui.helpers.helpers import center_screen
+from PySide2 import QtCore
+from PySide2 import QtWidgets
+from PySide2.QtWidgets import QDialog, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
 
 from logic.database import Database
+import qtawesome as qta
 
 
 class BookHoldersWindow(QDialog):
@@ -53,7 +54,7 @@ class BookHoldersWindow(QDialog):
             issued_on_widget = QLabel(each_holder[1])
             returned_on_widget = QLabel(each_holder[2])
 
-            view_profile_button = QPushButton(FontAwesomeIcon.EYE+'View Profile')
+            view_profile_button = QPushButton(qta.icon('mdi.eye'), 'View Profile')
             view_profile_button.setProperty('user_obj', user_obj)
             view_profile_button.clicked.connect(self.view_holder_profile)
 

@@ -1,5 +1,5 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
 
 from logic.database import Database
 from ui.helpers.enhanced_controls import LineEdit

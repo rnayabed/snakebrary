@@ -1,5 +1,5 @@
-from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+from PySide2 import QtCore
+from PySide2.QtWidgets import QApplication, QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.book import Book
 from logic.database import Database

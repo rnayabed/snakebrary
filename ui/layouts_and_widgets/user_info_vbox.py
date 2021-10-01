@@ -1,11 +1,13 @@
-from PySide6 import QtCore
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
+from PySide2 import QtCore
+from PySide2.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
 
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
-from ui.helpers.helpers import FontAwesomeIcon, get_font_size, center_screen
+from ui.helpers.helpers import get_font_size, center_screen
 from ui.window.edit_user import EditUser
+
+import qtawesome as qta
 
 
 class UserInfoVBox(QVBoxLayout):
@@ -37,10 +39,10 @@ class UserInfoVBox(QVBoxLayout):
 
         self.date_time_created_label = QLabel()
 
-        self.edit_user_button = QPushButton(FontAwesomeIcon.EDIT+'Edit')
+        self.edit_user_button = QPushButton(qta.icon('mdi.pencil'), 'Edit')
         self.edit_user_button.clicked.connect(self.edit_user_button_onclick)
 
-        self.delete_user_button = QPushButton(FontAwesomeIcon.TRASH+'Delete')
+        self.delete_user_button = QPushButton(qta.icon('mdi.delete'), 'Delete')
         self.delete_user_button.setProperty('class', 'danger')
         self.delete_user_button.clicked.connect(self.delete_user_button_onclick)
 
@@ -193,7 +195,8 @@ class PasswordWidget(QWidget):
         if self.mode == PasswordWidgetMode.HIDE:
             self.password_label.setText('Password: ********')
             self.password_hint_label.setText('Password Hint: *******')
-            self.password_show_hide_button.setText(FontAwesomeIcon.EYE+'Show Password and Hint')
+            self.password_show_hide_button.setText('Show Password and Hint')
+            self.password_show_hide_button.setIcon(qta.icon('mdi.eye'))
         elif self.mode == PasswordWidgetMode.SHOW:
             self.password_label.setText(f'Password : {self.user.password}')
 
@@ -202,7 +205,8 @@ class PasswordWidget(QWidget):
             else:
                 self.password_hint_label.setText(f'Password Hint: {self.user.password_hint}')
 
-            self.password_show_hide_button.setText(FontAwesomeIcon.EYE_SLASH+'Hide Password and Hint')
+            self.password_show_hide_button.setText('Hide Password and Hint')
+            self.password_show_hide_button.setIcon(qta.icon('mdi.eye-off'))
 
     def toggle_mode(self):
         if self.mode == PasswordWidgetMode.HIDE:

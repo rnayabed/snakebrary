@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
+from PySide2.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database

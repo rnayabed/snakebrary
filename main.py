@@ -1,6 +1,6 @@
-from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QFontDatabase, QIcon, QPixmap
-from PySide6.QtWidgets import QApplication, QSplashScreen
+from PySide2.QtCore import QCoreApplication
+from PySide2.QtGui import QFontDatabase, QIcon, QPixmap
+from PySide2.QtWidgets import QApplication, QSplashScreen
 from logic.database import Database
 from qt_material import apply_stylesheet
 from mysql.connector import Error
@@ -21,8 +21,6 @@ def start():
     splash.show()
     app.processEvents()
 
-    QFontDatabase.addApplicationFont('assets/icons.ttf')
-
     apply_stylesheet(app, theme='light_purple.xml')
     Database.create_local_connection()
 
@@ -31,7 +29,7 @@ def start():
 
     splash.finish(win)
 
-    exit_code = app.exec()
+    exit_code = app.exec_()
 
     Database.close_local_connection()
     Database.close_connection()

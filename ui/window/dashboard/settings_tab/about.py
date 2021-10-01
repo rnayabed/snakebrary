@@ -4,10 +4,12 @@ from sqlite3.dbapi2 import sqlite_version
 from ui.window.license import License
 from ui.helpers.enhanced_controls import ImageView
 
-from PySide6 import QtCore
-from PySide6.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QLabel
+from PySide2 import QtCore
+from PySide2.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QLabel
 
-from ui.helpers.helpers import FontAwesomeIcon, get_font_size
+from ui.helpers.helpers import get_font_size
+
+import qtawesome as qta
 
 
 class About(QWidget):
@@ -62,7 +64,7 @@ class About(QWidget):
         source_code_hyperlink.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(source_code_hyperlink)
 
-        license_button = QPushButton(FontAwesomeIcon.FILE+'License')
+        license_button = QPushButton(qta.icon('mdi.file'), 'License')
         license_button.setMinimumWidth(5)
         license_button.clicked.connect(self.license_button_clicked)
         license_button.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
