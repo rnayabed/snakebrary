@@ -4,7 +4,6 @@ from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
 
-
 class UserWizardMode:
     ADD = 1,
     EDIT = 2

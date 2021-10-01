@@ -5,9 +5,6 @@ from PySide2.QtGui import QIcon, QImage, QPixmap
 from PySide2.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
     QComboBox, QWidget
 
-import qtawesome as qta
-
-
 class LineEdit(QWidget):
 
     def __init__(self, info=None, init_value=None, password_mode=False):
@@ -55,10 +52,10 @@ class LineEdit(QWidget):
     def password_mode_show(self, show):
         self.current_password_mode = show
         if show:
-            self.show_hide_button.setIcon(qta.icon('mdi.eye'))
+            self.show_hide_button.setText('HIDE')
             self.line_edit.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
-            self.show_hide_button.setIcon(qta.icon('mdi.eye-off'))
+            self.show_hide_button.setText('SHOW')
             self.line_edit.setEchoMode(QLineEdit.EchoMode.Password)
 
 

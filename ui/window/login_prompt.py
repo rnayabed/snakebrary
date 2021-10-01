@@ -10,7 +10,6 @@ from ui.helpers.helpers import get_font_size, center_screen
 from ui.window.connection_details_widget import ConnectionDetailsWidget
 from ui.window.dashboard.dashboard import Dashboard
 
-import qtawesome as qta
 
 
 class LoginPrompt(QWidget):
@@ -37,14 +36,14 @@ class LoginPrompt(QWidget):
         self.username_field = LineEdit('Username')
         self.password_field = LineEdit('Password', password_mode=True)
 
-        self.login_button = QPushButton(qta.icon('mdi.login'), 'Login')
+        self.login_button = QPushButton('Login')
         self.login_button.clicked.connect(self.on_login_button_click)
 
-        self.forgot_password_button = QPushButton(qta.icon('mdi.key'), 'Forgot Password')
+        self.forgot_password_button = QPushButton('Forgot Password')
         self.forgot_password_button.clicked.connect(self.on_forgot_password_button_click)
         self.forgot_password_button.setProperty('class', 'danger')
 
-        self.sql_server_settings_button = QPushButton(qta.icon('mdi.server'), 'MySQL Settings')
+        self.sql_server_settings_button = QPushButton('MySQL Settings')
         self.sql_server_settings_button.clicked.connect(self.sql_server_settings_button_clicked)
 
         self.error_label = QLabel()

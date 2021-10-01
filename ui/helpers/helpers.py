@@ -20,13 +20,6 @@ def delete_layouts_in_layout(layout: QLayout):
         layout.itemAt(i).layout().deleteLater()
 
 
-# def delete_widgets_in_layout(layout: QLayout):
-#    for i in range(layout.count()):
-#        w = layout.itemAt(i)
-#        if w is not None:
-#            layout.removeWidget(w.widget())
-
-
 def delete_widgets_in_layout(layout):
     if layout is not None:
         while layout.count():

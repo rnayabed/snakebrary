@@ -5,7 +5,6 @@ from logic.book import Book
 from logic.database import Database
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
 
-
 class BookWizardWindowMode:
     ADD = 1,
     EDIT = 2

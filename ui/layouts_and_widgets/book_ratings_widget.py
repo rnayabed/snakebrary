@@ -6,6 +6,7 @@ from logic.database import Database
 from logic.user import User
 from ui.helpers.helpers import get_font_size, delete_widgets_in_layout
 
+import os
 import qtawesome as qta
 
 
@@ -30,12 +31,6 @@ class BookRatingsWidget(QWidget):
         self.large_rating_label = QLabel()
         self.large_rating_label.setContentsMargins(QtCore.QMargins(0, 0, 50, 0))
         self.large_rating_label.setFont(get_font_size(35))
-
-        # self.rating_graphic_label = QLabel()
-        # self.rating_graphic_label.setFont(get_font_size(20))
-        # self.rating_graphic_label.setStyleSheet(f'color: {primary_color}')
-
-        self.primary_color = os.environ.get('QTMATERIAL_PRIMARYCOLOR')
 
         self.rating_graph_hbox = QHBoxLayout()
 
@@ -183,23 +178,21 @@ class BookRatingsWidget(QWidget):
 
         delete_widgets_in_layout(self.rating_graph_hbox)
 
-        for i in range(major):
+        for i in range(0, major - 1, 1):
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star'))
-
-        if major == 5:
-            return
 
         if minor >= 5:
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-half-full'))
         else:
-            self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-outline'))
+            if major != 0:
+                self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star'))
 
-        for i in range(4 - major):
+        for i in range(5 - major):
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-outline'))
 
     def get_label_with_icon(self, icon_code):
         label = QLabel()
-        label.setPixmap(qta.icon(icon_code, color=self.primary_color).pixmap(32))
+        label.setPixmap(qta.icon(icon_code, color=os.environ.get('QTMATERIAL_PRIMARYCOLOR')).pixmap(32))
         return label
 
 

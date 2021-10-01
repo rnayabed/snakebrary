@@ -8,9 +8,6 @@ from ui.helpers.helpers import center_screen
 from ui.window.add_user import AddUser
 from ui.window.user_info import UserInfo
 
-import qtawesome as qta
-
-
 class AdminUsersTab(QWidget):
 
     def __init__(self, current_user: User, dashboard_on_user_edited, parent=None):
@@ -23,13 +20,13 @@ class AdminUsersTab(QWidget):
 
         button_bar = QHBoxLayout()
 
-        self.add_admin_button = QPushButton(qta.icon('mdi.plus'), 'New Admin user')
+        self.add_admin_button = QPushButton('New Admin user')
         self.add_admin_button.clicked.connect(lambda: self.add_new_user(UserPrivilege.ADMIN))
 
-        self.add_normal_button = QPushButton(qta.icon('mdi.plus'), 'New Normal user')
+        self.add_normal_button = QPushButton('New Normal user')
         self.add_normal_button.clicked.connect(lambda: self.add_new_user(UserPrivilege.NORMAL))
 
-        self.reload_button = QPushButton(qta.icon('mdi.refresh'), 'Reload')
+        self.reload_button = QPushButton('Reload')
         self.reload_button.clicked.connect(self.reload_button_clicked)
 
         button_bar.addWidget(self.add_admin_button)

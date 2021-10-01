@@ -11,8 +11,6 @@ from ui.window.book_holders_window import BookHoldersWindow
 from ui.window.book_reviewers_window import BookReviewersWindow
 from ui.window.book_wizard_window import BookWizardWindow
 
-import qtawesome as qta
-
 class BookInfo(QDialog):
 
     def __init__(self, book, dashboard_on_books_edited, current_user: User, parent=None):
@@ -72,10 +70,10 @@ class BookInfo(QDialog):
         show_book_holders_reviewers_hbox.addWidget(self.get_book_holders_details)
         show_book_holders_reviewers_hbox.addWidget(self.get_book_reviewers_details)
 
-        self.edit_book_button = QPushButton(qta.icon('mdi.pencil'), 'Edit')
+        self.edit_book_button = QPushButton('Edit')
         self.edit_book_button.clicked.connect(self.on_edit_button_clicked)
 
-        self.delete_book_button = QPushButton(qta.icon('mdi.delete'), 'Delete')
+        self.delete_book_button = QPushButton('Delete')
         self.delete_book_button.setProperty('class', 'danger')
         self.delete_book_button.clicked.connect(self.on_delete_button_clicked)
 

@@ -6,8 +6,6 @@ from logic.database import Database
 from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import ComboBox
 
-import qtawesome as qta
-
 
 class GeneralTab(QWidget, QtStyleTools):
 
@@ -47,13 +45,13 @@ class GeneralTab(QWidget, QtStyleTools):
         layout.addWidget(self.theme_combo_box)
         layout.addWidget(self.accent_colour_combo_box)
 
-        self.logout_button = QPushButton(qta.icon('mdi.logout'), 'Logout')
+        self.logout_button = QPushButton('Logout')
         self.logout_button.setProperty('class', 'danger')
         self.logout_button.clicked.connect(self.restart)
 
         layout.addWidget(self.logout_button)
 
-        self.reset_button = QPushButton(qta.icon('mdi.delete'), 'Reset')
+        self.reset_button = QPushButton('Reset')
         self.reset_button.setProperty('class', 'danger')
         self.reset_button.clicked.connect(self.reset)
 

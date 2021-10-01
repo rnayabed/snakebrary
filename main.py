@@ -11,23 +11,28 @@ from ui.window.welcome import Welcome
 
 
 def start():
+    is_fresh_run = True
     try:
         app = QApplication()
     except RuntimeError:
+        is_fresh_run = False
         app = QCoreApplication.instance()
 
     app.setWindowIcon(QIcon('assets/app_icon.png'))
-    splash = QSplashScreen(QPixmap('assets/splash.png'))
-    splash.show()
+
+    if is_fresh_run:
+        splash = QSplashScreen(QPixmap('assets/splash.png'))
+        splash.show()
+
     app.processEvents()
 
     apply_stylesheet(app, theme='light_purple.xml')
     Database.create_local_connection()
 
-
     win = decide_window()
 
-    splash.finish(win)
+    if is_fresh_run:
+        splash.finish(win)
 
     exit_code = app.exec_()
 

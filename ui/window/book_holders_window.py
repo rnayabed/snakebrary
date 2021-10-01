@@ -5,7 +5,6 @@ from PySide2 import QtWidgets
 from PySide2.QtWidgets import QDialog, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
 
 from logic.database import Database
-import qtawesome as qta
 
 
 class BookHoldersWindow(QDialog):
@@ -54,7 +53,7 @@ class BookHoldersWindow(QDialog):
             issued_on_widget = QLabel(each_holder[1])
             returned_on_widget = QLabel(each_holder[2])
 
-            view_profile_button = QPushButton(qta.icon('mdi.eye'), 'View Profile')
+            view_profile_button = QPushButton('View Profile')
             view_profile_button.setProperty('user_obj', user_obj)
             view_profile_button.clicked.connect(self.view_holder_profile)
 
@@ -74,6 +73,7 @@ class BookHoldersWindow(QDialog):
             self.book_holders_table.setCellWidget(i, 4, view_profile_button_widget)
 
     def view_holder_profile(self):
-        self.users_info_window = UserInfo(self.sender().property('user_obj'), self.current_user, self.configure_holders_table, self)
+        self.users_info_window = UserInfo(self.sender().property('user_obj'), self.current_user,
+                                          self.configure_holders_table, self, disable_edit_option=True)
         self.users_info_window.exec()
         center_screen(self.users_info_window)

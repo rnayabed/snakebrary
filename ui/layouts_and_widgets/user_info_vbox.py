@@ -7,12 +7,11 @@ from ui.helpers.enhanced_controls import ImageView
 from ui.helpers.helpers import get_font_size, center_screen
 from ui.window.edit_user import EditUser
 
-import qtawesome as qta
-
 
 class UserInfoVBox(QVBoxLayout):
 
-    def __init__(self, user: User, current_user: User, dashboard_on_user_edited, parent, is_account_tab=False):
+    def __init__(self, user: User, current_user: User, dashboard_on_user_edited, parent, is_account_tab=False,
+                 disable_edit_options=False):
         super(UserInfoVBox, self).__init__(parent)
 
         self.dashboard_on_user_edited = dashboard_on_user_edited
@@ -20,6 +19,7 @@ class UserInfoVBox(QVBoxLayout):
         self.parent = parent
         self.user = user
         self.is_account_tab = is_account_tab
+        self.disable_edit_options = disable_edit_options
 
         self.setAlignment(QtCore.Qt.AlignTop)
 
@@ -39,10 +39,10 @@ class UserInfoVBox(QVBoxLayout):
 
         self.date_time_created_label = QLabel()
 
-        self.edit_user_button = QPushButton(qta.icon('mdi.pencil'), 'Edit')
+        self.edit_user_button = QPushButton('Edit')
         self.edit_user_button.clicked.connect(self.edit_user_button_onclick)
 
-        self.delete_user_button = QPushButton(qta.icon('mdi.delete'), 'Delete')
+        self.delete_user_button = QPushButton('Delete')
         self.delete_user_button.setProperty('class', 'danger')
         self.delete_user_button.clicked.connect(self.delete_user_button_onclick)
 
@@ -92,7 +92,6 @@ class UserInfoVBox(QVBoxLayout):
                 self.current_user.privilege == self.user.privilege and self.current_user.username != self.user.username and self.current_user.privilege == UserPrivilege.ADMIN):
             self.password_widget.hide()
             self.edit_delete_button_widget.hide()
-            self.edit_delete_button_widget.hide()
             self.disable_enable_button.hide()
             is_enable_disable_button_visible = False
         
@@ -109,7 +108,14 @@ class UserInfoVBox(QVBoxLayout):
             self.delete_user_button.hide()
             self.disable_enable_button.hide()
             is_enable_disable_button_visible = False
-        
+
+        if self.disable_edit_options:
+            self.delete_user_button.hide()
+            self.edit_delete_button_widget.hide()
+            self.password_widget.hide()
+            self.disable_enable_button.hide()
+            is_enable_disable_button_visible = False
+
         if is_enable_disable_button_visible:
             self.configure_disable_enable_button()
         
@@ -196,7 +202,6 @@ class PasswordWidget(QWidget):
             self.password_label.setText('Password: ********')
             self.password_hint_label.setText('Password Hint: *******')
             self.password_show_hide_button.setText('Show Password and Hint')
-            self.password_show_hide_button.setIcon(qta.icon('mdi.eye'))
         elif self.mode == PasswordWidgetMode.SHOW:
             self.password_label.setText(f'Password : {self.user.password}')
 
@@ -206,7 +211,6 @@ class PasswordWidget(QWidget):
                 self.password_hint_label.setText(f'Password Hint: {self.user.password_hint}')
 
             self.password_show_hide_button.setText('Hide Password and Hint')
-            self.password_show_hide_button.setIcon(qta.icon('mdi.eye-off'))
 
     def toggle_mode(self):
         if self.mode == PasswordWidgetMode.HIDE:

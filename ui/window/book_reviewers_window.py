@@ -9,8 +9,6 @@ from shiboken6.Shiboken import delete
 
 from logic.database import Database
 
-import qtawesome as qta
-
 
 class BookReviewersWindow(QDialog):
 
@@ -60,12 +58,12 @@ class BookReviewersWindow(QDialog):
             name_widget = QLabel(each_reviewer_user_obj.name)
             rating_widget = QLabel(str(self.book_ratings.ratings[each_reviewer]))
 
-            delete_button = QPushButton(qta.icon('mdi.trash'), 'Delete')
+            delete_button = QPushButton('Delete')
             delete_button.setProperty('class', 'danger')
             delete_button.setProperty('username', each_reviewer)
             delete_button.clicked.connect(self.delete_rating)
 
-            view_profile_button = QPushButton(qta.icon('mdi.eye'), 'View Profile')
+            view_profile_button = QPushButton('View Profile')
             view_profile_button.setProperty('user_obj', each_reviewer_user_obj)
             view_profile_button.clicked.connect(self.view_reviewer_profile)
 
@@ -86,9 +84,10 @@ class BookReviewersWindow(QDialog):
             self.book_reviewers_table.setCellWidget(i, 3, view_profile_delete_button_widget)
 
             i += 1
-        
+
     def view_reviewer_profile(self):
-        self.users_info_window = UserInfo(self.sender().property('user_obj'), self.current_user, self.configure_reviewers_table, self)
+        self.users_info_window = UserInfo(self.sender().property('user_obj'), self.current_user,
+                                          self.configure_reviewers_table, self, True)
         self.users_info_window.exec()
         center_screen(self.users_info_window)
     

@@ -9,9 +9,6 @@ from PySide2.QtWidgets import QHBoxLayout, QPushButton, QWidget, QVBoxLayout, QL
 
 from ui.helpers.helpers import get_font_size
 
-import qtawesome as qta
-
-
 class About(QWidget):
 
     def __init__(self, parent=None):
@@ -64,7 +61,7 @@ class About(QWidget):
         source_code_hyperlink.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(source_code_hyperlink)
 
-        license_button = QPushButton(qta.icon('mdi.file'), 'License')
+        license_button = QPushButton('License')
         license_button.setMinimumWidth(5)
         license_button.clicked.connect(self.license_button_clicked)
         license_button.setContentsMargins(QtCore.QMargins(0, 0, 0, 30))
