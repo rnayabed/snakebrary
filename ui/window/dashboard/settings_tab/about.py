@@ -82,6 +82,8 @@ class About(QWidget):
         version_info_hbox.addWidget(self.get_seperator())
         version_info_hbox.addWidget(QLabel(f'qt-material {importlib.metadata.version("qt-material")}'))
         version_info_hbox.addWidget(self.get_seperator())
+        version_info_hbox.addWidget(QLabel(f'qtawesome {importlib.metadata.version("qtawesome")}'))
+        version_info_hbox.addWidget(self.get_seperator())
         version_info_hbox.addWidget(QLabel(f'{platform.system()} {platform.release()}'))
 
         layout.addLayout(version_info_hbox)

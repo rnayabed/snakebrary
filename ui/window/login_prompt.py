@@ -95,7 +95,7 @@ class LoginPrompt(QWidget):
             return
         
         if user.is_disabled:
-            self.set_error('Account disabled. Contact administrator(s).')
+            self.set_error('Account disabled. Contact administrator.')
             self.disable_prompt(False)
             return
 
@@ -128,7 +128,7 @@ class LoginPrompt(QWidget):
                 msg_text = f'Your password hint is:\n{hint}\n'
 
             if user.privilege == UserPrivilege.NORMAL:
-                msg_text += '\nContact administrator(s) for further help.'
+                msg_text += '\nContact administrator for further help.'
             elif user.privilege == UserPrivilege.ADMIN:
                 msg_text += '\nContact master administrator for further help.'
             else:
