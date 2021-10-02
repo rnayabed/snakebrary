@@ -74,6 +74,8 @@ class UserInfoVBox(QVBoxLayout):
         self.configure_ui()
 
     def configure_ui(self):
+        self.password_widget.reload_user(self.user)
+
         if self.user.photo == None:
             self.profile_photo.clear_image()
             self.profile_photo.hide()
@@ -195,6 +197,10 @@ class PasswordWidget(QWidget):
         self.setLayout(password_vbox)
 
         self.set_current_mode(PasswordWidgetMode.HIDE)
+
+    def reload_user(self, user):
+        self.user = user
+        self.set_current_mode(self.mode)
 
     def set_current_mode(self, mode: PasswordWidgetMode):
         self.mode = mode

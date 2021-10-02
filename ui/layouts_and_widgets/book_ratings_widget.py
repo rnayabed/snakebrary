@@ -178,16 +178,15 @@ class BookRatingsWidget(QWidget):
 
         delete_widgets_in_layout(self.rating_graph_hbox)
 
-        for i in range(0, major - 1, 1):
+        for i in range(0, major):
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star'))
 
         if minor >= 5:
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-half-full'))
         else:
-            if major != 0:
-                self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star'))
+            self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-outline'))
 
-        for i in range(5 - major):
+        for i in range(4 - major):
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-outline'))
 
     def get_label_with_icon(self, icon_code):
