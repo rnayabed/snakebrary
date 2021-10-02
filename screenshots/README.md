@@ -1,37 +1,48 @@
 # Screenshots
 
-Following screenshots were taken on a computer running on Manjaro KDE with light theme and pink colour combintation
+Following screenshots were taken on a computer running on Manjaro KDE with light theme and pink colour combination.
 
-| ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg) | |:--:| | *Space* |
+Login Prompt
+![login_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/login_prompt.png)
 
-| ![login_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/login_prompt.png) | |:--:
-| |asd|
-
+Add new Admin user (Accessible to master account only)
 ![add_admin_user.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_admin_user.png)
 
-![add_book.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_book.png)
-
+Add normal user (Accessible to master and admin only)
 ![add_normal_user.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_normal_user.png)
 
+Add new book (Accessible to master and admin only)
+![add_book.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_book.png)
+
+See book holders (Accessible to master and admin only)
 ![admin_book_holders_list.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/admin_book_holders_list.png)
 
+See book reviewers (Accessible to master and admin only)
 ![admin_book_reviewers_list.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/admin_book_reviewers_list.png)
 
+Book Info (Viewed from admin or master account)
 ![book_info_admin.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/book_info_admin.png)
 
+Book Info (Viewed from normal account)
 ![book_info_normal.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/book_info_normal.png)
 
+Books Tab (Viewed from admin or master account)
 ![dash_admin_books_tab.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_admin_books_tab.png)
 
-![dash_admin_books_tab.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_admin_books_tab.png)
+Users Tab (Viewed from admin or master account)
+![dash_admin_users_tab.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_admin_users_tab.png)
 
+Books Tab (Viewed from normal account)
 ![dash_normal_books_tab.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_normal_books_tab.png)
 
-![dash_settings_about.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_about.png)
-
+Account Settings
 ![dash_settings_account.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_account.png)
 
+General Settings
 ![dash_settings_general.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_general.png)
+
+About
+![dash_settings_about.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_about.png)
 
 ----
 Some screenshots in dark theme and other colour combinations
