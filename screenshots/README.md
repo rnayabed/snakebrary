@@ -2,6 +2,11 @@
 
 Following screenshots were taken on a computer running on Manjaro KDE with light theme and pink colour combintation
 
+| ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg) | |:--:| | *Space* |
+
+| ![login_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/login_prompt.png) | |:--:
+| |asd|
+
 ![add_admin_user.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_admin_user.png)
 
 ![add_book.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_book.png)
@@ -27,8 +32,6 @@ Following screenshots were taken on a computer running on Manjaro KDE with light
 ![dash_settings_account.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_account.png)
 
 ![dash_settings_general.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_general.png)
-
-![login_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/login_prompt.png)
 
 ----
 Some screenshots in dark theme and other colour combinations
