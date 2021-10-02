@@ -1,4 +1,4 @@
-from PySide2.QtCore import QCoreApplication
+from PySide2.QtCore import QCoreApplication, Qt
 from PySide2.QtGui import QFontDatabase, QIcon, QPixmap
 from PySide2.QtWidgets import QApplication, QSplashScreen
 from logic.database import Database
@@ -19,6 +19,7 @@ def start():
         app = QCoreApplication.instance()
 
     app.setWindowIcon(QIcon('assets/app_icon.png'))
+    app.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
     if is_fresh_run:
         splash = QSplashScreen(QPixmap('assets/splash.png'))
