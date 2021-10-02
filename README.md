@@ -12,6 +12,7 @@ School: DPS Ruby Park, Kolkata
 
 ## Prerequisites
 
+* MySQL/MariaDB Server
 * Python 3.9+
 * Python Modules
     * `PySide2`
