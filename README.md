@@ -8,4 +8,4 @@ School: DPS Ruby Park, Kolkata
 
 [Project synopsis](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/synopsis.pdf)
 
-[Screenshots]()
+[Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
