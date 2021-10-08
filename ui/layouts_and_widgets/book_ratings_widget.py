@@ -127,8 +127,6 @@ class BookRatingsWidget(QWidget):
         average_rating = self.book_ratings.get_average_rating()
         self.large_rating_label.setText(str(average_rating))
 
-        # self.rating_graph_hbox.setText(self.get_rating_graphic(average_rating))
-
         self.set_rating_graphic(average_rating)
 
         if len(self.book_ratings.ratings) == 1:

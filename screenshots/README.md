@@ -44,6 +44,9 @@ General Settings
 About
 ![dash_settings_about.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/dash_settings_about.png)
 
+Splash screen
+![splash.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/splash.png)
+
 ----
 Some screenshots in dark theme and other colour combinations
 
