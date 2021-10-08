@@ -1,6 +1,6 @@
 # Screenshots
 
-Following screenshots were taken on a computer running on Manjaro KDE with light theme and pink colour combination.
+Following screenshots were taken on a computer running on Manjaro KDE with light theme and pink accent colour for master/admin account and purple accent colour for normal accounts.
 
 Login Prompt
 
