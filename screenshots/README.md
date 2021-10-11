@@ -6,6 +6,10 @@ Login Prompt
 
 ![login_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/login_prompt.png)
 
+SQL Server Connection Prompt
+
+![sql_server_connection_prompt.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/sql_server_connection_prompt.png)
+
 Add new Admin user (Accessible to master account only)
 
 ![add_admin_user.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/screenshots/add_admin_user.png)

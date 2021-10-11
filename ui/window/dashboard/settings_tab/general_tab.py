@@ -45,6 +45,12 @@ class GeneralTab(QWidget, QtStyleTools):
         layout.addWidget(self.theme_combo_box)
         layout.addWidget(self.accent_colour_combo_box)
 
+        self.clear_local_connection_settings_button = QPushButton('Clear Connection Settings')
+        self.clear_local_connection_settings_button.clicked.connect(self.clear_local_connection_settings)
+        self.clear_local_connection_settings_button.setDisabled(Database.is_local_connection_settings_clear())
+
+        layout.addWidget(self.clear_local_connection_settings_button)
+
         self.logout_button = QPushButton('Logout')
         self.logout_button.setProperty('class', 'danger')
         self.logout_button.clicked.connect(self.restart)
@@ -84,3 +90,8 @@ Continue?''', QMessageBox.Yes, QMessageBox.No)
     def restart(self):
         QApplication.closeAllWindows()
         QCoreApplication.exit(6504)
+    
+    def clear_local_connection_settings(self):
+        Database.clear_local_connection_settings()
+        Database.save_local_database()
+        self.clear_local_connection_settings_button.setDisabled(True)

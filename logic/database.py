@@ -406,3 +406,18 @@ class Database:
             return None
         else:
             return tbr[0]
+
+    @staticmethod
+    def clear_local_connection_settings():
+        Database.set_local_connection_settings('', '', '', '')
+    
+    @staticmethod
+    def set_local_connection_settings(host, port, user, password):
+        Database.set_local_database_server_host(host)
+        Database.set_local_database_server_port(port)
+        Database.set_local_database_server_user(user)
+        Database.set_local_database_server_password(password)
+    
+    @staticmethod
+    def is_local_connection_settings_clear():
+        return Database.get_local_database_server_host()==''

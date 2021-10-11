@@ -1,5 +1,5 @@
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel
+from PySide2.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel, QCheckBox
 
 from logic.database import Database
 from ui.helpers.enhanced_controls import LineEdit
@@ -32,6 +32,9 @@ class ConnectionDetailsWidget(QWidget):
         self.user_field = LineEdit('User')
         self.password_field = LineEdit('Password', password_mode=True)
 
+        self.remember_me_checkbox = QCheckBox('Remember Connection Settings')
+        self.remember_me_checkbox.setChecked(True)
+
         self.connect_server_button = QPushButton('Connect')
         self.connect_server_button.clicked.connect(self.connect_server_button_clicked)
 
@@ -45,6 +48,7 @@ class ConnectionDetailsWidget(QWidget):
         layout.addWidget(self.port_field)
         layout.addWidget(self.user_field)
         layout.addWidget(self.password_field)
+        layout.addWidget(self.remember_me_checkbox)
         layout.addWidget(self.error_label)
         layout.addWidget(self.connect_server_button)
 
@@ -97,10 +101,11 @@ class ConnectionDetailsWidget(QWidget):
             if Database.is_new_local_setup():
                 Database.create_local_database_settings_table()
 
-            Database.set_local_database_server_host(host)
-            Database.set_local_database_server_port(port)
-            Database.set_local_database_server_user(user)
-            Database.set_local_database_server_password(password)
+            if self.remember_me_checkbox.isChecked():
+                Database.set_local_connection_settings(host, port, user, password)
+            else:
+                Database.clear_local_connection_settings()
+
 
             Database.save_local_database()
 

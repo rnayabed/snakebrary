@@ -43,15 +43,20 @@ def start():
     if exit_code == 6504:
         start()
 
+def start_connection_details_widget():
+    connection_details = ConnectionDetailsWidget(decide_window)
+    connection_details.show()
+    center_screen(connection_details)
+    return connection_details
 
 def decide_window():
     if Database.is_new_local_setup():
-        connection_details = ConnectionDetailsWidget(decide_window)
-        connection_details.show()
-        center_screen(connection_details)
-        return connection_details
+        return start_connection_details_widget()
     else:
-        if not Database.is_connected():
+        if not Database.is_connected() :
+            if Database.is_local_connection_settings_clear():
+                return start_connection_details_widget()
+
             try:
                 Database.create_connection(Database.get_local_database_server_host(),
                                             Database.get_local_database_server_user(),
@@ -60,11 +65,11 @@ def decide_window():
                 return decide_window()
             except Error as e:
                 print(e)
-                connection_details = ConnectionDetailsWidget(decide_window)
-                connection_details.error_label.setText(e.msg)
-                connection_details.show()
-                center_screen(connection_details)
-                return connection_details
+                connection_details_widget = start_connection_details_widget()
+                connection_details_widget.error_label.setText(e.msg)
+                Database.clear_local_connection_settings()
+                Database.save_local_database()
+                return connection_details_widget
             
         if Database.is_new_server_setup():
             welcome = Welcome()
