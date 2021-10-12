@@ -1,5 +1,8 @@
 # SnakeBrary
 
+![app_icon.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/assets/app_icon.png)
+
+
 CBSE Class 12 Computer Science Project
 
 Year: 2021-22
