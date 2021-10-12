@@ -1,11 +1,10 @@
 # SnakeBrary
 
-![app_icon.png](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/assets/app_icon.png)
+<img src="https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/assets/app_icon.png" width="100" height="100">
 
+### CBSE Class 12 Computer Science Project
 
-CBSE Class 12 Computer Science Project
-
-Year: 2021-22
+#### Year: 2021-22
 
 School: DPS Ruby Park, Kolkata
 
