@@ -5,7 +5,6 @@ from PySide2 import QtCore
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel, QPushButton, QTableWidget, QVBoxLayout, \
     QWidget
-from shiboken6.Shiboken import delete
 
 from logic.database import Database
 
