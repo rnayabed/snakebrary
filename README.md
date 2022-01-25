@@ -11,7 +11,7 @@ Year: 2021-22
 
 School: DPS Ruby Park, Kolkata
 
-![version](https://img.shields.io/badge/Version-1.0.0-SNAPSHOT-green)
+![version](https://img.shields.io/badge/Version-1.0.0-green)
 
 ### [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
 
