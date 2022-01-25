@@ -26,7 +26,7 @@ School: DPS Ruby Park, Kolkata
 * Python Modules
     * `PySide2` - GUI Library
     * `qtawesome` - Icon Library. 
-        * **Use Version 2.8.10 ONLY. Future versions has issues with font resizing.**
+        * **Use Version 2.8.10 ONLY. Future versions will have issues with font size.**
     * `qt-material` - Material Design Stylesheet for PySide2
     * `mysql-connector-python` - SQL Library to connect to MySQL Server
 
