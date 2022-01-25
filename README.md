@@ -1,18 +1,25 @@
+<div align="center">
+<img src="https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/assets/app_icon.png" height="150" alt="logo">
+
 # SnakeBrary
 
-<img src="https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/assets/app_icon.png" width="100" height="100">
+*A Sweet and Simple Library Management System*
 
-### CBSE Class 12 Computer Science Project
+CBSE Class 12 Computer Science Project
 
-#### Year: 2021-22
+Year: 2021-22
 
 School: DPS Ruby Park, Kolkata
 
-[Project Synopsis](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/synopsis.pdf)
+![version](https://img.shields.io/badge/Version-1.0.0-SNAPSHOT-green)
 
-[Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
+### [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
 
-[Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
+### [Project Synopsis](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/synopsis.pdf)
+
+### [Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
+
+</div>
 
 ## Prerequisites
 
@@ -20,7 +27,8 @@ School: DPS Ruby Park, Kolkata
 * Python 3.9+
 * Python Modules
     * `PySide2` - GUI Library
-    * `qtawesome` - Icon Library
+    * `qtawesome` - Icon Library. 
+        * **Use Version 2.8.10 ONLY. Future versions has issues with font resizing.**
     * `qt-material` - Material Design Stylesheet for PySide2
     * `mysql-connector-python` - SQL Library to connect to MySQL Server
 
