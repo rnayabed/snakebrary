@@ -15,7 +15,7 @@ School: DPS Ruby Park, Kolkata
 
 ### [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
 
-#### [Project Synopsis](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/synopsis.pdf) | [Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
+#### [Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
 
 </div>
 
