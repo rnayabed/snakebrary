@@ -18,7 +18,7 @@
 
 ## Showed in
 
-- **[Version 1.1.0](https://github.com/rnayabed/SnakeBrary/tree/1.1.0)** - BCA Semester 4 PCA2, NSHM Knowledge Campus, Kolkata
+- **[Version 1.1.0](https://github.com/rnayabed/SnakeBrary/tree/1.1.0)** - BCA Semester 4 PCA2 (2024), NSHM Knowledge Campus, Kolkata
 
 - **[Version 1.0.0](https://github.com/rnayabed/SnakeBrary/tree/1.0.0)** - CBSE Class 12 Computer Science Project (2021-22), DPS Ruby Park, Kolkata
     * [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/1.0.0/cbse/project.pdf)
