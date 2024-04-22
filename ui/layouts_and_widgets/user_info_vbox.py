@@ -1,3 +1,5 @@
+from enum import Enum
+
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
 
@@ -14,6 +16,7 @@ class UserInfoVBox(QVBoxLayout):
                  disable_edit_options=False):
         super(UserInfoVBox, self).__init__(parent)
 
+        self.edit_user_window = None
         self.dashboard_on_user_edited = dashboard_on_user_edited
         self.current_user = current_user
         self.parent = parent
@@ -76,7 +79,7 @@ class UserInfoVBox(QVBoxLayout):
     def configure_ui(self):
         self.password_widget.reload_user(self.user)
 
-        if self.user.photo == None:
+        if self.user.photo is None:
             self.profile_photo.clear_image()
             self.profile_photo.hide()
         else:
@@ -91,12 +94,15 @@ class UserInfoVBox(QVBoxLayout):
         is_enable_disable_button_visible = True
 
         if (self.current_user.privilege == UserPrivilege.ADMIN and self.user.privilege == UserPrivilege.MASTER) or (
-                self.current_user.privilege == self.user.privilege and self.current_user.username != self.user.username and self.current_user.privilege == UserPrivilege.ADMIN):
+                self.current_user.privilege == self.user.privilege and
+                self.current_user.username != self.user.username and
+                self.current_user.privilege == UserPrivilege.ADMIN
+        ):
             self.password_widget.hide()
             self.edit_delete_button_widget.hide()
             self.disable_enable_button.hide()
             is_enable_disable_button_visible = False
-        
+
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.password_widget.hide()
             self.disable_enable_button.hide()
@@ -120,9 +126,8 @@ class UserInfoVBox(QVBoxLayout):
 
         if is_enable_disable_button_visible:
             self.configure_disable_enable_button()
-        
-    
-    def configure_disable_enable_button(self):            
+
+    def configure_disable_enable_button(self):
         self.disconnect_slots_disable_enable_button()
 
         if self.user.is_disabled:
@@ -137,9 +142,8 @@ class UserInfoVBox(QVBoxLayout):
     def enable_disable_user(self, is_disabled):
         self.user.is_disabled = is_disabled
         Database.update_user(self.user)
-        
+
         self.configure_disable_enable_button()
-                
 
     def disconnect_slots_disable_enable_button(self):
         try:
@@ -154,7 +158,7 @@ Username: {self.user.username}''', QMessageBox.Yes, QMessageBox.No)
 
         if warning_box == QMessageBox.Yes:
             Database.delete_user(self.user.username)
-            if self.dashboard_on_user_edited != None:
+            if self.dashboard_on_user_edited is not None:
                 self.dashboard_on_user_edited()
             self.parent.close()
 
@@ -164,14 +168,14 @@ Username: {self.user.username}''', QMessageBox.Yes, QMessageBox.No)
         center_screen(self.edit_user_window)
 
     def on_user_edited(self):
-        if self.dashboard_on_user_edited != None:
+        if self.dashboard_on_user_edited is not None:
             self.dashboard_on_user_edited()
         self.user = Database.get_user_by_username(self.user.username)
-        self.configure_ui() 
+        self.configure_ui()
         center_screen(self.parent)
 
 
-class PasswordWidgetMode:
+class PasswordWidgetMode(Enum):
     HIDE = 0,
     SHOW = 1
 
@@ -181,6 +185,7 @@ class PasswordWidget(QWidget):
     def __init__(self, user):
         super(PasswordWidget, self).__init__(None)
 
+        self.mode = None
         self.user = user
 
         self.password_label = QLabel()

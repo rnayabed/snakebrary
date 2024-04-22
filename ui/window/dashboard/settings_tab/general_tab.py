@@ -7,6 +7,7 @@ from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import ComboBox
 from constants import Constants
 
+
 class GeneralTab(QWidget, QtStyleTools):
 
     def __init__(self, current_user, current_user_account_settings):
@@ -78,7 +79,8 @@ class GeneralTab(QWidget, QtStyleTools):
         Database.update_user_account_settings(self.current_user_account_settings)
 
     def reset(self):
-        confirm_delete_box = QMessageBox.warning(self, 'Warning', f'''This will DELETE EVERYTHING - books, users, etc. No data can be recovered. 
+        confirm_delete_box = QMessageBox.warning(self, 'Warning', f'''This will DELETE EVERYTHING - books, users, etc.
+No data can be recovered.
 Continue?''', QMessageBox.Yes, QMessageBox.No)
 
         if confirm_delete_box == QMessageBox.Yes:
@@ -87,10 +89,11 @@ Continue?''', QMessageBox.Yes, QMessageBox.No)
 
             self.restart()
 
-    def restart(self):
+    @staticmethod
+    def restart():
         QApplication.closeAllWindows()
         QCoreApplication.exit(Constants.RESTART_RETURN_CODE)
-    
+
     def clear_local_connection_settings(self):
         Database.clear_local_connection_settings()
         Database.save_local_database()

@@ -11,6 +11,7 @@ class ConnectionDetailsWidget(QWidget):
     def __init__(self, on_success=None, parent=None):
         super(ConnectionDetailsWidget, self).__init__(parent)
 
+        self.holder_value_to_prevent_reference_loss = None
         self.setWindowTitle('SnakeBrary')
         self.on_success = on_success
         self.setFixedSize(420, 480)
@@ -106,13 +107,12 @@ class ConnectionDetailsWidget(QWidget):
             else:
                 Database.clear_local_connection_settings()
 
-
             Database.save_local_database()
 
             self.error_label.setText('')
 
-            if self.on_success != None:
-                self.x = self.on_success()
+            if self.on_success is not None:
+                self.holder_value_to_prevent_reference_loss = self.on_success()
 
             self.close()
         except Exception as e:

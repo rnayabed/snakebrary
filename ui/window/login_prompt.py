@@ -1,6 +1,5 @@
-from PySide6 import QtCore
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QGraphicsColorizeEffect, QWidget, QVBoxLayout, QLabel, QPushButton, \
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, \
     QMessageBox
 
 from logic.database import Database
@@ -11,12 +10,14 @@ from ui.window.connection_details_widget import ConnectionDetailsWidget
 from ui.window.dashboard.dashboard import Dashboard
 
 
-
 class LoginPrompt(QWidget):
 
     def __init__(self, parent=None):
         super(LoginPrompt, self).__init__(parent)
 
+        self.dash = None
+        self.login_prompt = None
+        self.connection_details = None
         self.setWindowTitle('SnakeBrary')
         self.setFixedSize(400, 420)
 
@@ -84,7 +85,7 @@ class LoginPrompt(QWidget):
 
         user = Database.get_user_by_username(try_username)
 
-        if user == None:
+        if user is None:
             self.set_error("Invalid username/password")
             self.disable_prompt(False)
             return
@@ -93,13 +94,12 @@ class LoginPrompt(QWidget):
             self.set_error("Invalid username/password")
             self.disable_prompt(False)
             return
-        
+
         if user.is_disabled:
             self.set_error('Account disabled. Contact administrator.')
             self.disable_prompt(False)
             return
 
-        
         self.set_success('Successfully Logged in!')
         self.dash = Dashboard(user)
         self.dash.show()
@@ -117,7 +117,7 @@ class LoginPrompt(QWidget):
 
         user = Database.get_user_by_username(try_username)
 
-        if user == None:
+        if user is None:
             msg_text = 'No user with the provided username was found. Contact administrator.'
         else:
             hint = user.password_hint
@@ -140,7 +140,7 @@ class LoginPrompt(QWidget):
         self.error_label.setText(error)
         self.error_label.setStyleSheet("color: red;")
         QApplication.instance().processEvents()
-    
+
     def set_success(self, error):
         self.error_label.setText(error)
         self.error_label.setStyleSheet("color: green;")

@@ -12,6 +12,7 @@ class BookHoldersWindow(QDialog):
     def __init__(self, book_holders, current_user, parent=None):
         super(BookHoldersWindow, self).__init__(parent)
 
+        self.users_info_window = None
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.book_holders = book_holders
@@ -33,7 +34,8 @@ class BookHoldersWindow(QDialog):
         self.book_holders_table.setSortingEnabled(True)
         self.book_holders_table.setRowCount(len(self.book_holders))
         self.book_holders_table.setColumnCount(5)
-        self.book_holders_table.setHorizontalHeaderLabels(["Username", "Name", "   Issued On   ", "   Returned On   ", "          Action          "])
+        self.book_holders_table.setHorizontalHeaderLabels(
+            ["Username", "Name", "   Issued On   ", "   Returned On   ", "          Action          "])
 
         self.book_holders_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.book_holders_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -58,12 +60,11 @@ class BookHoldersWindow(QDialog):
             view_profile_button.clicked.connect(self.view_holder_profile)
 
             vbox = QVBoxLayout()
-            vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            vbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
             vbox.addWidget(view_profile_button)
-          
 
             view_profile_button_widget = QWidget()
-            view_profile_button_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            view_profile_button_widget.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
             view_profile_button_widget.setLayout(vbox)
 
             self.book_holders_table.setCellWidget(i, 0, username_widget)

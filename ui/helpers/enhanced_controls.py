@@ -1,15 +1,17 @@
 import os
 from PySide6 import QtCore
-from PySide6.QtCore import QMargins, QSize, Qt
-from PySide6.QtGui import QIcon, QImage, QPixmap
+from PySide6.QtCore import QMargins, Qt
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
     QComboBox, QWidget
+
 
 class LineEdit(QWidget):
 
     def __init__(self, info=None, init_value=None, password_mode=False):
         super(LineEdit, self).__init__()
 
+        self.current_password_mode = None
         self.info_label = QLabel(info)
 
         self.error_label = QLabel()
@@ -26,7 +28,7 @@ class LineEdit(QWidget):
         self.line_edit.setText(init_value)
 
         vbox = QVBoxLayout()
-        vbox.setContentsMargins(QMargins(0,0,0,0))
+        vbox.setContentsMargins(QMargins(0, 0, 0, 0))
         vbox.addLayout(self.upper)
 
         lower = QHBoxLayout()
@@ -48,7 +50,7 @@ class LineEdit(QWidget):
 
     def on_success(self):
         self.error_label.clear()
-    
+
     def password_mode_show(self, show):
         self.current_password_mode = show
         if show:
@@ -57,7 +59,6 @@ class LineEdit(QWidget):
         else:
             self.show_hide_button.setText('SHOW')
             self.line_edit.setEchoMode(QLineEdit.EchoMode.Password)
-
 
     def configure_show_hide_button(self):
         self.password_mode_show(not self.current_password_mode)
@@ -100,13 +101,13 @@ class PlainTextEdit(QWidget):
 
 class ComboBox(QWidget):
 
-    def __init__(self, info, l):
+    def __init__(self, info, items):
         super(ComboBox, self).__init__()
 
         self.label = QLabel(info)
 
         self.combo_box = QComboBox()
-        self.combo_box.addItems(l)
+        self.combo_box.addItems(items)
 
         hbox = QHBoxLayout()
         hbox.setContentsMargins(QMargins(0, 0, 0, 0))
@@ -172,12 +173,12 @@ class FilePicker(QWidget):
 
         if img_path != '':
             self.line_edit.setText(img_path)
-            if self.on_select != None:
+            if self.on_select is not None:
                 self.on_select(img_path)
 
     def __clear_file(self):
         self.line_edit.clear()
-        if self.on_clear != None:
+        if self.on_clear is not None:
             self.on_clear()
 
 
@@ -210,4 +211,3 @@ class ImageView(QLabel):
         self.clear()
         self.setText(self.info)
         self.is_clear = True
-

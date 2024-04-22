@@ -11,11 +11,15 @@ from ui.window.book_holders_window import BookHoldersWindow
 from ui.window.book_reviewers_window import BookReviewersWindow
 from ui.window.book_wizard_window import BookWizardWindow
 
+
 class BookInfo(QDialog):
 
     def __init__(self, book, dashboard_on_books_edited, current_user: User, parent=None):
         super(BookInfo, self).__init__(parent)
 
+        self.book_wizard_window = None
+        self.book_reviewers_list_window = None
+        self.book_holders_list_window = None
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.book = book
@@ -137,7 +141,7 @@ class BookInfo(QDialog):
         self.configure_ui()
 
     def configure_ui(self):
-        if self.book.photo == None:
+        if self.book.photo is None:
             self.cover_photo.clear_image()
             self.cover_photo.hide()
         else:
@@ -198,13 +202,13 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
         self.configure_get_return_button()
         self.configure_disable_enable_button()
         self.configure_current_holder_label()
-    
+
     def configure_current_holder_label(self):
         if self.current_user.privilege == UserPrivilege.NORMAL:
             return
 
         current_holder = self.book.get_current_holder()
-        if current_holder == None:
+        if current_holder is None:
             self.current_holder_label.hide()
         else:
             current_holder_user = Database.get_user_by_username(current_holder)
@@ -212,7 +216,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
             self.current_holder_label.show()
 
     def return_book(self):
-        
+
         self.get_return_button.setDisabled(True)
         self.book.return_now()
         Database.update_book_holders(self.book.holders, self.book.ISBN)
@@ -225,8 +229,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     def configure_get_return_button(self):
         self.disconnect_slots_get_return_button()
 
-        
-        if self.book.get_current_holder() == None:
+        if self.book.get_current_holder() is None:
             if self.book.is_unavailable:
                 self.get_return_button.setDisabled(True)
                 self.get_return_button.setText('Unavailable')
@@ -236,13 +239,17 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
                 self.get_return_button.clicked.connect(self.get_book)
         else:
             current_holder_privilege = Database.get_user_by_username(self.book.get_current_holder()).privilege
-            if self.book.get_current_holder() == self.current_user.username or (self.current_user.privilege != UserPrivilege.NORMAL and current_holder_privilege != self.current_user.privilege and current_holder_privilege != UserPrivilege.MASTER):
+            if self.book.get_current_holder() == self.current_user.username or (
+                    self.current_user.privilege != UserPrivilege.NORMAL and
+                    current_holder_privilege != self.current_user.privilege and
+                    current_holder_privilege != UserPrivilege.MASTER
+            ):
                 self.get_return_button.setDisabled(False)
                 self.get_return_button.setText('Return')
                 self.get_return_button.clicked.connect(self.return_book)
             else:
                 self.get_return_button.setDisabled(True)
-                self.get_return_button.setText('Unavailable')  
+                self.get_return_button.setText('Unavailable')
 
     def disconnect_slots_get_return_button(self):
         try:
@@ -253,10 +260,10 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     def configure_disable_enable_button(self):
         if self.current_user.privilege == UserPrivilege.NORMAL:
             return
-            
+
         self.disconnect_slots_disable_enable_button()
 
-        if self.book.get_current_holder() == None:
+        if self.book.get_current_holder() is None:
             if self.book.is_unavailable:
                 self.disable_enable_button.show()
                 self.disable_enable_button.setText('Enable')
@@ -272,10 +279,9 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
     def make_book_unavailable(self, is_unavailable):
         self.book.is_unavailable = is_unavailable
         Database.update_book(self.book)
-        
+
         self.configure_get_return_button()
         self.configure_disable_enable_button()
-                
 
     def disconnect_slots_disable_enable_button(self):
         try:
@@ -295,7 +301,7 @@ Date Time Added: {self.book.date_time_added}''', QMessageBox.Yes, QMessageBox.No
 
     def on_book_edited(self):
         self.dashboard_on_books_edited()
-        self.book = Database.get_book_by_ISBN(self.book.ISBN)
+        self.book = Database.get_book_by_isbn(self.book.ISBN)
         self.configure_ui()
 
     def show_book_reviewers_list_window(self):

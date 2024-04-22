@@ -1,9 +1,5 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
-from PySide6.QtGui import QPainter, QColor, QPixmap
-from PySide6.QtSvg import QSvgRenderer
-
-import os
 from logic.book import Book
 from logic.database import Database
 from logic.user import User
@@ -12,11 +8,13 @@ from ui.helpers.helpers import get_label_style_sheet_font_size, delete_widgets_i
 import os
 import qtawesome as qta
 
+
 class BookRatingsWidget(QWidget):
 
     def __init__(self, book: Book, current_user: User):
         super(BookRatingsWidget, self).__init__(None)
 
+        self.book_ratings = None
         self.book = book
         self.current_user = current_user
 
@@ -148,7 +146,7 @@ class BookRatingsWidget(QWidget):
             self.rating_layout_widget.show()
             existing_rating = self.book_ratings.get_rating_by_username(self.current_user.username)
 
-            if existing_rating == None:
+            if existing_rating is None:
                 self.rating_current_status_label.setText(
                     'You have read but not rated this book yet. Go ahead and rate it!')
                 self.delete_rating_button.hide()
@@ -189,7 +187,8 @@ class BookRatingsWidget(QWidget):
         for i in range(4 - major):
             self.rating_graph_hbox.addWidget(self.get_label_with_icon('mdi.star-outline'))
 
-    def get_label_with_icon(self, icon_code):
+    @staticmethod
+    def get_label_with_icon(icon_code):
         label = QLabel()
         label.setPixmap(qta.icon(icon_code, color=os.environ.get('QTMATERIAL_PRIMARYCOLOR')).pixmap(32))
         return label
@@ -198,7 +197,7 @@ class BookRatingsWidget(QWidget):
 class RatingProgressBar(QHBoxLayout):
 
     def __init__(self, rating):
-        super(RatingProgressBar, self).__init__(None)
+        super(RatingProgressBar, self).__init__()
 
         self.rating = rating
         self.rate_label = QLabel(str(self.rating))

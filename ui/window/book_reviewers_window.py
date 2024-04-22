@@ -1,9 +1,9 @@
 from ui.helpers.helpers import center_screen
 from ui.window.user_info import UserInfo
-from logic.user import User, UserPrivilege
+from logic.user import UserPrivilege
 from PySide6 import QtCore
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel, QPushButton, QTableWidget, QVBoxLayout, \
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QTableWidget, QVBoxLayout, \
     QWidget
 
 from logic.database import Database
@@ -14,12 +14,13 @@ class BookReviewersWindow(QDialog):
     def __init__(self, book, current_user, on_review_deleted, parent):
         super(BookReviewersWindow, self).__init__(parent)
 
+        self.users_info_window = None
+        self.book_ratings = None
         self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint)
 
         self.book = book
         self.current_user = current_user
         self.on_review_deleted = on_review_deleted
-
 
         self.setWindowTitle("Book Reviewers")
         self.resize(800, 600)
@@ -40,7 +41,8 @@ class BookReviewersWindow(QDialog):
         self.book_reviewers_table.setSortingEnabled(True)
         self.book_reviewers_table.setRowCount(len(self.book_ratings.ratings))
         self.book_reviewers_table.setColumnCount(4)
-        self.book_reviewers_table.setHorizontalHeaderLabels(["Username", "Name", "Rating", "                           Actions                          "])
+        self.book_reviewers_table.setHorizontalHeaderLabels(
+            ["Username", "Name", "Rating", "                           Actions                          "])
 
         self.book_reviewers_table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.book_reviewers_table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -67,14 +69,15 @@ class BookReviewersWindow(QDialog):
             view_profile_button.clicked.connect(self.view_reviewer_profile)
 
             hbox = QHBoxLayout()
-            hbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            hbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
             hbox.addWidget(view_profile_button)
-            if (self.current_user.privilege != each_reviewer_user_obj.privilege and each_reviewer_user_obj.privilege != UserPrivilege.MASTER) or self.current_user.username == each_reviewer:
+            if ((self.current_user.privilege != each_reviewer_user_obj.privilege and
+                 each_reviewer_user_obj.privilege != UserPrivilege.MASTER) or
+                    self.current_user.username == each_reviewer):
                 hbox.addWidget(delete_button)
-            
 
             view_profile_delete_button_widget = QWidget()
-            view_profile_delete_button_widget.setContentsMargins(QtCore.QMargins(0,0,0,0))
+            view_profile_delete_button_widget.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
             view_profile_delete_button_widget.setLayout(hbox)
 
             self.book_reviewers_table.setCellWidget(i, 0, username_widget)
@@ -89,7 +92,7 @@ class BookReviewersWindow(QDialog):
                                           self.configure_reviewers_table, self, True)
         self.users_info_window.exec()
         center_screen(self.users_info_window)
-    
+
     def delete_rating(self):
         self.book_ratings.ratings.pop(self.sender().property('username'), None)
         Database.update_book_ratings(self.book_ratings)

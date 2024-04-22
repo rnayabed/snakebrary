@@ -8,11 +8,13 @@ from ui.helpers.helpers import center_screen
 from ui.window.add_user import AddUser
 from ui.window.user_info import UserInfo
 
+
 class AdminUsersTab(QWidget):
 
     def __init__(self, current_user: User, dashboard_on_user_edited, parent=None):
         super(AdminUsersTab, self).__init__(parent)
 
+        self.users_info_window = None
         self.current_user = current_user
         self.dashboard_on_user_edited = dashboard_on_user_edited
 
@@ -50,7 +52,7 @@ class AdminUsersTab(QWidget):
             self.add_admin_button.hide()
 
         self.configure_users_table()
-    
+
     def reload_button_clicked(self):
         self.reload_button.setDisabled(True)
         QApplication.instance().processEvents()
@@ -63,7 +65,7 @@ class AdminUsersTab(QWidget):
         for i in range(self.users_table.rowCount()):
             user = self.users_table.cellWidget(i, 0).property('user_obj')
 
-            if not search in (user.name + user.username + UserPrivilege.get_ui_name(user.privilege).lower()):
+            if search not in (user.name + user.username + UserPrivilege.get_ui_name(user.privilege).lower()):
                 self.users_table.hideRow(i)
             else:
                 self.users_table.showRow(i)

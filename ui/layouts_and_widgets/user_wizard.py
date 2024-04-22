@@ -1,10 +1,13 @@
+from enum import Enum
+
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit
 
-class UserWizardMode:
+
+class UserWizardMode(Enum):
     ADD = 1,
     EDIT = 2
 
@@ -45,7 +48,7 @@ class UserWizard(QVBoxLayout):
         self.addWidget(self.new_user_password_field_hint)
         self.addWidget(self.proceed_button)
 
-        if old_user == None:
+        if old_user is None:
             self.mode = UserWizardMode.ADD
             self.user_privilege = new_user_privilege
         else:
@@ -61,7 +64,7 @@ class UserWizard(QVBoxLayout):
         self.new_user_password_confirm_field.info_label.setText('Confirm Password')
 
     def load_values_for_old_user(self):
-        if self.old_user.photo != None:
+        if self.old_user.photo is not None:
             self.new_user_photo_preview.set_image_from_blob(self.old_user.photo)
 
         self.new_user_name_field.line_edit.setText(self.old_user.name)
@@ -138,7 +141,7 @@ class UserWizard(QVBoxLayout):
 
         if self.mode == UserWizardMode.ADD:
             old_user = Database.get_user_by_username(proposed_new_user_username)
-            if old_user != None:
+            if old_user is not None:
                 QMessageBox.critical(None, 'Error', f'''User with same username already exists.
 Name: {old_user.name}
 Privilege: {UserPrivilege.get_ui_name(old_user.privilege)}

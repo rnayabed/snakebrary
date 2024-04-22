@@ -34,7 +34,7 @@ class User:
         self.privilege = privilege
         self.photo = photo
 
-        if date_time_created == None:
+        if date_time_created is None:
             date_time_created = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         self.date_time_created = date_time_created

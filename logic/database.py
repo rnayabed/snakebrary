@@ -19,10 +19,8 @@ class Database:
 
     @staticmethod
     def is_connected():
-        global __db_con_cursor
-
         try:
-            return __db_con_cursor != None
+            return Database.__db_con_cursor is not None
         except:
             return False
 
@@ -32,58 +30,44 @@ class Database:
 
     @staticmethod
     def create_connection(host, user, password, port):
-        global __db_con
-        global __db_con_cursor
-
-        __db_con = mysql.connector.connect(host=host, user=user, password=password, port=int(port))
-        __db_con.cursor().execute('create database if not exists snakebrary')
-        __db_con.cmd_init_db('snakebrary')
-        __db_con_cursor = __db_con.cursor(buffered=True)
+        Database.__db_con = mysql.connector.connect(host=host, user=user, password=password, port=int(port))
+        Database.__db_con.cursor().execute('create database if not exists snakebrary')
+        Database.__db_con.cmd_init_db('snakebrary')
+        Database.__db_con_cursor = Database.__db_con.cursor(buffered=True)
 
     @staticmethod
     def create_local_connection():
-        global __local_db_con
-        global __local_db_con_cursor
-
-        __local_db_con = sqlite3.connect(Database.get_local_database_location())
-        __local_db_con_cursor = __local_db_con.cursor()
+        Database.__local_db_con = sqlite3.connect(Database.get_local_database_location())
+        Database.__local_db_con_cursor = Database.__local_db_con.cursor()
 
     @staticmethod
     def close_connection():
-        global __db_con
-        global __db_con_cursor
-
         if Database.is_connected():
-            __db_con_cursor.close()
-            __db_con.close()
-            __db_con_cursor = None
-            __db_con = None
+            Database.__db_con_cursor.close()
+            Database.__db_con.close()
+            Database.__db_con_cursor = None
+            Database.__db_con = None
 
     @staticmethod
     def close_local_connection():
-        global __local_db_con
-        global __local_db_con_cursor
-        __local_db_con_cursor.close()
-        __local_db_con.close()
+        Database.__local_db_con_cursor.close()
+        Database.__local_db_con.close()
 
     @staticmethod
     def create_local_database_settings_table():
-        global __local_db_con_cursor
-        __local_db_con_cursor.execute('''CREATE TABLE local_settings
+        Database.__local_db_con_cursor.execute('''CREATE TABLE local_settings
         (key   TEXT  PRIMARY KEY  NOT NULL,
         value    TEXT    NOT NULL)''')
 
     @staticmethod
     def set_local_setting(key, value):
-        global __local_db_con_cursor
-        __local_db_con_cursor.execute(f'''INSERT OR REPLACE INTO local_settings(key, value)
+        Database.__local_db_con_cursor.execute(f'''INSERT OR REPLACE INTO local_settings(key, value)
             VALUES ("{key}", "{value}");''')
 
     @staticmethod
     def get_local_setting(key):
-        global __local_db_con_cursor
         try:
-            return list(__local_db_con_cursor.execute(f'SELECT * FROM local_settings WHERE key="{key}"'))[0][1]
+            return list(Database.__local_db_con_cursor.execute(f'SELECT * FROM local_settings WHERE key="{key}"'))[0][1]
         except:
             return None
 
@@ -128,8 +112,7 @@ class Database:
 
     @staticmethod
     def create_new_users_table():
-        global __db_con_cursor
-        __db_con_cursor.execute('''CREATE TABLE users
+        Database.__db_con_cursor.execute('''CREATE TABLE users
         (username   VARCHAR(50)  PRIMARY KEY  NOT NULL,
         password    TEXT    NOT NULL,
         password_hint   TEXT    NOT NULL,
@@ -141,16 +124,14 @@ class Database:
 
     @staticmethod
     def create_new_account_settings_table():
-        global __db_con_cursor
-        __db_con_cursor.execute('''CREATE TABLE account_settings
+        Database.__db_con_cursor.execute('''CREATE TABLE account_settings
         (username   VARCHAR(50)  PRIMARY KEY  NOT NULL,
         theme    TEXT    NOT NULL,
         accent_colour   TEXT    NOT NULL);''')
 
     @staticmethod
     def create_new_books_table():
-        global __db_con_cursor
-        __db_con_cursor.execute('''CREATE TABLE books
+        Database.__db_con_cursor.execute('''CREATE TABLE books
         (ISBN   VARCHAR(50)  PRIMARY KEY  NOT NULL,
         name    TEXT    NOT NULL,
         author   TEXT   NOT NULL,
@@ -164,42 +145,39 @@ class Database:
 
     @staticmethod
     def create_new_books_ratings_table():
-        global __db_con_cursor
-        __db_con_cursor.execute('''CREATE TABLE books_ratings
+        Database.__db_con_cursor.execute('''CREATE TABLE books_ratings
         (ISBN   VARCHAR(50)  PRIMARY KEY  NOT NULL,
         ratings   TEXT    NOT NULL);''')
 
     @staticmethod
     def create_new_user(new_user: User):
-        global __db_con_cursor
-
-        if new_user.photo == None:
-            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
+        if new_user.photo is None:
+            Database.__db_con_cursor.execute(f'''INSERT INTO users
+            (username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
             VALUES ("{new_user.username}", "{new_user.password}", 
             "{new_user.password_hint}", "{new_user.name}", {new_user.is_disabled}, "{new_user.privilege}", NULL,
             "{new_user.date_time_created}");''')
         else:
-            __db_con_cursor.execute(f'''INSERT INTO users(username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
+            Database.__db_con_cursor.execute(f'''INSERT INTO users
+            (username, password, password_hint, name, is_disabled, privilege, photo, date_time_created)
             VALUES ("{new_user.username}", "{new_user.password}", 
             "{new_user.password_hint}", "{new_user.name}", {new_user.is_disabled}, "{new_user.privilege}", %s,
             "{new_user.date_time_created}");''', (new_user.photo,))
 
-        __db_con_cursor.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
+        Database.__db_con_cursor.execute(f'''INSERT INTO account_settings(username, theme, accent_colour)
         VALUES ("{new_user.username}", "light", "purple")''')
 
         Database.save_database()
 
     @staticmethod
     def update_user(user: User):
-        global __db_con_cursor
-
-        if user.photo == None:
-            __db_con_cursor.execute(f'''UPDATE users
+        if user.photo is None:
+            Database.__db_con_cursor.execute(f'''UPDATE users
             SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
             is_disabled={user.is_disabled}, privilege="{user.privilege}", photo=NULL
             WHERE username="{user.username}"''')
         else:
-            __db_con_cursor.execute(f'''UPDATE users
+            Database.__db_con_cursor.execute(f'''UPDATE users
             SET password="{user.password}", password_hint="{user.password_hint}", name="{user.name}", 
             is_disabled={user.is_disabled}, privilege="{user.privilege}", photo=%s
             WHERE username="{user.username}"''', (user.photo,))
@@ -208,33 +186,34 @@ class Database:
 
     @staticmethod
     def create_new_book(new_book: Book):
-        global __db_con_cursor
-
-        if new_book.photo == None:
-            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
+        if new_book.photo is None:
+            Database.__db_con_cursor.execute(f'''INSERT INTO books
+            (ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", {new_book.is_unavailable}, NULL, "{new_book.date_time_added}");''')
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", 
+            "{new_book.price}", "{new_book.about}", {new_book.is_unavailable}, NULL, "{new_book.date_time_added}");''')
         else:
-            __db_con_cursor.execute(f'''INSERT INTO books(ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
+            Database.__db_con_cursor.execute(f'''INSERT INTO books
+            (ISBN, name, author, holders, genres, price, about, is_unavailable, photo, date_time_added)
             VALUES ("{new_book.ISBN}", "{new_book.name}", 
-            "{new_book.author}", "{new_book.holders}", "{new_book.genres}", "{new_book.price}", "{new_book.about}", {new_book.is_unavailable}, %s, "{new_book.date_time_added}");''',
-                                    (new_book.photo,))
+            "{new_book.author}", "{new_book.holders}", "{new_book.genres}",
+            "{new_book.price}", "{new_book.about}", {new_book.is_unavailable},
+             %s, "{new_book.date_time_added}");''', (new_book.photo,))
 
-        __db_con_cursor.execute(f'''INSERT INTO books_ratings(ISBN, ratings)
+        Database.__db_con_cursor.execute(f'''INSERT INTO books_ratings(ISBN, ratings)
         VALUES ("{new_book.ISBN}", "{{}}")''')
 
         Database.save_database()
 
     @staticmethod
     def update_book(book: Book):
-        global __db_con_cursor
-        if book.photo == None:
-            __db_con_cursor.execute(f'''UPDATE books
+        if book.photo is None:
+            Database.__db_con_cursor.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", is_unavailable={book.is_unavailable}, about="{book.about}", photo=NULL
             WHERE ISBN="{book.ISBN}"''')
         else:
-            __db_con_cursor.execute(f'''UPDATE books
+            Database.__db_con_cursor.execute(f'''UPDATE books
             SET name="{book.name}", author="{book.author}", genres="{book.genres}", 
             price="{book.price}", is_unavailable={book.is_unavailable}, about="{book.about}", photo=%s
             WHERE ISBN="{book.ISBN}"''', (book.photo,))
@@ -242,17 +221,14 @@ class Database:
         Database.save_database()
 
     @staticmethod
-    def update_book_holders(holders, ISBN):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'UPDATE books SET holders="{holders}" WHERE ISBN="{ISBN}"')
+    def update_book_holders(holders, isbn):
+        Database.__db_con_cursor.execute(f'UPDATE books SET holders="{holders}" WHERE ISBN="{isbn}"')
 
         Database.save_database()
 
     @staticmethod
     def update_book_ratings(book_ratings: BookRatings):
-        global __db_con_cursor
-
-        __db_con_cursor.execute(f'''UPDATE books_ratings
+        Database.__db_con_cursor.execute(f'''UPDATE books_ratings
         SET ratings="{book_ratings.ratings}" 
         WHERE ISBN="{book_ratings.ISBN}"''')
 
@@ -261,15 +237,15 @@ class Database:
     @staticmethod
     def get_user_by_username(username):
         tbr = Database.__filter_users(f'SELECT * FROM users WHERE username="{username}"')
-        if tbr == []:
+        if not tbr:
             return None
         else:
             return tbr[0]
 
     @staticmethod
-    def get_book_by_ISBN(ISBN):
-        tbr = Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{ISBN}"')
-        if tbr == []:
+    def get_book_by_isbn(isbn):
+        tbr = Database.__filter_books(f'SELECT * FROM books WHERE ISBN="{isbn}"')
+        if not tbr:
             return None
         else:
             return tbr[0]
@@ -280,10 +256,9 @@ class Database:
 
     @staticmethod
     def __filter_users(sql):
-        global __db_con_cursor
         tbr = []
-        __db_con_cursor.execute(sql)
-        users = list(__db_con_cursor.fetchall())
+        Database.__db_con_cursor.execute(sql)
+        users = list(Database.__db_con_cursor.fetchall())
         for i in users:
             tba = User(i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7])
             tbr.append(tba)
@@ -296,11 +271,10 @@ class Database:
 
     @staticmethod
     def __filter_books(sql):
-        global __db_con_cursor
         tbr = []
 
-        __db_con_cursor.execute(sql)
-        books = list(__db_con_cursor.fetchall())
+        Database.__db_con_cursor.execute(sql)
+        books = list(Database.__db_con_cursor.fetchall())
         for i in books:
             tba = Book(i[0], i[1], i[2], literal_eval(i[3]), literal_eval(i[4]), i[5], i[6], i[7], i[8], i[9])
             tbr.append(tba)
@@ -309,31 +283,27 @@ class Database:
 
     @staticmethod
     def get_user_account_settings(username):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'SELECT * FROM account_settings WHERE username="{username}"')
-        s = list(__db_con_cursor.fetchall())[0]
+        Database.__db_con_cursor.execute(f'SELECT * FROM account_settings WHERE username="{username}"')
+        s = list(Database.__db_con_cursor.fetchall())[0]
         return UserSettings(s[0], s[1], s[2])
 
     @staticmethod
     def update_user_account_settings(user_settings: UserSettings):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'''UPDATE account_settings 
+        Database.__db_con_cursor.execute(f'''UPDATE account_settings 
                              SET theme="{user_settings.theme}", accent_colour="{user_settings.accent_colour}" 
                              WHERE username="{user_settings.username}" ''')
 
         Database.save_database()
 
     @staticmethod
-    def get_book_ratings(ISBN):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'SELECT * FROM books_ratings WHERE ISBN="{ISBN}"')
-        s = list(__db_con_cursor.fetchall())[0]
+    def get_book_ratings(isbn):
+        Database.__db_con_cursor.execute(f'SELECT * FROM books_ratings WHERE ISBN="{isbn}"')
+        s = list(Database.__db_con_cursor.fetchall())[0]
         return BookRatings(s[0], literal_eval(s[1]))
 
     @staticmethod
     def set_book_ratings(book_ratings: BookRatings):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'''UPDATE books_ratings 
+        Database.__db_con_cursor.execute(f'''UPDATE books_ratings 
                              SET ratings="{book_ratings.ratings}"
                              WHERE ISBN="{book_ratings.ISBN}" ''')
 
@@ -341,31 +311,26 @@ class Database:
 
     @staticmethod
     def save_database():
-        global __db_con
-        __db_con.commit()
+        Database.__db_con.commit()
 
     @staticmethod
     def save_local_database():
-        global __local_db_con
-        __local_db_con.commit()
+        Database.__local_db_con.commit()
 
     @staticmethod
     def is_new_local_setup():
-        global __local_db_con_cursor
-        return len(list(__local_db_con_cursor.execute(
+        return len(list(Database.__local_db_con_cursor.execute(
             'SELECT name FROM sqlite_master WHERE type="table" AND name="local_settings";'))) == 0
 
     @staticmethod
     def is_new_server_setup():
-        global __db_con_cursor
-        __db_con_cursor.execute('SHOW TABLES LIKE "users"')
-        return (not __db_con_cursor.fetchone())
+        Database.__db_con_cursor.execute('SHOW TABLES LIKE "users"')
+        return not Database.__db_con_cursor.fetchone()
 
     @staticmethod
     def delete_user(username):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'DELETE FROM users WHERE username="{username}"')
-        __db_con_cursor.execute(f'DELETE FROM account_settings WHERE username="{username}"')
+        Database.__db_con_cursor.execute(f'DELETE FROM users WHERE username="{username}"')
+        Database.__db_con_cursor.execute(f'DELETE FROM account_settings WHERE username="{username}"')
 
         Database.save_database()
 
@@ -379,30 +344,27 @@ class Database:
 
     @staticmethod
     def delete_book(ISBN):
-        global __db_con_cursor
-        __db_con_cursor.execute(f'DELETE FROM books WHERE ISBN="{ISBN}"')
-        __db_con_cursor.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')
+        Database.__db_con_cursor.execute(f'DELETE FROM books WHERE ISBN="{ISBN}"')
+        Database.__db_con_cursor.execute(f'DELETE FROM books_ratings WHERE ISBN="{ISBN}"')
 
         Database.save_database()
 
     @staticmethod
     def delete_database():
-        global __db_con_cursor
-        __db_con_cursor.execute('DROP DATABASE snakebrary')
+        Database.__db_con_cursor.execute('DROP DATABASE snakebrary')
 
         Database.save_database()
 
     @staticmethod
     def delete_local_database():
-        global __local_db_con_cursor
-        __local_db_con_cursor.execute('DROP TABLE local_settings')
+        Database.__local_db_con_cursor.execute('DROP TABLE local_settings')
 
         Database.save_local_database()
 
     @staticmethod
     def get_random_book():
         tbr = Database.__filter_books(f'SELECT * FROM books ORDER BY RAND() LIMIT 1')
-        if tbr == []:
+        if not tbr:
             return None
         else:
             return tbr[0]
@@ -410,14 +372,14 @@ class Database:
     @staticmethod
     def clear_local_connection_settings():
         Database.set_local_connection_settings('', '', '', '')
-    
+
     @staticmethod
     def set_local_connection_settings(host, port, user, password):
         Database.set_local_database_server_host(host)
         Database.set_local_database_server_port(port)
         Database.set_local_database_server_user(user)
         Database.set_local_database_server_password(password)
-    
+
     @staticmethod
     def is_local_connection_settings_clear():
-        return Database.get_local_database_server_host()==''
+        return Database.get_local_database_server_host() == ''

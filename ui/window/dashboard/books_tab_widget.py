@@ -8,11 +8,14 @@ from ui.helpers.helpers import center_screen, get_label_style_sheet_font_size
 from ui.window.book_info import BookInfo
 from ui.window.book_wizard_window import BookWizardWindow
 
+
 class BooksTabWidget(QWidget):
 
     def __init__(self, current_user: User, parent=None):
         super(BooksTabWidget, self).__init__(parent)
 
+        self.new_book_window = None
+        self.book_info_window = None
         self.current_user = current_user
 
         layout = QVBoxLayout()
@@ -42,7 +45,7 @@ class BooksTabWidget(QWidget):
 
         self.books_widget = QWidget()
         books_widget_vbox = QVBoxLayout()
-        books_widget_vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        books_widget_vbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         books_widget_vbox.addWidget(self.search_bar)
         books_widget_vbox.addWidget(self.get_random_book_button)
         books_widget_vbox.addWidget(self.books_table)
@@ -52,7 +55,7 @@ class BooksTabWidget(QWidget):
 
         self.no_books_widget = QWidget()
         no_books_vbox = QVBoxLayout()
-        no_books_vbox.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        no_books_vbox.setContentsMargins(QtCore.QMargins(0, 0, 0, 0))
         no_books_vbox.setAlignment(QtCore.Qt.AlignCenter)
 
         no_books_found_label = QLabel('No books found')
@@ -69,7 +72,7 @@ class BooksTabWidget(QWidget):
         no_books_vbox.addWidget(self.no_books_non_admin_sub_heading_label)
         no_books_vbox.addWidget(self.no_books_admin_sub_heading_label)
         self.no_books_widget.setLayout(no_books_vbox)
-        
+
         layout.addWidget(self.no_books_widget)
 
         self.setLayout(layout)
@@ -78,7 +81,6 @@ class BooksTabWidget(QWidget):
         if self.current_user.privilege == UserPrivilege.NORMAL:
             self.add_book_button.hide()
 
-    
     def reload_button_clicked(self):
         self.reload_button.setDisabled(True)
         QApplication.instance().processEvents()
@@ -90,7 +92,7 @@ class BooksTabWidget(QWidget):
 
         for i in range(self.books_table.rowCount()):
             book = self.books_table.cellWidget(i, 0).property('book_obj')
-            if not search in (book.name.lower() + book.author.lower() + ''.join(book.genres) + book.ISBN.lower()):
+            if search not in (book.name.lower() + book.author.lower() + ''.join(book.genres) + book.ISBN.lower()):
                 self.books_table.hideRow(i)
             else:
                 self.books_table.showRow(i)
@@ -148,11 +150,11 @@ class BooksTabWidget(QWidget):
     def books_table_clicked(self, index):
         book = self.books_table.cellWidget(index.row(), index.column()).property('book_obj')
         self.open_book_info(book)
-    
+
     def get_random_book(self):
         book = Database.get_random_book()
         self.open_book_info(book)
-    
+
     def open_book_info(self, book):
         self.book_info_window = BookInfo(book, self.configure_books_table, self.current_user, self)
         self.book_info_window.exec()

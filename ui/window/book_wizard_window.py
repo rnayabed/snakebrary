@@ -1,3 +1,5 @@
+from enum import Enum
+
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
@@ -5,7 +7,8 @@ from logic.book import Book
 from logic.database import Database
 from ui.helpers.enhanced_controls import FilePicker, ImageView, LineEdit, PlainTextEdit
 
-class BookWizardWindowMode:
+
+class BookWizardWindowMode(Enum):
     ADD = 1,
     EDIT = 2
 
@@ -56,7 +59,7 @@ class BookWizardWindow(QDialog):
 
         self.setLayout(vbox)
 
-        if old_book == None:
+        if old_book is None:
             self.setWindowTitle('Add Book')
             self.mode = BookWizardWindowMode.ADD
         else:
@@ -148,8 +151,8 @@ class BookWizardWindow(QDialog):
                 new_book.photo = self.old_book.photo
 
         if self.mode == BookWizardWindowMode.ADD:
-            old_book = Database.get_book_by_ISBN(proposed_new_book_isbn)
-            if old_book != None:
+            old_book = Database.get_book_by_isbn(proposed_new_book_isbn)
+            if old_book is not None:
                 QMessageBox.critical(None, 'Error', f'''Book with same ISBN already exists.
 Name: {old_book.name}
 Author: {old_book.author}

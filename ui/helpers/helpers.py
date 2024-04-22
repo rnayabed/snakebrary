@@ -26,4 +26,4 @@ def delete_widgets_in_layout(layout):
             if widget is not None:
                 widget.setParent(None)
             else:
-                deleteItemsOfLayout(item.layout())
+                delete_widgets_in_layout(item.layout())

@@ -13,6 +13,8 @@ class Dashboard(QWidget, QtStyleTools):
     def __init__(self, current_user: User, parent=None):
         super(Dashboard, self).__init__(parent)
 
+        self.admin_users_table = None
+        self.settings_tab = None
         self.current_user = current_user
         self.current_user_account_settings = Database.get_user_account_settings(self.current_user.username)
 
@@ -35,7 +37,8 @@ class Dashboard(QWidget, QtStyleTools):
 
     def configure_tabs(self):
         
-        self.settings_tab = SettingsTab(self.current_user, self.current_user_account_settings, self.dashboard_on_user_edited)
+        self.settings_tab = SettingsTab(self.current_user, self.current_user_account_settings,
+                                        self.dashboard_on_user_edited)
 
         if self.current_user.privilege != UserPrivilege.NORMAL:
             self.admin_users_table = AdminUsersTab(self.current_user, self.dashboard_on_user_edited)
@@ -46,7 +49,8 @@ class Dashboard(QWidget, QtStyleTools):
         self.tabs.addTab(self.settings_tab, "Settings")
 
     def configure_theme_and_accent_colour(self):
-        stylesheet_name = f'{self.current_user_account_settings.theme.lower()}_{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml'
+        stylesheet_name = (f'{self.current_user_account_settings.theme.lower()}_'
+                           f'{self.current_user_account_settings.accent_colour.lower().replace(" ", "")}.xml')
         apply_stylesheet(QApplication.instance(), stylesheet_name)
 
     def dashboard_on_user_edited(self):
