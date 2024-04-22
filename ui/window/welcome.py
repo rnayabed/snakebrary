@@ -1,8 +1,8 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QVBoxLayout, QWidget, QLabel, QMessageBox
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QVBoxLayout, QWidget, QLabel, QMessageBox
 
 from logic.user import UserPrivilege
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import get_label_style_sheet_font_size, center_screen
 from ui.layouts_and_widgets.user_wizard import UserWizard
 from ui.window.login_prompt import LoginPrompt
 
@@ -17,16 +17,15 @@ class Welcome(QWidget):
 
         heading = QLabel('Welcome to SnakeBrary!')
         heading.setAlignment(Qt.AlignCenter)
-        heading.setFont(get_font_size(30))
+        heading.setStyleSheet(get_label_style_sheet_font_size(30))
 
         sub_heading_1 = QLabel('<i>A Sweet and Simple Library Management System</i>')
         sub_heading_1.setAlignment(Qt.AlignCenter)
-        sub_heading_1.setFont(get_font_size(13))
-        sub_heading_1.setStyleSheet('padding-bottom: 20')
+        sub_heading_1.setStyleSheet(get_label_style_sheet_font_size(13) + 'padding-bottom: 20;')
 
         sub_heading_2 = QLabel('Fill the form below to create Master account and get started!')
         sub_heading_2.setAlignment(Qt.AlignCenter)
-        sub_heading_2.setFont(get_font_size(15))
+        sub_heading_2.setStyleSheet(get_label_style_sheet_font_size(15))
 
         # Create layout and add widgets
         layout = QVBoxLayout()

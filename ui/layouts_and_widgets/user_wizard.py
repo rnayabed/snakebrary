@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QApplication, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QApplication, QHBoxLayout, QMessageBox, QVBoxLayout, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User

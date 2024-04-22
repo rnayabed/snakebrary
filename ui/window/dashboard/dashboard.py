@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
+from PySide6.QtWidgets import (QApplication, QVBoxLayout, QWidget, QTabWidget)
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database
@@ -50,11 +50,12 @@ class Dashboard(QWidget, QtStyleTools):
         apply_stylesheet(QApplication.instance(), stylesheet_name)
 
     def dashboard_on_user_edited(self):
+        self.current_user = Database.get_user_by_username(self.current_user.username)
+
         if self.current_user.privilege != UserPrivilege.NORMAL:
             self.admin_users_table.configure_users_table()
-        
-        self.current_user = Database.get_user_by_username(self.current_user.username)
-        self.admin_users_table.current_user = self.current_user
+            self.admin_users_table.current_user = self.current_user        
+            
         self.settings_tab.account_tab.user_info_vbox.current_user = self.current_user
         self.settings_tab.account_tab.user_info_vbox.configure_ui()
         self.configure_window_title()

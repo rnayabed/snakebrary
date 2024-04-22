@@ -1,8 +1,8 @@
 from ui.window.user_info import UserInfo
 from ui.helpers.helpers import center_screen
-from PySide2 import QtCore
-from PySide2 import QtWidgets
-from PySide2.QtWidgets import QDialog, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
+from PySide6 import QtCore
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QTableWidget, QVBoxLayout, QWidget
 
 from logic.database import Database
 

@@ -5,34 +5,31 @@
 
 *A Sweet and Simple Library Management System*
 
-CBSE Class 12 Computer Science Project
+![version](https://img.shields.io/badge/Version-1.1.0-green)
 
-Year: 2021-22
-
-School: DPS Ruby Park, Kolkata
-
-![version](https://img.shields.io/badge/Version-1.0.0-green)
-
-### [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
-
-#### [Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
+### [Screenshots](https://github.com/rnayabed/SnakeBrary/blob/master/screenshots/README.md)
 
 </div>
 
 ## Prerequisites
 
-* MySQL/MariaDB Server
+* MySQL Server 8.1+ or MariaDB Server 11.0+
 * Python 3.9+
-* Python Modules
-    * `PySide2` - GUI Library
-    * `qtawesome` - Icon Library. 
-        * **Use Version 2.8.10 ONLY. Future versions will have issues with font size.**
-    * `qt-material` - Material Design Stylesheet for PySide2
-    * `mysql-connector-python` - SQL Library to connect to MySQL Server
+
+## Showed in
+
+- **[Version 1.1.0](https://github.com/rnayabed/SnakeBrary/tree/1.1.0)** - BCA Semester 4 PCA2, NSHM Knowledge Campus, Kolkata
+
+- **[Version 1.0.0](https://github.com/rnayabed/SnakeBrary/tree/1.0.0)** - CBSE Class 12 Computer Science Project (2021-22), DPS Ruby Park, Kolkata
+    * [Final Project submitted to CBSE](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
+    * [Project Synopsis](https://raw.githubusercontent.com/rnayabed/SnakeBrary/master/docs/project.pdf)
 
 ## How to run ?
 
-Execute `python main.py`
+```shell
+pip3 install -r requirements.txt
+python3 main.py
+```
 
 ## License
 

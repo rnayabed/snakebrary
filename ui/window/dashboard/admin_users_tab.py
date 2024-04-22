@@ -1,5 +1,5 @@
-from PySide2 import QtWidgets
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton, QHBoxLayout
 
 from logic.database import Database
 from logic.user import UserPrivilege, User

@@ -1,10 +1,10 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
+from PySide6 import QtCore
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout, QWidget
 
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import get_label_style_sheet_font_size, center_screen
 from ui.window.edit_user import EditUser
 
 
@@ -29,7 +29,7 @@ class UserInfoVBox(QVBoxLayout):
         hbox_1.addWidget(self.profile_photo)
 
         self.name_label = QLabel()
-        self.name_label.setFont(get_font_size(30))
+        self.name_label.setStyleSheet(get_label_style_sheet_font_size(30))
 
         self.username_label = QLabel()
 

@@ -1,8 +1,8 @@
 import os
-from PySide2 import QtCore
-from PySide2.QtCore import QMargins, QSize, Qt
-from PySide2.QtGui import QIcon, QImage, QPixmap
-from PySide2.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
+from PySide6 import QtCore
+from PySide6.QtCore import QMargins, QSize, Qt
+from PySide6.QtGui import QIcon, QImage, QPixmap
+from PySide6.QtWidgets import QFileDialog, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
     QComboBox, QWidget
 
 class LineEdit(QWidget):

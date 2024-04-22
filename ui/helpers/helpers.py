@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon, QScreen, QFont
-from PySide2.QtWidgets import QApplication, QLayout, QWidget
+from PySide6.QtGui import QIcon, QScreen, QFont
+from PySide6.QtWidgets import QApplication, QLayout, QWidget
 
 
 def center_screen(window):
@@ -9,10 +9,8 @@ def center_screen(window):
     window.move(geo.topLeft())
 
 
-def get_font_size(size):
-    font = QFont()
-    font.setPixelSize(size)
-    return font
+def get_label_style_sheet_font_size(size):
+    return f'font-size: {size}pt;'
 
 
 def delete_layouts_in_layout(layout: QLayout):

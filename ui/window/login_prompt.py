@@ -1,12 +1,12 @@
-from PySide2 import QtCore
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QApplication, QGraphicsColorizeEffect, QWidget, QVBoxLayout, QLabel, QPushButton, \
+from PySide6 import QtCore
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QGraphicsColorizeEffect, QWidget, QVBoxLayout, QLabel, QPushButton, \
     QMessageBox
 
 from logic.database import Database
 from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import get_label_style_sheet_font_size, center_screen
 from ui.window.connection_details_widget import ConnectionDetailsWidget
 from ui.window.dashboard.dashboard import Dashboard
 
@@ -22,11 +22,11 @@ class LoginPrompt(QWidget):
 
         heading = QLabel('Sign in')
         heading.setAlignment(Qt.AlignCenter)
-        heading.setFont(get_font_size(30))
+        heading.setStyleSheet(get_label_style_sheet_font_size(30))
 
         sub_heading = QLabel('to continue to SnakeBrary')
         sub_heading.setAlignment(Qt.AlignCenter)
-        sub_heading.setFont(get_font_size(15))
+        sub_heading.setStyleSheet(get_label_style_sheet_font_size(15))
 
         # Create layout and add widgets
         layout = QVBoxLayout()

@@ -1,11 +1,11 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget
+from PySide6 import QtCore
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QMessageBox, QPushButton, QScrollArea, QVBoxLayout, QWidget
 
 from logic.book import BookHolder
 from logic.database import Database
 from logic.user import User, UserPrivilege
 from ui.helpers.enhanced_controls import ImageView
-from ui.helpers.helpers import get_font_size, center_screen
+from ui.helpers.helpers import get_label_style_sheet_font_size, center_screen
 from ui.layouts_and_widgets.book_ratings_widget import BookRatingsWidget
 from ui.window.book_holders_window import BookHoldersWindow
 from ui.window.book_reviewers_window import BookReviewersWindow
@@ -35,10 +35,10 @@ class BookInfo(QDialog):
         hbox_1.addWidget(self.cover_photo)
 
         self.name_label = QLabel()
-        self.name_label.setFont(get_font_size(30))
+        self.name_label.setStyleSheet(get_label_style_sheet_font_size(30))
 
         self.author_label = QLabel()
-        self.author_label.setFont(get_font_size(17))
+        self.author_label.setStyleSheet(get_label_style_sheet_font_size(17))
 
         self.genres_label = QLabel()
 
@@ -113,7 +113,7 @@ class BookInfo(QDialog):
 
         self.about_label_header = QLabel('About')
         self.about_label_header.setContentsMargins(QtCore.QMargins(0, 10, 0, 0))
-        self.about_label_header.setFont(get_font_size(18))
+        self.about_label_header.setStyleSheet(get_label_style_sheet_font_size(18))
 
         self.about_label = QLabel()
         self.about_label.setAlignment(QtCore.Qt.AlignJustify)

@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QDialog
+from PySide6 import QtCore
+from PySide6.QtWidgets import QDialog
 
 from logic.user import User
 from ui.layouts_and_widgets.user_info_vbox import UserInfoVBox

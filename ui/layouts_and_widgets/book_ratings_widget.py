@@ -1,14 +1,16 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
+from PySide6 import QtCore
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QPushButton, QSlider, QVBoxLayout, QWidget
+from PySide6.QtGui import QPainter, QColor, QPixmap
+from PySide6.QtSvg import QSvgRenderer
+
 import os
 from logic.book import Book
 from logic.database import Database
 from logic.user import User
-from ui.helpers.helpers import get_font_size, delete_widgets_in_layout
+from ui.helpers.helpers import get_label_style_sheet_font_size, delete_widgets_in_layout
 
 import os
 import qtawesome as qta
-
 
 class BookRatingsWidget(QWidget):
 
@@ -20,7 +22,7 @@ class BookRatingsWidget(QWidget):
 
         header_label = QLabel('Ratings')
         header_label.setContentsMargins(QtCore.QMargins(0, 10, 0, 0))
-        header_label.setFont(get_font_size(18))
+        header_label.setStyleSheet(get_label_style_sheet_font_size(18))
 
         self.vbox = QVBoxLayout()
 
@@ -30,12 +32,12 @@ class BookRatingsWidget(QWidget):
 
         self.large_rating_label = QLabel()
         self.large_rating_label.setContentsMargins(QtCore.QMargins(0, 0, 50, 0))
-        self.large_rating_label.setFont(get_font_size(35))
+        self.large_rating_label.setStyleSheet(get_label_style_sheet_font_size(35))
 
         self.rating_graph_hbox = QHBoxLayout()
 
         self.total_ratings_label = QLabel()
-        self.total_ratings_label.setFont(get_font_size(14))
+        self.total_ratings_label.setStyleSheet(get_label_style_sheet_font_size(14))
 
         left_rating_layout = QVBoxLayout()
         left_rating_layout.addWidget(self.large_rating_label)

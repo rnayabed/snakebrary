@@ -1,11 +1,11 @@
-from PySide2.QtCore import QCoreApplication, Qt
-from PySide2.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
+from PySide6.QtCore import QCoreApplication, Qt
+from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet, QtStyleTools
 
 from logic.database import Database
 from logic.user import UserPrivilege
 from ui.helpers.enhanced_controls import ComboBox
-
+from constants import Constants
 
 class GeneralTab(QWidget, QtStyleTools):
 
@@ -89,7 +89,7 @@ Continue?''', QMessageBox.Yes, QMessageBox.No)
 
     def restart(self):
         QApplication.closeAllWindows()
-        QCoreApplication.exit(6504)
+        QCoreApplication.exit(Constants.RESTART_RETURN_CODE)
     
     def clear_local_connection_settings(self):
         Database.clear_local_connection_settings()

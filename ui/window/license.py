@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QDialog, QPlainTextEdit, QPushButton, QVBoxLayout
+from PySide6 import QtCore
+from PySide6.QtWidgets import QDialog, QPlainTextEdit, QPushButton, QVBoxLayout
 
 
 class License(QDialog):

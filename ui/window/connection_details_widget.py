@@ -1,9 +1,9 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel, QCheckBox
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel, QCheckBox
 
 from logic.database import Database
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import get_font_size
+from ui.helpers.helpers import get_label_style_sheet_font_size
 
 
 class ConnectionDetailsWidget(QWidget):
@@ -19,12 +19,12 @@ class ConnectionDetailsWidget(QWidget):
 
         heading = QLabel('Connect to MySQL Server')
         heading.setAlignment(Qt.AlignCenter)
-        heading.setFont(get_font_size(20))
+        heading.setStyleSheet(get_label_style_sheet_font_size(20))
         layout.addWidget(heading)
 
         sub_heading = QLabel('to use SnakeBrary')
         sub_heading.setAlignment(Qt.AlignCenter)
-        sub_heading.setFont(get_font_size(15))
+        sub_heading.setStyleSheet(get_label_style_sheet_font_size(15))
         layout.addWidget(sub_heading)
 
         self.host_field = LineEdit('Host')

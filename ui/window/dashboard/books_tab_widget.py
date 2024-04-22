@@ -1,10 +1,10 @@
-from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QWidget, QVBoxLayout, QTableWidget, QPushButton
 
 from logic.database import Database
 from logic.user import UserPrivilege, User
 from ui.helpers.enhanced_controls import LineEdit
-from ui.helpers.helpers import center_screen, get_font_size
+from ui.helpers.helpers import center_screen, get_label_style_sheet_font_size
 from ui.window.book_info import BookInfo
 from ui.window.book_wizard_window import BookWizardWindow
 
@@ -57,7 +57,7 @@ class BooksTabWidget(QWidget):
 
         no_books_found_label = QLabel('No books found')
         no_books_found_label.setAlignment(QtCore.Qt.AlignCenter)
-        no_books_found_label.setFont(get_font_size(18))
+        no_books_found_label.setStyleSheet(get_label_style_sheet_font_size(18))
 
         self.no_books_non_admin_sub_heading_label = QLabel('Ask the administrator to add some books!')
         self.no_books_non_admin_sub_heading_label.setAlignment(QtCore.Qt.AlignCenter)

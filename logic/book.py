@@ -2,8 +2,8 @@ from datetime import datetime
 
 
 class BookRatings:
-    def __init__(self, ISBN, ratings):
-        self.ISBN = ISBN
+    def __init__(self, isbn, ratings):
+        self.ISBN = isbn
         self.ratings = ratings
 
     def get_average_rating(self):
@@ -44,7 +44,7 @@ class BookHolder:
         self.username = username
         self.returned_on = returned_on
 
-        if issued_on == None:
+        if issued_on is None:
             issued_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         self.issued_on = issued_on
@@ -58,9 +58,9 @@ class BookHolder:
 
 
 class Book:
-    def __init__(self, ISBN, name, author, holders, genres, price, about, is_unavailable=False, photo=None,
+    def __init__(self, isbn, name, author, holders, genres, price, about, is_unavailable=False, photo=None,
                  date_time_added=None):
-        self.ISBN = ISBN
+        self.ISBN = isbn
         self.name = name
         self.author = author
         self.holders = holders
@@ -70,24 +70,24 @@ class Book:
         self.is_unavailable = is_unavailable
         self.photo = photo
 
-        if date_time_added == None:
+        if date_time_added is None:
             date_time_added = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         self.date_time_added = date_time_added
 
     def is_eligible_to_rate(self, username):
         for each_holder in self.holders:
-            if each_holder[0] == username and each_holder[2] != None:
+            if each_holder[0] == username and each_holder[2] is not None:
                 return True
 
         return False
 
     def get_stylish_genres(self):
-        l = len(self.genres)
+        genres_length = len(self.genres)
         g = ''
-        for i in range(l):
+        for i in range(genres_length):
             g += self.genres[i].capitalize()
-            if i < (l - 1):
+            if i < (genres_length - 1):
                 g += ', '
         return g
 
@@ -97,7 +97,7 @@ class Book:
     def get_current_holder(self):
         if len(self.holders) > 0:
             last_holder = self.holders[-1]
-            if last_holder[2] == None:
+            if last_holder[2] is None:
                 return last_holder[0]
 
         return None

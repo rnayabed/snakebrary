@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QDialog, QMessageBox
+from PySide6 import QtCore
+from PySide6.QtWidgets import QDialog, QMessageBox
 
 from ui.layouts_and_widgets.user_wizard import UserWizard
 
