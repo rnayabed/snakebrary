@@ -63,8 +63,11 @@ class AdminUsersTab(QWidget):
         search = self.search_bar.line_edit.text().lower()
 
         for i in range(self.users_table.rowCount()):
-            user = self.users_table.cellWidget(i, 0).property('user_obj')
+            cell_widget = self.users_table.cellWidget(i, 0)
+            if not cell_widget: 
+                return 
 
+            user = cell_widget.property('user_obj')
             if search not in (user.name + user.username + UserPrivilege.get_ui_name(user.privilege).lower()):
                 self.users_table.hideRow(i)
             else:
@@ -106,7 +109,11 @@ class AdminUsersTab(QWidget):
             self.users_table.setCellWidget(i, 2, privilege_widget)
 
     def users_table_clicked(self, index):
-        user = self.users_table.cellWidget(index.row(), index.column()).property('user_obj')
+        cell_widget = self.users_table.cellWidget(index.row(), index.column())
+        if not cell_widget: 
+            return 
+
+        user = cell_widget.property('user_obj')
         self.users_info_window = UserInfo(user, self.current_user, self.dashboard_on_user_edited, self)
         self.users_info_window.exec()
         center_screen(self.users_info_window)
