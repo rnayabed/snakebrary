@@ -1,12 +1,11 @@
-snakebrary_master@localhost = snakebrary_master_password
+snakebrary_master : snakebrary_master_password
 
+master  mike_w  mike_w_12345
 
-master: mike_w  = mike_w_12345
+admin   roz     roz_12345                     username with bunch of numbers
+admin   sully   sully_wully
 
-admin:  roz     = roz_12345                     username with bunch of numbers
-admin:  sully   = sully_wully
-
-normal: val     = you_made_a_pinky_promise!     friends with tylor
-normal: celia   = googley_bear                  schmoopsie-poo
-normal: tylor   = number_1_scarer!              it's laughter we are after!
+normal  val     you_made_a_pinky_promise!     friends with tylor
+normal  celia   googley_bear                  schmoopsie-poo
+normal  tylor   number_1_scarer!              it's laughter we are after!
 
